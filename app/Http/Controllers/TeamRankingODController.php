@@ -17,7 +17,8 @@ class TeamRankingODController extends Controller
     public function index()
     {
         $teamRankingODs = TeamsRankingOD::all();
-        return view('admin.teamRankingOds.index',compact('teamRankingODs'));
+        $clubs = Club::pluck('name','id')->all();
+        return view('admin.teamRankingOds.index',compact('teamRankingODs','clubs'));
     }
 
     /**

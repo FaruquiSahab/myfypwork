@@ -22,8 +22,11 @@ class TournamentReferenceController extends Controller
     public function index()
     {
         $tournaments = TournamentsReference::all();
+        $tournamentss = Tournament::pluck('name','id');
+        $m_type = MatchType::pluck('type_name','id');
+        $t_format = TournamentFormat::pluck('format_name','id');
 
-        return view('admin.tournaments.editions.index',compact('tournaments'));
+        return view('admin.tournaments.editions.index',compact('tournaments','tournamentss','m_type','t_format'));
     }
 
     /**

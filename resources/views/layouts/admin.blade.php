@@ -23,6 +23,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -78,6 +79,8 @@
                 <ul class="dropdown-menu dropdown-user">
                     <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
+                    <li><a href="{{ route('admin.create') }}"><i class="fa fa-user fa-fw"></i> Register</a>
+                    </li>
                     <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                     <li class="divider"></li>
@@ -123,7 +126,7 @@
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
-                    <li class="sidebar-search">
+                    {{-- <li class="sidebar-search">
                         <div class="input-group custom-search-form">
                             <input type="text" class="form-control" placeholder="Search...">
                             <span class="input-group-btn">
@@ -133,21 +136,21 @@
                                 </span>
                         </div>
                         <!-- /input-group -->
-                    </li>
+                    </li> --}}
                     <li>
-                        <a href="/admin"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        <a href="/admin/home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i>Clubs<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-shield fa-fw"></i>Clubs<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('clubs.index')}}">All Clubs</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('clubs.create')}}">Create Club</a>
-                            </li>
+                            </li> --}}
 
 
 
@@ -168,15 +171,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Players<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-users fa-fw"></i> Players<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('players.index')}}">All Players</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('players.create')}}">Create Players</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -186,15 +189,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Player Ranking ODs<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-list-ul fa-fw"></i> Player Ranking ODs<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('playerRankingOds.index')}}">All Rankings</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('playerRankingOds.create')}}">Add Rankings</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -207,15 +210,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Player Ranking T20s<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-list fa-fw"></i> Player Ranking T20s<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('playerRankingt20.index')}}">All Rankings</a>
                             </li>
 
-                            <li>
+                           {{--  <li>
                                 <a href="{{route('playerRankingt20.create')}}">Add Rankings</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -225,15 +228,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Team Ranking ODs<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-list-ol fa-fw"></i> Team Ranking ODs<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('teamRankingOds.index')}}">All Rankings</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('teamRankingOds.create')}}">Add Rankings</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -243,15 +246,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Team Ranking T20s<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-list-ol fa-fw"></i> Team Ranking T20s<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('teamRankingt20.index')}}">All Rankings</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('teamRankingt20.create')}}">Add Rankings</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -259,15 +262,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Grounds<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-globe fa-fw"></i> Grounds<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('grounds.index')}}">All Grounds</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('grounds.create')}}">Add Ground</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -277,20 +280,20 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Tournaments<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-fire fa-fw"></i> Tournaments<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('tournaments.index')}}">All Tournaments</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('tournaments.create')}}">Add Tournament</a>
-                            </li>
+                            </li> --}}
 
 
-                            <li>
+                            {{-- <li>
                                 <a href="">Manage Tournaments</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                     </li>
@@ -298,7 +301,7 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Tournaments Edition<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-pencil fa-fw"></i> Tournaments Edition<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('edition.index')}}">Edition</a>
@@ -308,14 +311,14 @@
                                 <a href="#">Finalize</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('edition.create')}}">Make Edition</a>
-                            </li>
+                            </li> --}}
 
 
-                            <li>
+                            {{-- <li>
                                 <a href="">Manage Tournaments</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                     </li>
@@ -333,9 +336,9 @@
                                 <a href="{{route('matches.index')}}">All Matches</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('matches.create')}}">Add Match</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -347,15 +350,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Umpires<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-user fa-fw"></i> Umpires<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('umpires.index')}}">All Umpires</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('umpires.create')}}">Add Umpire</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -371,9 +374,9 @@
                                 <a href="{{route('posts.index')}}">All Posts</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('posts.create')}}">Add Post</a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                         <!-- /.nav-second-level -->
@@ -383,15 +386,15 @@
 
 
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Coaches<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-user fa-fw"></i> Coaches<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('coaches.index')}}">All Coaches</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{route('coaches.create')}}">Create Coach</a>
-                            </li>
+                            </li> --}}
 
 
 
@@ -411,7 +414,7 @@
                         <!-- /.nav-second-level -->
                     </li>
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i>Media<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -424,10 +427,10 @@
 
                         </ul>
                         <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -438,14 +441,14 @@
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
-                    </li>
-                    <li>
+                    </li> --}}
+                    {{-- <li>
                         <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
-                    </li>
-                    <li>
+                    </li> --}}
+                    {{-- <li>
                         <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
-                    </li>
-                    <li>
+                    </li> --}}
+                    {{-- <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -468,8 +471,8 @@
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
-                    </li>
-                    <li>
+                    </li> --}}
+                    {{-- <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -498,8 +501,8 @@
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
-                    </li>
-                    <li class="active">
+                    </li> --}}
+                    {{-- <li class="active">
                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -510,7 +513,7 @@
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
                 </ul>
 
 

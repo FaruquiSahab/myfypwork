@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class clubController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -17,8 +18,9 @@ class clubController extends Controller
      */
     public function index()
     {
+        $levels = Level::pluck('name','id');
         $clubs = Club::all();
-        return view('admin.clubs.index',compact('clubs'));
+        return view('admin.clubs.index',compact('clubs','levels'));
     }
 
     /**
@@ -52,19 +54,13 @@ class clubController extends Controller
             $file->move('images', $name);
 
             $photo = Photo::create(['file'=>$name]);
-
-
-
             $input['photo_id'] = $photo->id;
+
+        }
 
             $input['name'] = $request->name;
 
             $input['level_id'] = $request->level_id;
-
-
-
-
-        }
 
 
         Club::create($input);
@@ -73,9 +69,7 @@ class clubController extends Controller
         Session::flash('created_club','The club has been created.');
         return redirect('/admin/clubs');
 
-
-
-
+        // return $request->name;
     }
 
     /**
@@ -113,8 +107,9 @@ class clubController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $id  = $request->id;
         $club = Club::findOrFail($id);
 
         $input = $request->all();
@@ -144,6 +139,9 @@ class clubController extends Controller
         Session::flash('updated_club','The club has been updated.');
 
         return redirect('/admin/clubs');
+        // 
+        // 
+        // return $request->name;
 
 
 
@@ -155,20 +153,22 @@ class clubController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $club = Club::findOrFail($id);
+        // $id = $request->id;
+        // $club = Club::findOrFail($id);
 
 
-        unlink(public_path() . $club->photo->file);
+        // unlink(public_path() . $club->photo->file);
 
 
-        $club->delete();
+        // $club->delete();
 
 
-        Session::flash('deleted_club','The club has been deleted.');
+        // Session::flash('deleted_club','The club has been deleted.');
 
 
-        return redirect('/admin/clubs');
+        // return redirect('/admin/clubs');
+        return "Hello";
     }
 }

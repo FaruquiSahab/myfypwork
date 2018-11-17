@@ -51,7 +51,7 @@
 
 
             <div class="form-group">
-                {!! Form::submit('Edit Coach', ['class'=>'btn btn-primary col-sm-3']) !!}
+                {!! Form::submit('Edit Club', ['class'=>'btn btn-primary col-sm-3']) !!}
             </div>
 
             {!! Form::close() !!}

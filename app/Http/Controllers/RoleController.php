@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Role;
-use App\User;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.index');
+        //
     }
 
     /**
@@ -23,21 +22,9 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $data)
+    public function create()
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-        $user->role()->attach($data['role']);
-        return view('admin.index');
-
-    }
-    public function showCreate()
-    {
-        $roles = Role::pluck('name','id');
-        return view('admin.register',compact('roles'));
+        //
     }
 
     /**
@@ -54,10 +41,10 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Role $role)
     {
         //
     }
@@ -65,10 +52,10 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
         //
     }
@@ -77,10 +64,10 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
         //
     }
@@ -88,10 +75,10 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
         //
     }

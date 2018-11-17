@@ -1,0 +1,33 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+	protected $fillable = ['name','permissions'];
+
+
+	public function user()
+	{
+		return $this->belongsToMany(User::class,'role_users');
+	}
+
+
+    public function hasAccess(array $permissions)
+    {
+        foreach ($permissions as $permission) {
+            if ($this->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasPermission(string $permission)
+    {
+    	$permissions = json_decode($this->permissions,true);
+    	return $permissions[$permission]??false;
+    }
+}

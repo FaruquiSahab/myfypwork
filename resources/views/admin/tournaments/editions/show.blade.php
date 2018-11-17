@@ -74,7 +74,6 @@
 
     <script type="text/javascript">
         var totalAllowedClubs = $('#totalClubs').val();
-        console.log(a);
         $("#club_id").select2({
             placeholder: "Select Clubs",
             multiple: true,

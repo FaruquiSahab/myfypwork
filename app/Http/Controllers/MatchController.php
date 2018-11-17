@@ -20,7 +20,11 @@ class MatchController extends Controller
     public function index()
     {
         $matches = Match::all();
-        return view('admin.matches.index',compact('matches'));
+        $grounds = Ground::pluck('name','id')->all();
+        $clubs = Club::pluck('name','id')->all();
+        $tournaments = Tournament::pluck('name','id')->all();
+        $match_types = MatchType::pluck('type_name','id')->all();
+        return view('admin.matches.index',compact('matches','grounds','clubs','tournaments','match_types'));
     }
 
     /**
@@ -31,15 +35,9 @@ class MatchController extends Controller
     public function create()
     {
         $matches = Match::all();
-
         $grounds = Ground::pluck('name','id')->all();
-
-
         $clubs = Club::pluck('name','id')->all();
-
         $tournaments = Tournament::pluck('name','id')->all();
-
-
         $match_types = MatchType::pluck('type_name','id')->all();
 
         return view('admin.matches.create', compact('matches','grounds','clubs','tournaments','match_types'));

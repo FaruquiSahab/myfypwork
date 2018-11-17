@@ -19,7 +19,10 @@ class PlayerRankingT20Controller extends Controller
     public function index()
     {
         $playerRankingT20s = PlayersRankingT20::all();
-        return view('admin.playerRankingt20.index',compact('playerRankingT20s'));
+        $roles = PlayerRole::pluck('name','id')->all();
+        $clubs = Club::pluck('name','id')->all();
+        $players = Player::pluck('name','id')->all();
+        return view('admin.playerRankingt20.index',compact('playerRankingT20s','players','roles','clubs'));
     }
 
     /**

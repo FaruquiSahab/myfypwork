@@ -21,7 +21,11 @@ class PlayerController extends Controller
     public function index()
     {
         $players = Player::all();
-        return view('admin.players.index',compact('players'));
+        $roles = PlayerRole::pluck('name','id')->all();
+        $batting_styles = BattingStyle::pluck('name','id')->all();
+        $clubs = Club::pluck('name','id')->all();
+        $bowling_styles = BowlingStyle::pluck('name','id')->all();
+        return view('admin.players.index',compact('players','roles','batting_styles','bowling_styles','clubs'));
     }
 
     /**

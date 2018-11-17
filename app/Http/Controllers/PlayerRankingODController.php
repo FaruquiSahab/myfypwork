@@ -18,8 +18,12 @@ class PlayerRankingODController extends Controller
      */
     public function index()
     {
+        $clubs = Club::pluck('name','id')->all();
+
+        $roles = PlayerRole::pluck('name','id')->all();
+        $players = Player::pluck('name','id')->all();
         $playerRankingODs = PlayersRankingOD::all();
-        return view('admin.playerRankingOds.index',compact('playerRankingODs'));
+        return view('admin.playerRankingOds.index',compact('playerRankingODs','players','roles','clubs'));
     }
 
     /**

@@ -18,7 +18,8 @@ class CoachController extends Controller
     public function index()
     {
         $coaches = Coach::all();
-        return view('admin.coaches.index',compact('coaches'));
+        $clubs = Club::pluck('name','id')->all();
+        return view('admin.coaches.index',compact('coaches','clubs'));
     }
 
     /**
