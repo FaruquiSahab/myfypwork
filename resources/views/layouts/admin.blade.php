@@ -18,15 +18,38 @@
 
 
 
+
+    {{-- <link rel="stylesheet" href="{{ URL::asset('css/jquery.bracket.min.css') }}" />
+     <script type="text/javascript" src="{{ URL::asset('js/jquery.bracket.min.js') }}"></script>--}}
+
+    {{-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+     <script src="{{ URL::asset('js/jquery.gracket.min.js') }}"></script>--}}
+
+
+    {{--   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+   --}}
+
+
+    {{--    <script type="text/javascript" src="jquery-1.6.2.min.js"></script>--}}
+
     {{--<link href="{{asset('css/app.css')}}" rel="stylesheet">--}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ URL::to('css/jquery.bracket.min.css') }}">
+    <script type="text/javascript" src="{{ URL::to('js/jquery.bracket.min.js') }}"></script>
 
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    {{--<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="jquery.bracket.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jquery.bracket.min.css" />--}}
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -186,6 +209,27 @@
                     </li>
 
 
+					
+					
+						                    <li>
+                        <a href="#"><i class="fa fa-fire fa-fw"></i>Stats<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{route('stats.index')}}">Index</a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{--<li>--}}
+                        {{--<a href="#"><i class="fa fa-fire fa-fw"></i>Scoring<span class="fa arrow"></span></a>--}}
+                        {{--<ul class="nav nav-second-level">--}}
+                            {{--<li>--}}
+                                {{--<a href="{{route('scoring')}}">Score a Match</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+
+
+
 
 
                     <li>
@@ -342,6 +386,16 @@
 
                         </ul>
                         <!-- /.nav-second-level -->
+                    </li>
+
+
+					<li>
+                        <a href="#"><i class="fa fa-pencil"></i>Fixture<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{route('fixtures.index')}}">All Fixture</a>
+                            </li>
+                        </ul>
                     </li>
 
 
@@ -591,6 +645,9 @@
 
 <!-- jQuery -->
 <script src="{{asset('js/libs.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
 
 @yield('scripts')

@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Club;
+use App\Ground;
 use App\MatchType;
 use App\Photo;
+use DB;
 use App\Tournament;
 use App\TournamentFormat;
 use App\TournamentsReference;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use phpDocumentor\Reflection\Types\Null_;
 
 class TournamentReferenceController extends Controller
 {
@@ -23,10 +26,69 @@ class TournamentReferenceController extends Controller
     {
         $tournaments = TournamentsReference::all();
         $tournamentss = Tournament::pluck('name','id');
+
+        // wo tornment id jo ban chkii hain
+        $tour_id = TournamentsReference::where('edition','=',Carbon::now()->format('Y'))->get();
+        /*
+
+
+
+        foreach ($tour_id as $tour)
+        {
+           $ids =  $tour->tournament_id . '<br>';
+
+//           echo $ids;
+
+           $names[] = Tournament::where('id', '!=',$ids)->get();
+        }
+        foreach ($names as $key=> $name)
+        {
+            echo $name;
+//            if($key!=0)
+            foreach ($name as $k=>$val)
+            if($k!=0 && $key ==0) {
+                $tr = DB::table('tournaments')->select('id','name')->where('id',$val->id)->distinct('id')->get();
+//                $tr = Tournament::where('id',$val->id)->distinct()->get();
+                echo $k;
+                echo $tr;
+//                echo $k . $val . '<br>';
+            }
+        }
+
+        return "";*/
+
+
+
+
+
+  // return $tour_id[0]->tournament_id;
+         //$tour_id[0]->tournament_id;
+//return $tour_id;
+
+//         foreach ($tour_id as $tour)
+//         {
+//            $ids =  $tour->tournament_id;
+////            echo $ids.'<br>';
+//
+//             $tournamentss[] = Tournament::select('id','name')->where('id','!=',$ids)->get();
+//         }
+/*        $tournamentss[] = Tournament::select('id','name')->where('id','!=',1)->get();
+        $tournamentss[] = Tournament::select('id','name')->where('id','!=',4)->get();*/
+
+
+//         return " Ok";
+//            foreach ($tournamentss as $tt)
+//            {
+//                echo $tt->['name'];
+//            }
+//            return"";
+
         $m_type = MatchType::pluck('type_name','id');
         $t_format = TournamentFormat::pluck('format_name','id');
+        $t_grounds = Ground::pluck('name','id');
 
-        return view('admin.tournaments.editions.index',compact('tournaments','tournamentss','m_type','t_format'));
+
+        return view('admin.tournaments.editions.index',compact('tournaments','tournamentss','m_type','t_format','t_grounds'));
     }
 
     /**
@@ -37,11 +99,12 @@ class TournamentReferenceController extends Controller
     public function create()
     {
         $tournaments = Tournament::pluck('name','id');
+
         $m_type = MatchType::pluck('type_name','id');
         $t_format = TournamentFormat::pluck('format_name','id');
+        $t_grounds = Ground::pluck('name','id');
 
-
-        return view('admin.tournaments.editions.create',compact('tournaments','m_type','t_format'));
+        return view('admin.tournaments.editions.create',compact('tournaments','m_type','t_format','t_grounds'));
     }
 
     /**
@@ -63,17 +126,51 @@ class TournamentReferenceController extends Controller
 
 
 
+
         $input['tournament_id'] = $request->tournament_id;
         $input['tournament_format_id'] = $request->tournament_format_id;
         $input['tournament_type_id'] = $request->tournament_type_id;
         $input['number_of_teams'] = $request->number_of_teams;
         $edition = Carbon::now()->format('Y');
         $input['edition']= $edition;
+        $input['starting_date'] = $request->starting_date;
+        //$input['ending_date'] = $request->ending_date;
+        $input['rounds'] = $request->rounds;
+        $input['ground_id'] = $request->ground_id;
+        $input['time'] = $request->time;
+
+
+
+
+        $data = TournamentsReference::where('id')->get();
+
+
+        /*if ($input['number_of_teams'] >= 4 || $input['number_of_teams'] == 5)
+        {
+            $input['rounds'] = 3;
+        }
+
+        if ($input['number_of_teams'] >= 6 || $input['number_of_teams'] == 7)
+        {
+            $input['rounds'] = 5;
+        }
+
+        if ($input['number_of_teams'] >= 8 || $input['number_of_teams'] == 9)
+        {
+            $input['rounds'] = 7;
+        }
+
+        if ($input['number_of_teams'] >= 10 || $input['number_of_teams'] == 11)
+        {
+            $input['rounds'] = 9;
+        }*/
+
+
 
         $data = TournamentsReference::create($input);
 
 
-        Session::flash('created_edition','The Request For The Edition Created');
+        Session::flash('created_edition','The Request For The Edition Created.');
         return redirect(route('edition.index'));
         // return $data;
     }
@@ -106,6 +203,12 @@ class TournamentReferenceController extends Controller
 
     }
 
+//    public function edition()
+//    {
+//
+//        return json_encode($tour_id);
+//    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -137,6 +240,9 @@ class TournamentReferenceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $did = decrypt($id);
+        TournamentsReference::find($did)->delete();
+        return redirect()->back();
     }
+
 }

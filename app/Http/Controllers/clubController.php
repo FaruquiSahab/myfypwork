@@ -6,6 +6,8 @@ use App\Club;
 use App\Level;
 use Illuminate\Http\Request;
 use App\Photo;
+use Datatables;
+use Validator;
 use Illuminate\Support\Facades\Session;
 
 class clubController extends Controller
@@ -19,8 +21,32 @@ class clubController extends Controller
     public function index()
     {
         $levels = Level::pluck('name','id');
-        $clubs = Club::all();
         return view('admin.clubs.index',compact('clubs','levels'));
+    }
+    function clubdata()
+    {
+        $clubs = Club::all();
+        return Datatables::of($clubs)
+                        // ->addColumn('image',function($club)
+                        // {
+                        //     return  '<img height="50" src="'. $club->photo->file .'>';
+                        // })
+                        // 
+                        ->addColumn('name',function($club)
+                        {
+                            return '<strong>'.$club->name.'</strong>';
+                        })
+                        ->addColumn('level',function($club)
+                        {
+                            return $club->level->name;
+                        })
+                        ->addColumn('action', function($club)
+                        {
+                            return '<a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1" data-id="' .$club->id. '" data-name="' .$club->name. '" data-level="' .$club->level_id. '"><i class="glyphicon glyphicon-edit"></i> Change </a>
+                                <a class="btn btn-sm btn-danger iddelete" data-toggle="modal" data-target="#deletemodal" data-id="' .$club->id. '"><i class="glyphicon glyphicon-remove "></i> Delete</a>';
+                        })
+                        ->rawColumns(['action','name'])
+                        ->make(true);
     }
 
     /**
@@ -45,29 +71,60 @@ class clubController extends Controller
      */
     public function store(Request $request)
     {
-        if($file = $request->file('photo_id')) {
-
-
-            $name = time() . $file->getClientOriginalName();
-
-
-            $file->move('images', $name);
-
-            $photo = Photo::create(['file'=>$name]);
-            $input['photo_id'] = $photo->id;
-
+        // if($file = $request->file('photo_id'))
+        // {
+        //     $name = time() . $file->getClientOriginalName();
+        //     $file->move('images', $name);
+        //     $photo = Photo::create(['file'=>$name]);
+        //     $input['photo_id'] = $photo->id;
+        // }
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'level_id'  => 'required',
+        ]);
+        $error_array = array();
+        $success_output = '';
+        if ($validation->fails())
+        {
+            foreach($validation->messages()->getMessages() as $field_name => $messages)
+            {
+                $error_array[] = $messages;
+            }
+            // Session::flash('error','Error Occured Cannot Insert');
         }
+        else
+        {
+            if($request->button_action == 0)
+            {
+                $club = new Club([
+                    'name'    =>  $request->name,
+                    'level_id'     =>  $request->level_id
+                ]);
+                $club->save();
+                $success_output = 'Club '.$request->name.' Inserted';
+                
+            }
+            elseif ($request->button_action == 1) 
+            {
+                $club = Club::findOrFail($request->id);
+                $club->name = $request->name;
+                $club->level_id = $request->level_id;
+                $club->save();
+                $success_output = 'Club '.$request->name.' Updated';
+            }
+        }
+        
+        $output = array(
+            'error'     =>  $error_array,
+            'success'   =>  $success_output
+        );
+        echo json_encode($output);
+        // $input['name'] = $request->name;
+        // $input['level_id'] = $request->level_id;
+        // $created = Club::create($input);
 
-            $input['name'] = $request->name;
 
-            $input['level_id'] = $request->level_id;
-
-
-        Club::create($input);
-
-
-        Session::flash('created_club','The club has been created.');
-        return redirect('/admin/clubs');
+        // return redirect('/admin/clubs');
 
         // return $request->name;
     }
@@ -109,42 +166,35 @@ class clubController extends Controller
      */
     public function update(Request $request)
     {
-        $id  = $request->id;
-        $club = Club::findOrFail($id);
-
-        $input = $request->all();
-
-        if($file = $request->file('photo_id')){
-
-
-            $name = time() . $file->getClientOriginalName();
-
-            $file->move('images', $name);
-
-            $photo = Photo::create(['file'=>$name]);
-
-
-            $input['photo_id'] = $photo->id;
-
-            $input['level_id'] = $request->level_id;
-
-
-
+        echo "string";
+        // return $request->all();
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'level_id'  => 'required',
+        ]);
+        $error_array = array();
+        $success_output = '';
+        if ($validation->fails())
+        {
+            foreach($validation->messages()->getMessages() as $field_name => $messages)
+            {
+                $error_array[] = $messages;
+            }
         }
-
-
-
-        $club->update($input);
-
-        Session::flash('updated_club','The club has been updated.');
-
-        return redirect('/admin/clubs');
-        // 
-        // 
-        // return $request->name;
-
-
-
+        else
+        {
+            $club = findOrFail($request->id);
+            $club->name = $request->name;
+            $club->level_id = $request->level_id;
+            $club->save();
+            $success_output = '<div class="alert alert-success">Data Inserted</div>';
+        }
+        
+        $output = array(
+            'error'     =>  $error_array,
+            'success'   =>  $success_output
+        );
+        echo json_encode($output);
     }
 
     /**
@@ -153,22 +203,21 @@ class clubController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        // $id = $request->id;
-        // $club = Club::findOrFail($id);
+        $club = Club::findOrFail($id);
+        if($club->delete())
+        {
+            echo 'Club '.$club->name.' Deleted Successfully';
+        }
+        else
+        {
+            echo 'An Error Occurred Cannot Delete Club';
+        }
+    }
 
-
-        // unlink(public_path() . $club->photo->file);
-
-
-        // $club->delete();
-
-
-        // Session::flash('deleted_club','The club has been deleted.');
-
-
-        // return redirect('/admin/clubs');
-        return "Hello";
+    public function myFm()
+    {
+        echo "string";
     }
 }

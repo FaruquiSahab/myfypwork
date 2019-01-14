@@ -6,6 +6,8 @@
 
 @section('content')
 
+    
+    <span id="form_output"></span>
     @if(Session::has('deleted_ground'))
         <div class="alert alert-danger">
             <p class="bg-danger">{{session('deleted_ground')}}</p>
@@ -27,49 +29,13 @@
 
     <h2>Grounds</h2>
 
-    <table class="table table-sm table-hover  table-striped">
+    <table class="table table-sm table-hover table-striped" id="mytable">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Photo</th>
             <th>Name</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>Action</th>
         </tr>
         </thead>
-        <tbody>
-
-        @if($grounds->count() > 0)
-
-            @foreach($grounds as $ground)
-                <tr>
-                    <td>{{$ground->id}}</td>
-                    <td> <img height="50" src="{{$ground->photo ? $ground->photo->file : 'http://placehold.it/400x400'}}" alt="" ></td>
-                    <td><a href="" data-toggle="modal" data-target="#addmodel1">{{$ground->name}}</a></td>
-                    {{--<td>{{$ground->type}}</td>--}}
-
-                    <td>{{$ground->created_at->diffForHumans()}}</td>
-                    <td>{{$ground->updated_at->diffForHumans()}}</td>
-
-                    <td>
-                        <a href="" class=" col-sm-8 btn btn-info btn-circle" data-toggle="modal" data-target="#addmodel1"><i class="fa fa-wrench fa-fw"></i></a>
-                    </td>
-
-                    <td>
-                        <a href="" class="col-sm-8 btn btn-danger btn-circle" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash fa-fw"></i></a>
-                    </td>
-
-                </tr>
-
-            @endforeach
-
-        @else
-
-            <th colspan="5" class="text-center">No any grounds</th>
-        @endif
-        </tbody>
     </table>
 
 
@@ -83,9 +49,9 @@
                 </h3>
             </div>
             <div class="modal-body">
-                <h3>
+                <h4>
                     Are you Sure you Want To Delete?
-                </h3>
+                </h4>
             </div>
             <div class="modal-footer">
                 <input type="hidden" id="deleteid" name="">
@@ -93,7 +59,7 @@
                     Cancel
                 </button>
                 
-                <button type="submit" id="showtoast"  class="btn btn-danger delete" data-dismiss="modal">
+                <button type="submit" id="buttonDelete"  class="btn btn-danger delete" data-dismiss="modal">
                     Delete
                 </button>
                 {!! Form::close() !!}
@@ -114,27 +80,26 @@
   <div class="modal-body">
 
 
-       {!! Form::model($ground, ['method'=>'PATCH', 'action'=> ['GroundController@update', $ground->id],'files'=>true]) !!}
+       {!! Form::open() !!}
 
-
+            <input type="hidden" name="id" id="editid">
+            <input type="hidden" name="button_action" value="1">
             <div class="form-group">
                 {!! Form::label('name', 'Name') !!}
-                {!! Form::text('name', null, ['class'=>'form-control'])!!}
+                {!! Form::text('name', null, ['class'=>'form-control','id'=>'editname'])!!}
             </div>
 
 
-       {{--     <div class="form-group">
+            {{-- <div class="form-group">
                 {!! Form::label('type_id', 'Type') !!}
                 {!! Form::select('type_id',  $types, null, ['class'=>'form-control'])!!}
-            </div>--}}
+            </div> --}}
 
 
-
-
-            <div class="form-group">
+            {{-- <div class="form-group">
                 {!! Form::label('photo_id', 'Photo') !!}
                 {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
-            </div>
+            </div> --}}
 
 
 
@@ -162,12 +127,12 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title"><strong>Coach</strong></h3>
+        <h3 class="modal-title"><strong>Register New Ground</strong></h3>
   </div>
   <div class="modal-body">
-    {!! Form::open(['method'=>'POST', 'action'=> 'GroundController@store','files'=>true]) !!}
+    {!! Form::open() !!}
 
-
+                <input type="hidden" name="button_action" value="0">
                 <div class="form-group">
                     {!! Form::label('name', 'Name') !!}
                     {!! Form::text('name', null, ['class'=>'form-control'])!!}
@@ -181,16 +146,15 @@
 
 
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     {!! Form::label('photo_id', 'Logo') !!}
                     {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
-                </div>
-
+                </div> --}}
 
 
 
                 <div class="form-group">
-                    {!! Form::submit('Add Ground', ['class'=>'btn btn-primary col-sm-3']) !!}
+                    {!! Form::submit('Register Ground', ['class'=>'btn btn-primary col-sm-3']) !!}
                 </div>
                 <div class="form-group">
             {!! Form::button('Cancel', ['class'=>'btn btn-danger col-sm-3', 'data-dismiss'=>'modal']) !!}
@@ -206,4 +170,116 @@
 {{-- End Add Modal --}}
 
 
+@stop
+
+@section('scripts')
+    <script type="text/javascript">
+        //load  table ajax
+        $('#mytable').DataTable(
+        {
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ route('grounddata') }}",
+                "columns":[
+                    { "data": "names" },
+                    { "data": "action"}
+                ]
+        });
+
+        //when click on edit button of table
+        $(document).on('click','.idedit',function()
+        {
+            console.log('Edit Enter');
+            $('#editid').val($(this).data('id'));
+            $('#editname').val($(this).data('name'));
+        });
+
+         //when click on delete button of table
+        $(document).on('click','.iddelete',function()
+        {
+            console.log('Delete Enter');
+            $('#deleteid').val($(this).data('id'));
+        });
+
+        //when click on edit/add button of modal form
+        $(document).on('submit','form',function(event)
+        {
+            event.preventDefault();
+            var form_data = $(this).serialize();
+            console.log(form_data);
+            $.ajax({
+                url:"{{ route('grounds.store') }}",
+                method:"POST",
+                data:form_data,
+                success:function(data)
+                {
+                    console.log(data);
+                    var dt = JSON.parse(data,true);
+                    console.log(dt);
+                    if(dt.error.length)
+                    {
+                        toastr.warning('Fill In The Required Fields', 'Error Alert');
+                        var error_html = '';
+                        for(var count = 0; count < dt.error.length; count++)
+                        {
+                            error_html += '<div class="alert alert-danger">'+dt.error[count]+'</div>';
+                        }
+                        $('#form_output').html(error_html);
+                        $('#addmodel').modal('hide');
+                        $('.moodal #addmodel1').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        setTimeout(function(){
+                            $('.alert-danger').remove();
+                        }, 6000)
+                        
+                    }
+                    else
+                    {
+                        // $('#form_output').html(dt.success);
+                        toastr.success(dt.success, 'Data Inserted Successfully');
+                        $('form')[0].reset();
+                        $('#addmodel').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        
+                        // $('#action').val('Add');
+                        // $('.modal-title').text('Add Data');
+                        // $('#button_action').val('insert');
+                        $('#mytable').DataTable().ajax.reload();
+                    }
+                },
+                error:function(data)
+                {
+                    toastr.error('Server Responded With Error','Error Alert');
+                }
+            });
+        });
+
+        //when click on delete button of modal form
+        $(document).on('click','#buttonDelete',function(event)
+        {
+            event.preventDefault();
+            var id = $('#deleteid').val();
+            $.ajax({
+                url:"/admin/ground/delete/"+id,
+                method:'DELETE',
+                data: {
+                    id:id,
+                    _token:$('input[name=_token]').val()
+                },
+                success:function(data)
+                {
+                    // alert(data);
+                    $('#mytable').DataTable().ajax.reload();
+                    toastr.success(data, 'Data Deleted');
+                },
+                error:function(data)
+                {
+                    toastr.error(data, 'Error Alert');
+                }
+            });
+        });
+
+    </script>
 @stop

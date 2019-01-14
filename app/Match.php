@@ -6,8 +6,49 @@ use Illuminate\Database\Eloquent\Model;
 
 class Match extends Model
 {
-    protected $fillable = ['
-    
-    
-    '];
+    protected $guarded = [];
+
+   public function club1()
+   {
+   		return $this->belongsTo('App\Club','club_id_1');
+   }
+   public function club2()
+   {
+   		return $this->belongsTo('App\Club','club_id_2');
+   }
+   public function winner()
+   {
+   		return $this->belongsTo('App\Club','winner_club_id');
+   }
+   public function ground()
+   {
+   		return $this->belongsTo('App\Ground','ground_id');
+   }
+   public function pitch()
+   {
+   		return $this->belongsTo('App\Pitch','pitch_id');
+   }
+   public function player()
+   {
+   		return $this->belongsTo('App\Player','mom_player_id');
+   }
+   public function umpire()
+   {
+   		return $this->belongsTo('App\Umpire','umpire_id');
+   }
+   public function tournament()
+   {
+   		return $this->belongsTo('App\Tournament','tournament_id');
+   }
+   public function matchtype()
+   {
+   		return $this->belongsTo('App\MatchType','match_type_id');
+   }
+
+
+   public function toss_name()
+   {
+   		return $this->belongsTo('App\Club','toss');
+   }
+
 }

@@ -20,9 +20,38 @@ class TournamentsReference extends Model
 
 
 
+//    public function tournamentClubs()
+//    {
+//        return $this->belongsTo('App\TournamentClub');
+//    }
+
+
     public function club()
     {
         return $this->belongsTo('App\Club');
+    }
+
+
+
+    public function clubs()
+    {
+        return $this->belongsToMany('App\Club');
+    }
+
+    public function tournament_format()
+    {
+        return $this->belongsTo('App\TournamentFormat');
+    }
+
+
+    public function tournament_type()
+    {
+        return $this->belongsTo('App\MatchType');
+    }
+
+    public function ground()
+    {
+        return $this->belongsTo('App\Ground','ground_id');
     }
 
 }

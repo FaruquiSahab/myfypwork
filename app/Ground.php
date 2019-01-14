@@ -31,10 +31,16 @@ protected $fillable = [
     }
 
 
- /*   public function groundType()
+    public function tournamentReference()
     {
-        return $this->belongsTo('App\GroundType');
-    }*/
+        return $this->belongsTo('App\TournamentsReferences');
+    }
+
+
+    /*   public function groundType()
+       {
+           return $this->belongsTo('App\GroundType');
+       }*/
 
 
 }

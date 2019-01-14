@@ -43,13 +43,11 @@
     <table class="table table-sm table-hover  table-striped">
         <thead>
         <tr>
-            <th>ID</th>
+            <th>Id</th>
             <th>Logo</th>
             <th>Name</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            {{--<th>Edit</th>--}}
+            {{--<th>Delete</th>--}}
         </tr>
         </thead>
         <tbody>
@@ -57,27 +55,27 @@
         @if($tournaments->count() > 0)
 
 
-            @foreach($tournaments as $tournament)
+            @foreach($tournaments as $key=> $tournament)
 
 
                 <tr>
-                    <td>{{$tournament->id}}</td>
+                    <td>{{$key+1}}</td>
                     <td> <img height="50" src="{{$tournament->photo ? $tournament->photo->file : 'http://placehold.it/400x400'}}" alt="" ></td>
-                    <td><a href="">{{$tournament->name}}</a></td>
+                    <td><strong><h4>{{$tournament->name}}</h4></strong></td>
                     {{--<td>{{$Tournament->type}}</td>--}}
 
 
-                    <td>{{$tournament->created_at->diffForHumans()}}</td>
-                    <td>{{$tournament->updated_at->diffForHumans()}}</td>
+                    {{--<td>{{$tournament->created_at->diffForHumans()}}</td>--}}
+                    {{--<td>{{$tournament->updated_at->diffForHumans()}}</td>--}}
 
-                    <td>
-                        <a href="" class=" col-sm-8 btn btn-info btn-circle" data-toggle="modal" data-target="#addmodel1"><i class="fa fa-pencil fa-fw"></i></a>
-                    </td>
+                    {{--<td>--}}
+                        {{--<a href="" class=" col-sm-8 btn btn-info btn-circle" data-toggle="modal" data-target="#addmodel1"><i class="fa fa-pencil fa-fw"></i></a>--}}
+                    {{--</td>--}}
 
 
-                    <td>
-                        <a href="" class="col-sm-8 btn btn-danger btn-circle" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash fa-fw"></i></a>
-                    </td>
+                    {{--<td>--}}
+                        {{--<a href="" class="col-sm-8 btn btn-danger btn-circle" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash fa-fw"></i></a>--}}
+                    {{--</td>--}}
 
 
 
@@ -141,7 +139,7 @@
 
             <div class="form-group">
                 {!! Form::label('name', 'Name') !!}
-                {!! Form::text('name', null, ['class'=>'form-control'])!!}
+                {!! Form::text('name', null, ['class'=>'form-control','required'])!!}
             </div>
 
 
@@ -155,7 +153,7 @@
 
             <div class="form-group">
                 {!! Form::label('photo_id', 'Photo') !!}
-                {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
+                {!! Form::file('photo_id', null, ['class'=>'form-control','required'])!!}
             </div>
 
 
@@ -189,7 +187,7 @@
 
                 <div class="form-group">
                     {!! Form::label('name', 'Name') !!}
-                    {!! Form::text('name', null, ['class'=>'form-control'])!!}
+                    {!! Form::text('name', null, ['class'=>'form-control','required'])!!}
                 </div>
 
 
@@ -202,7 +200,7 @@
 
                 <div class="form-group">
                     {!! Form::label('photo_id', 'Logo') !!}
-                    {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
+                    {!! Form::file('photo_id', null, ['class'=>'form-control','required'])!!}
                 </div>
 
 

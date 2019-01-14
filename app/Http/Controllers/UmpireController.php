@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+use Datatables;
 use App\Photo;
 use App\Umpire;
 use Illuminate\Http\Request;
@@ -16,8 +18,28 @@ class UmpireController extends Controller
      */
     public function index()
     {
+        return view('admin.umpires.index');
+    }
+    public function umpiredata()
+    {
         $umpires = Umpire::all();
-        return view('admin.umpires.index',compact('umpires'));
+        return Datatables::of($umpires)
+        ->addColumn('names',function($umpire)
+        {
+            return '<strong style="font-size:20px">'.$umpire->name. '</strong>';
+        })
+        ->addColumn('action',function($umpire)
+        {
+            return '<a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1"
+            data-id="' .$umpire->id. '"
+            data-name="' .$umpire->name. '"
+            data-nation="' .$umpire->nationality. '">
+            <i class="glyphicon glyphicon-edit"></i> Change </a>
+            <a class="btn btn-sm btn-danger iddelete" data-toggle="modal" data-target="#deletemodal" data-id="' .$umpire->id. '"><i class="glyphicon glyphicon-remove "></i> Delete</a>';
+        })
+
+        ->rawColumns(['names','action'])
+        ->make(true);
     }
 
     /**
@@ -42,38 +64,46 @@ class UmpireController extends Controller
      */
     public function store(Request $request)
     {
-        if($file = $request->file('photo_id')) {
-
-
-            $name = time() . $file->getClientOriginalName();
-
-
-            $file->move('images', $name);
-
-            $photo = Photo::create(['file'=>$name]);
-
-
-
-            $input['photo_id'] = $photo->id;
-
-            $input['name'] = $request->name;
-
-            $input['nationality'] = $request->nationality;
-
-            //$input['club_id'] = $request->club_id;
-
-
-
-
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'nationality' => 'required',
+        ]);
+        $error_array = array();
+        $success_output = '';
+        if ($validation->fails())
+        {
+            foreach($validation->messages()->getMessages() as $field_name => $messages)
+            {
+                $error_array[] = $messages;
+            }
         }
-
-
-        Umpire::create($input);
-
-
-        Session::flash('created_umpire','The umpire has been created.');
-        return redirect('/admin/umpires');
-
+        else
+        {
+            if($request->button_action == 0)
+            {
+                $umpire = new Umpire([
+                    'name' => $request->name,
+                    'nationality' => $request->nationality,
+                ]);
+                $umpire->save();
+                $success_output = 'Umpire '.$request->name.' Inserted';
+                
+            }
+            elseif ($request->button_action == 1) 
+            {
+                $umpire = Umpire::findOrFail($request->id);
+                $umpire->name = $request->name;
+                $umpire->nationality = $request->nationality;
+                $umpire->save();
+                $success_output = 'Umpire '.$request->name.' Updated';
+            }
+        }
+        
+        $output = array(
+            'error'     =>  $error_array,
+            'success'   =>  $success_output
+        );
+        echo json_encode($output);
     }
 
     /**
@@ -154,18 +184,13 @@ class UmpireController extends Controller
     public function destroy($id)
     {
         $umpire = Umpire::findOrFail($id);
-
-
-        unlink(public_path() . $umpire->photo->file);
-
-
-        $umpire->delete();
-
-
-        Session::flash('deleted_umpire','The umpire has been deleted.');
-
-
-        return redirect('/admin/umpires');
-
+        if($umpire->delete())
+        {
+            echo 'Umpire '.$umpire->name.' Deleted Successfully';
+        }
+        else
+        {
+            echo 'An Error Ocurred Cannot Delete';
+        }
     }
 }

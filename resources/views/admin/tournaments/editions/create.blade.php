@@ -8,7 +8,7 @@
 
 
 
-    <h2>Create Tournamaent Edition</h2>
+    <h2>Create Tournament Edition</h2>
 
 
     <div class="row">
@@ -42,8 +42,9 @@
                     {!! Form::select('tournament_id', $t_format, null, ['placeholder'=>'Tournament Format', 'class'=>'form-control', 'name'=>'tournament_format_id','id'=>'formatSelect', 'required'])!!}
                 </div>
 
+
                 <div class="form-group">
-                    {!! Form::label('number_of_teams', 'Num of Teams') !!}
+                    {!! Form::label('number_of_teams', 'Number of Teams') !!}
                     {!! Form::number('number_of_teams', null, ['class'=>'form-control', 'min'=>'0', 'required'])!!}
                 </div>
 

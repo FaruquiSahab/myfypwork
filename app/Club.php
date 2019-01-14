@@ -119,4 +119,17 @@ class Club extends Model
 
 
 
+    public function tournaments()
+    {
+        return $this->belongsTo('App\TournamentReference');
+    }
+
+
+    public function tournament_club()
+    {
+        return $this->belongsToMany('App\TournamentClub');
+    }
+
+
+
 }

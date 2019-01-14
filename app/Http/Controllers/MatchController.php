@@ -9,6 +9,8 @@ use App\MatchType;
 use App\Tournament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use phpDocumentor\Reflection\Types\Null_;
+use Yajra\Datatables\Facades\Datatables;
 
 class MatchController extends Controller
 {
@@ -20,11 +22,64 @@ class MatchController extends Controller
     public function index()
     {
         $matches = Match::all();
-        $grounds = Ground::pluck('name','id')->all();
-        $clubs = Club::pluck('name','id')->all();
-        $tournaments = Tournament::pluck('name','id')->all();
-        $match_types = MatchType::pluck('type_name','id')->all();
-        return view('admin.matches.index',compact('matches','grounds','clubs','tournaments','match_types'));
+
+
+        return view('admin.matches.index',compact('matches'));
+
+
+    }
+    public function matchdata()
+    {
+        $matches = Match::all();
+        return Datatables::of($matches)
+        ->addColumn('club1',function($match){
+            if($match->club1->name)
+                return $match->club1->name;
+            else
+                return Null;
+        })
+        ->addColumn('club2',function($match){
+            if($match->club2->name)
+                return $match->club2->name;
+            else
+                return Null;
+        })
+        ->addColumn('winner',function($match){
+            if($match->winner->name)
+                return $match->club2->name;
+            else
+                return Null;
+        })
+        ->addColumn('pitch',function($match){
+            if($match->pitch->name)
+                return $match->pitch->name;
+            else
+                return Null;
+        })
+        ->addColumn('umpire',function($match){
+            if($match->umpire->name)
+                return $match->umpire->name;
+            else
+                return Null;
+        })
+        ->addColumn('ground',function($match){
+            if($match->ground->name)
+                return $match->ground->name;
+            else
+                return Null;
+        })
+        ->addColumn('tournament',function($match){
+            if($match->tournament->name)
+                return $match->tournament->name;
+            else
+                return Null;
+        })
+        ->addColumn('vs',function(){
+            return 'VS';
+        })
+        ->make(true);
+
+
     }
 
     /**

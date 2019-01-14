@@ -44,7 +44,7 @@
         <thead>
         <tr>
 
-            <th>ID</th>
+
             <th>Logo</th>
             <th>Name</th>
             <th>Edition</th>
@@ -61,9 +61,14 @@
 
 
                 <tr>
-                    <td>{{$tournament->id}}</td>
                     <td> <img height="50" src="{{$tournament->photo ? $tournament->photo->file : 'http://placehold.it/400x400'}}" alt="" ></td>
-                    <td><a href="{{route('edition.show', $tournament->id)}}">{{$tournament->tournament->name}}</a></td>
+                    <td>
+                        @if($tournament->status == 0)
+                        <a href="{{route('edition.show', $tournament->id)}}"> {{$tournament->tournament->name}}</a>
+                        @else
+                            {{$tournament->tournament->name}}
+                        @endif
+                    </td>
                     {{--<td>{{$Tournament->type}}</td>--}}
 
                     <td>
@@ -74,8 +79,10 @@
 
 
                     <td>
-                    	<a href="" class=" col-sm-8 btn btn-info btn-circle"><i class="fa fa-pencil fa-fw"></i></a>
-                        <a href="" class="col-sm-8 btn btn-danger btn-circle"><i class="fa fa-trash fa-fw"></i></a>
+                        @if($tournament->status == 1)
+                    	    <a style="margin: 5px" href="{{route('edition.tournament_table', encrypt($tournament->id))}}" class=" col-sm-8 btn btn-info btn-circle"><i class="fa fa-eye fa-fw"></i></a>
+                        @endif
+                        <a style="margin: 5px" href="{{route('edition.delete', encrypt($tournament->id))}}" class="col-sm-8 btn btn-danger btn-circle"><i class="fa fa-trash fa-fw"></i></a>
                     </td>
 
 
@@ -92,79 +99,6 @@
         </tbody>
     </table>
 
-    <!--begin::DeleteModal-->
-{{-- <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">
-                    Warning
-                </h3>
-                
-            </div>
-            <div class="modal-body">
-                <h3>
-                    Are you Sure you Want To Delete?
-                </h3>
-            </div>
-            <div class="modal-footer">
-                <input type="hidden" id="deleteid" name="">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Cancel
-                </button>
-                <button type="submit" id="showtoast"  class="btn btn-danger delete" data-dismiss="modal">
-                    Delete
-                </button>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
-</div> --}}
-<!--end::DeleteModal-->
-
-
-{{-- Edit Modal Start --}}
-{{-- <div class="modal" tabindex="-1" role="dialog" id="addmodel1">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title"><strong>Update Information</strong></h3>
-  </div>
-  <div class="modal-body">
-
-
-       {!! Form::model($coach, ['method'=>'PATCH', 'action'=> ['CoachController@update', $coach->id],'files'=>true]) !!}
-            <div class="form-group">
-                {!! Form::label('', 'Name') !!}
-                {!! Form::text('name', null, ['class'=>'form-control'])!!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('', 'Nationality') !!}
-                {!! Form::text('nationality', null, ['class'=>'form-control'])!!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('', 'Club') !!}
-                {!! Form::select('club_id',  $clubs, null, ['class'=>'form-control'])!!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('', 'Photo') !!}
-                {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
-            </div>
-            <div class="form-group">
-                {!! Form::submit('Edit coach', ['class'=>'btn btn-primary col-sm-3']) !!}
-            </div>
-            <div class="form-group">
-            {!! Form::button('Cancel', ['class'=>'btn btn-danger col-sm-3', 'data-dismiss'=>'modal']) !!}
-        </div>
-            {!! Form::close() !!}
-
-</div>
-<div class="modal-footer"></div>
-</div>
-</div>
-</div> --}}
-{{-- Edit Modal Ends --}}
-
 
 
 {{-- Add Modal Starts --}}
@@ -172,27 +106,54 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title"><strong>Coach</strong></h3>
+        <h3 class="modal-title"><strong>Tournament</strong></h3>
   </div>
   <div class="modal-body">
     
     {!! Form::open(['method'=>'POST', 'action'=> 'TournamentReferenceController@store','files'=>true]) !!}
 
 
+
                 <div class="form-group">
                     {!! Form::label('photo_id', 'Logo') !!}
                     {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
                 </div>
-                
+
+
+
+      <div class="form-group">
+          {!! Form::label('starting_date', 'Starting Date') !!}
+          {{--{!! Form::text('starting_date', null, ['class'=>'form-control','required', 'id' => 'start_date'])!!}--}}
+          <input name="starting_date" class="form-control" type="text" id="datepicker" required>
+      </div>
+
+
+      {{--<div class="form-group">
+          {!! Form::label('ending_date', 'Ending Date') !!}
+          {!! Form::date('ending_date', null, ['class'=>'form-control','required','id' => 'end_date'])!!}
+      </div>
+--}}
 
                 <div class="form-group">
                     {!! Form::label('tournament_id', 'Tournament') !!}
-                    {!! Form::select('tournament_id', $tournamentss, null, ['placeholder'=>'Select a Tournament', 'class'=>'form-control', 'name'=>'tournament_id','id'=>'tournamentSelect', 'required' ])!!}
+                    {!! Form::select('tournament_id', $tournamentss, null, ['placeholder'=>'Select a Tournament', 'class'=>'form-control', 'name'=>'tournament_id','id'=>'tournamentSelect', 'required'])!!}
+
+
+                    {{--<label for="tournament">Tournament</label>--}}
+                    {{--<select name="tournament_id" form="carform" class="form-control">--}}
+                        {{--<option value="" default selected>Tournament</option>--}}
+                      {{--  @foreach($tournamentss as $key=> $tour)--}}
+                        {{--<option value="{{$tournamentss[$key]->id}}">{{$tournamentss[$key]->name}}</option>--}}
+                        {{--@endforeach--}}
+                    {{--</select>--}}
+
+
+
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('tournament_type_id', 'Tournament') !!}
-                    {!! Form::select('tournament_id', $m_type, null, ['placeholder'=>'Match Type', 'class'=>'form-control', 'name'=>'tournament_type_id','id'=>'TypeSelect', 'required'])!!}
+                    {!! Form::label('tournament_type_id', 'Tournament Type') !!}
+                    {!! Form::select('tournament_type_id', $m_type, null, ['placeholder'=>'Match Type', 'class'=>'form-control', 'name'=>'tournament_type_id','id'=>'TypeSelect', 'required'])!!}
                 </div>
                 
                 <div class="form-group">
@@ -200,15 +161,26 @@
                     {!! Form::select('tournament_id', $t_format, null, ['placeholder'=>'Tournament Format', 'class'=>'form-control', 'name'=>'tournament_format_id','id'=>'formatSelect', 'required'])!!}
                 </div>
 
+
+
+
                 <div class="form-group">
-                    {!! Form::label('number_of_teams', 'Num of Teams') !!}
-                    {!! Form::number('number_of_teams', null, ['class'=>'form-control', 'min'=>'0', 'required'])!!}
+                    {!! Form::label('ground_id', 'Ground') !!}
+                    {!! Form::select('ground_id', $t_grounds, null, ['placeholder'=>'Ground', 'class'=>'form-control', 'name'=>'ground_id', 'required'])!!}
                 </div>
 
 
 
 
-                <div class="form-group">
+      <div class="form-group">
+
+          {!! Form::label('number_of_teams', 'Number of Teams') !!}
+          {!! Form::number('number_of_teams', null, ['class'=>'form-control', 'min'=>'4','max'=>'10', 'required'])!!}
+
+      </div>
+
+
+          <div class="form-group">
                     {!! Form::submit('Add Tournament', ['class'=>'btn btn-primary col-sm-3']) !!}
                 </div>
 
@@ -226,4 +198,53 @@
 {{-- End Add Modal --}}
 
 
+
+
 @stop
+
+@section('scripts')
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all">
+    <script type="text/javascript">
+
+//         Get today's date
+        var today = new Date();
+        console.log(today);
+
+        $("#datepicker").datepicker({
+            minDate: today // set the minDate to the today's date
+            // you can add other options heres
+        });
+
+       /* $('#start_date').on('change select',function () {
+           $('#end_date').prop('disabled',false);
+        });
+
+
+        $('#end_date').on('change select',function () {
+           var endDate =  $('#end_date').val();
+            var startDate =  $('#start_date').val();
+//            console.log(endDate);
+
+            $.ajax({
+                url: "tournaments_edtions",
+                method: "GET",
+                data: {
+                    'end_date':endDate,
+                    'start_date':startDate,
+                    '_token': $('input[name=_token]').val()
+                },
+                success: function () {
+
+                },
+                error: function () {
+
+                }
+            })
+        });*/
+    </script>
+
+
+
+
+    @stop
