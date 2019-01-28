@@ -21,6 +21,7 @@
                 <input type="hidden" name="club1" value="{{$club1[0]->club_id_1}}">
                 <input type="hidden" name="club2" value="{{$club2[0]->club_id_2}}">
                 <input type="hidden" name="ground_id" value="{{$club2[0]->ground_id}}">
+                <input type="hidden" name="club2" value="{{$club2[0]->club_id_2}}">
                 <input type="hidden" name="tournament_id" value="{{$club2[0]->tournament_id}}">
                 <input type="hidden" name="date" value="{{$club2[0]->match_date}}">
                 <input type="hidden" name="match_type_id" value="{{$type}}">
@@ -32,8 +33,8 @@
 
                     <div class="form-group">
                     <label for="Toss">Toss</label>
-                    <select class="form-control" name="toss" required>
-                        <option disabled selected>Select Toss Winning Team</option>
+
+                    <select class="form-control" name="toss">
                         <option value="{{$club1[0]->club_id_1}}">{{$club1[0]->club1->name}}</option>
                         <option value="{{$club2[0]->club_id_2}}">{{$club2[0]->club2->name}}</option>
                     </select>
@@ -44,7 +45,6 @@
                         <label for="Toss">Choose To</label>
 
                         <select class="form-control" name="choose_to">
-                            <option disabled selected>After Winning Toss Decided To</option>
                             <option value="1">Bat</option>
                             <option value="2">Field</option>
                         </select>
@@ -54,7 +54,7 @@
                     <div class="form-group">
 
                         <label for="players">Lineup for {{$club1[0]->club1->name}}</label>
-                        <select id="player_id1" name="player_id1[]"  class="form-control players" required>
+                        <select id="player_id1" name="player_id1[]"  class="form-control players">
                             @foreach($players1 as $key => $player1)
                                 <option value="{{ $player1->id }}" >{{ $player1->name }} ({{ $player1->role->name }})</option>
                             @endforeach
@@ -70,7 +70,7 @@
                     <div class="form-group">
 
                         <label for="players">Lineup for {{$club2[0]->club2->name}}</label>
-                        <select id="player_id2" name="player_id2[]"  class="form-control" required>
+                        <select id="player_id2" name="player_id2[]"  class="form-control">
                             @foreach($players2 as $key => $player2)
                                 <option value="{{ $player2->id }}" >{{ $player2->name }} ({{ $player2->role->name }})</option>
                             @endforeach
@@ -82,8 +82,7 @@
                     <div class="form-group">
                         <label for="Umpires">Umpires</label>
 
-                        <select class="form-control" name="umpire_id" required>
-                            <option disabled selected>Select Umpire</option>
+                        <select class="form-control" name="umpire_id">
                             @foreach($umpires as $umpire )
                             <option value="{{$umpire->id}}">{{$umpire->name}}</option>
                                 @endforeach

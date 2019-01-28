@@ -34,42 +34,18 @@ class clubController extends Controller
                         // 
                         ->addColumn('name',function($club)
                         {
-                            if ($club->level->name == 'Easy') {
-                                return '<h2><span class="label label-default"><strong>'.$club->name.'</strong></span></h2>';
-                            }
-                            elseif ($club->level->name == 'Moderate') {
-                                return '<h2><span class="label label-info"><strong>'.$club->name.'</strong></span></h2>';
-                            }
-                            elseif ($club->level->name == 'Hard') {
-                                return '<h2><span class="label label-warning"><strong>'.$club->name.'</strong></span></h2>';
-                            }
-                            else{
-                                return '<h2><span class="label label-danger"><strong>'.$club->name.'</strong></span></h2>';
-                            }   
-                            
+                            return '<strong>'.$club->name.'</strong>';
                         })
                         ->addColumn('level',function($club)
                         {
-                            if ($club->level->name == 'Easy') {
-                                return '<h3><span class="label label-default">'.$club->level->name.'</span></h3>';
-                            }
-                            elseif ($club->level->name == 'Moderate') {
-                                return '<h3><span class="label label-info">'.$club->level->name.'</span></h3>';
-                            }
-                            elseif ($club->level->name == 'Hard') {
-                                return '<h3><span class="label label-warning">'.$club->level->name.'</span></h3>';
-                            }
-                            else{
-                                return '<h3><span class="label label-danger">'.$club->level->name.'</span></h3>';
-                            }
-                            
+                            return $club->level->name;
                         })
                         ->addColumn('action', function($club)
                         {
                             return '<a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1" data-id="' .$club->id. '" data-name="' .$club->name. '" data-level="' .$club->level_id. '"><i class="glyphicon glyphicon-edit"></i> Change </a>
                                 <a class="btn btn-sm btn-danger iddelete" data-toggle="modal" data-target="#deletemodal" data-id="' .$club->id. '"><i class="glyphicon glyphicon-remove "></i> Delete</a>';
                         })
-                        ->rawColumns(['action','name','level'])
+                        ->rawColumns(['action','name'])
                         ->make(true);
     }
 

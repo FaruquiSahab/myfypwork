@@ -85,7 +85,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     ])->middleware(['can:update']);
 
 
-    Route::DELETE('/club/delete/{id}', [
+    Route::POST('/club/delete/{id}', [
         'uses' => 'ClubController@destroy',
         'as' => 'clubs.delete'
     ])->middleware(['can:delete']);
@@ -176,7 +176,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     ])->middleware(['can:update']);
 
 
-    Route::DELETE('/ground/delete/{id}', [
+    Route::get('/ground/delete/{id}', [
         'uses' => 'GroundController@destroy',
         'as' => 'grounds.delete'
 
@@ -212,6 +212,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     Route::get('/player/edit/{id}', [
         'uses' => 'PlayerController@edit',
         'as' => 'players.edit'
+
     ])->middleware(['can:update']);
 
 
@@ -222,9 +223,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     ])->middleware(['can:update']);
 
 
-    Route::DELETE('/player/delete/{id}', [
+    Route::get('/player/delete/{id}', [
         'uses' => 'PlayerController@destroy',
         'as' => 'players.delete'
+
     ])->middleware(['can:delete']);
 
     //-----------------------------------------------------------------------------------------------------
@@ -756,7 +758,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
 Route::get('/scoring', 'ScoringController@index' )
     ->name('scoring')
     ->middleware(['can:create']);
-Route::get('/scoring/match/{match}', 'ScoringController@index1' )
+Route::get('/scoring/match', 'ScoringController@index1' )
     ->name('scoring.match')
     ->middleware(['can:create']);
 
