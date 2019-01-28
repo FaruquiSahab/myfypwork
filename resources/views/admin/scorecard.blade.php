@@ -71,13 +71,6 @@
                                     <th>6s</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                              @foreach()
-                                <tr>
-                                  <td></td>
-                                </tr>
-                              @endforeach
-                            </tbody>
                         </table>
                     </div> 
                     <br>
@@ -94,13 +87,6 @@
                                     <th>Wickets</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                              @foreach()
-                                <tr>
-                                  <td></td>
-                                </tr>
-                              @endforeach
-                            </tbody>
                         </table>
                     </div>  
                     <br>
@@ -117,13 +103,6 @@
                                         <th>Leg Byes</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                  @foreach()
-                                    <tr>
-                                      <td></td>
-                                    </tr>
-                                  @endforeach
-                                </tbody>
                             </table>
                     </div>     
                     <br>
@@ -138,13 +117,6 @@
                                     <th>Batsmen</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                              @foreach()
-                                <tr>
-                                  <td></td>
-                                </tr>
-                              @endforeach
-                            </tbody>
                         </table>
                     </div>
                     <br>    
@@ -159,13 +131,6 @@
                                     <th>Runs</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                              @foreach()
-                                <tr>
-                                  <td></td>
-                                </tr>
-                              @endforeach
-                            </tbody>
                         </table>
                     </div>
 

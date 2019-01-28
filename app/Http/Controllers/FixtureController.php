@@ -6,6 +6,8 @@ use App\Club;
 use App\Fixture;
 use App\Ground;
 use App\Match;
+use App\Option;
+use App\Out;
 use App\Player;
 use App\TournamentsReference;
 use App\Umpire;
@@ -75,6 +77,7 @@ class FixtureController extends Controller
 
         $players1 = Player::where('club_id',$club1[0]->club_id_1)->get();
         $players2 = Player::where('club_id',$club2[0]->club_id_2)->get();
+        // return $players2;
 
         $umpires = Umpire::all();
 //        return $umpires;
@@ -164,8 +167,13 @@ class FixtureController extends Controller
                 ]);
 
             }
+            // $lineups = DB::table('lineups')->where('match_id',$match)->get();
+            // $options = Option::all();
+            // $optionsE = Option::where('legal','1')->get();
+            // $wickets = Out::all();
+            // return view('admin.scoringscorecard',compact('options','optionsE','wickets','match','lineups'));
 
-            return redirect( route('scoring.match',compact('match')));
+            return redirect( route('scoring.match',$match));
 //            return response()->json(array('success' => true, 'html' => $returnHtml));
         }
     }
