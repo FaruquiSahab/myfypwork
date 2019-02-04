@@ -165,7 +165,7 @@ class FixtureController extends Controller
 
             }
 
-            return redirect( route('scoring.match',compact('match')));
+            return redirect( route('scoring.match',$match));
 //            return response()->json(array('success' => true, 'html' => $returnHtml));
         }
     }

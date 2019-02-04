@@ -94,7 +94,7 @@
                 <td>{{$fix->ground->name}}</td>
                 <td>
 
-                    @if($fix->match_date =="2019-02-24")
+                    @if($fix->match_date =="2019-02-11")
                         <form action="{{route('editions.lineup',encrypt($fix->id))}}">
                             <input type="hidden">
                             <input type="submit" class="btn btn-success" value="Allowed">

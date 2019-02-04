@@ -6,6 +6,8 @@ use App\BatsmenScore;
 use App\BowlerScore;
 use App\Extra;
 use App\FallOfWicket;
+use App\Lineup;
+use App\Match;
 use App\Option;
 use App\Out;
 use App\Over;
@@ -23,12 +25,30 @@ class ScoringController extends Controller
 		$wickets = Out::all();
 		return view('admin.scoringajax',compact('options','optionsE','wickets'));
 	}
-    public function index1()
+    public function index1($match)
     {
+
+    	$matches = Match::where('id',$match)->get();
+    	$battingfirst = Lineup::where('match_id',$match)
+    						  ->where('innings_no',1)
+    						  ->get();
+
+    	$battingsecond = Lineup::where('match_id',$match)
+    						  ->where('innings_no',2)
+    						  ->get();
+
+        $ballingfirst = Lineup::where('match_id',$match)
+    						  ->where('innings_no',2)
+    						  ->get();
+
+    	$ballingsecond = Lineup::where('match_id',$match)
+    						  ->where('innings_no',1)
+    						  ->get();					  
+
         $options = Option::all();
         $optionsE = Option::where('legal','1')->get();
         $wickets = Out::all();
-        return view('admin.scoringajax',compact('options','optionsE','wickets'));
+        return view('admin.scoringscorecard',compact( 'matches' ,'options','optionsE','wickets','battingfirst','battingsecond','ballingfirst','ballingsecond'));
     }
 
 	public function batsmenScore($id)

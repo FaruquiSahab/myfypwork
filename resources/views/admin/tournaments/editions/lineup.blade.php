@@ -35,6 +35,7 @@
                     <label for="Toss">Toss</label>
 
                     <select class="form-control" name="toss">
+                        <option disabled selected>Select Team</option>
                         <option value="{{$club1[0]->club_id_1}}">{{$club1[0]->club1->name}}</option>
                         <option value="{{$club2[0]->club_id_2}}">{{$club2[0]->club2->name}}</option>
                     </select>
@@ -45,6 +46,7 @@
                         <label for="Toss">Choose To</label>
 
                         <select class="form-control" name="choose_to">
+                            <option disabled selected>Select Decision</option>
                             <option value="1">Bat</option>
                             <option value="2">Field</option>
                         </select>
