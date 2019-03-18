@@ -756,32 +756,42 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
 //--------------------------------------------scoring-----------------------------------------------------
 
 Route::get('/scoring', 'ScoringController@index' )
-    ->name('scoring')
-    ->middleware(['can:create']);
-Route::get('/scoring/match/{match}', 'ScoringController@index1' )
-    ->name('scoring.match')
-    ->middleware(['can:create']);
-
-Route::get('/batsmenScore/{match_id}','ScoringController@batsmenScore')
-            ->name('batsmenScore')
-            ->middleware(['can:create']);  
-
-Route::get('/bowlerScore/{match_id}','ScoringController@bowlerScore')
-            ->name('bowlerScore')
+            ->name('scoring')
             ->middleware(['can:create']);
 
-Route::get('/fallofwickets/{match_id}','ScoringController@fallofwickets')
-            ->name('fallofwickets')
-            ->middleware(['can:create']); 
+Route::get('/scoring/match/{match}', 'ScoringController@index1' )
+            ->name('scoring.match')
+            ->middleware(['can:create']);
+#Obsolute
+    Route::get('/batsmenScore/{match_id}','ScoringController@batsmenScore')
+                ->name('batsmenScore')
+                ->middleware(['can:create']);  
 
-Route::get('/runsovers/{match_id}','ScoringController@runsovers')
-            ->name('runsovers')
-            ->middleware(['can:create']); 
+    Route::get('/bowlerScore/{match_id}','ScoringController@bowlerScore')
+                ->name('bowlerScore')
+                ->middleware(['can:create']);
 
-Route::get('/extras/{match_id}','ScoringController@extras')
-            ->name('extras')
-            ->middleware(['can:create']); 
+    Route::get('/fallofwickets/{match_id}','ScoringController@fallofwickets')
+                ->name('fallofwickets')
+                ->middleware(['can:create']); 
 
+    Route::get('/runsovers/{match_id}','ScoringController@runsovers')
+                ->name('runsovers')
+                ->middleware(['can:create']); 
+
+    Route::get('/extras/{match_id}','ScoringController@extras')
+                ->name('extras')
+                ->middleware(['can:create']); 
+#End
+Route::POST('/submitbatsmenscore','ScoringController@submitbatsmenscore')
+            ->name('submitbatsmenscore')
+            ->middleware(['can:create']);
+Route::POST('/submitbowlerscore','ScoringController@submitbowlerscore')
+            ->name('submitbowlerscore')
+            ->middleware(['can:create']);
+Route::POST('/submitextrascore','ScoringController@submitextrascore')
+            ->name('submitextrascore')
+            ->middleware(['can:create']);
 //------------------------------------------------------------------------------------------------------
 //
 //

@@ -27,30 +27,380 @@ class ScoringController extends Controller
 	}
     public function index1($match)
     {
+	    	$matches = Match::where('id',$match)->get();
+	    #////////////////////// Batting First
+	    	$battingfirst = Lineup::where('match_id',$match)->where('innings_no',1)->get();
+		    	for ($i=0; $i < sizeof($battingfirst) ; $i++)
+		    	{
+		    		BatsmenScore::updateOrCreate
+		    		(
+		    		 	[
+			    		 	'match_id'=>$matches[0]->id,
+			    		 	'batsmen_id'=>$battingfirst[$i]->player->id,
+			    		 	'inning_no'=>1
+		    		 	]
+		    		);
+		    	}
+	    	$battingfirst = BatsmenScore::where('match_id',$matches[0]->id)->where('inning_no',1)->get();
+	    	// return $battingfirst[0]->balls;
+	    #//////////////////////
 
-    	$matches = Match::where('id',$match)->get();
-    	$battingfirst = Lineup::where('match_id',$match)
-    						  ->where('innings_no',1)
-    						  ->get();
 
-    	$battingsecond = Lineup::where('match_id',$match)
-    						  ->where('innings_no',2)
-    						  ->get();
 
-        $ballingfirst = Lineup::where('match_id',$match)
-    						  ->where('innings_no',2)
-    						  ->get();
 
-    	$ballingsecond = Lineup::where('match_id',$match)
-    						  ->where('innings_no',1)
-    						  ->get();					  
+	    #////////////////////// Batting Second
+	    	$battingsecond = Lineup::where('match_id',$match)->where('innings_no',2)->get();
+		    	for ($i=0; $i < sizeof($battingsecond) ; $i++)
+		    	{
+		    		BatsmenScore::updateOrCreate
+		    		(
+		    		 	[
+			    		 	'match_id'=>$matches[0]->id,
+			    		 	'batsmen_id'=>$battingsecond[$i]->player->id,
+			    		 	'inning_no'=>2
+		    		 	]
+		    		);
+		    	}
+	    	$battingsecond = BatsmenScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
+	    #//////////////////////
 
-        $options = Option::all();
-        $optionsE = Option::where('legal','1')->get();
-        $wickets = Out::all();
-        return view('admin.scoringscorecard',compact( 'matches' ,'options','optionsE','wickets','battingfirst','battingsecond','ballingfirst','ballingsecond'));
+
+
+
+
+	    #////////////////////// Balling First
+	        $ballingfirst = Lineup::where('match_id',$match)->where('innings_no',2)->get();
+	        // return sizeof($ballingfirst);
+	        	for ($i=0; $i < sizeof($ballingfirst) ; $i++)
+		    	{
+		    		// echo 'i(F) =>'. $i . '<br>';
+		    		// echo 'role =>'. $ballingfirst[$i]->player->role_id . '<br>';
+		    		if ($ballingfirst[$i]->player->role_id == 2)
+		    		{
+		    			// echo 'roleReqq1 =>'. $ballingfirst[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingfirst[$i]->player->id,
+				    		 	'inning_no'=>2
+			    		 	]
+			    		);
+		    		}
+		    		elseif ($ballingfirst[$i]->player->role_id == 3)
+		    		{
+		    			// echo 'roleReqq2 =>'. $ballingfirst[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingfirst[$i]->player->id,
+				    		 	'inning_no'=>2
+			    		 	]
+			    		);
+		    		}
+		    	}
+		    	// return"";
+		    $ballingfirst = BowlerScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
+		#//////////////////////
+
+
+
+
+	    #////////////////////// Balling Second
+	    	$ballingsecond = Lineup::where('match_id',$match)->where('innings_no',1)->get();
+	    	// return sizeof($ballingsecond);
+	    		for ($i=0; $i< sizeof($ballingsecond); $i++)
+		    	{
+		    		// echo 'i(S) =>'. $i . '<br>';
+		    		// echo 'role =>'. $ballingsecond[$i]->player->role_id . '<br>';
+		    		if ($ballingsecond[$i]->player->role_id == 2)
+		    		{
+		    			// echo 'roleReq1 =>'. $ballingsecond[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingsecond[$i]->player->id,
+				    		 	'inning_no'=>1
+			    		 	]
+			    		);
+		    		}
+		    		elseif ($ballingsecond[$i]->player->role_id == 3)
+		    		{
+		    			// echo 'roleReq2 =>'. $ballingsecond[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingsecond[$i]->player->id,
+				    		 	'inning_no'=>1
+			    		 	]
+			    		);
+		    		}
+		    	}
+		    	// return"";
+		    $ballingsecond = BowlerScore::where('match_id',$matches[0]->id)->where('inning_no',1)->get();
+		#//////////////////////
+
+
+
+		#//////////////////////Extra
+			Extra::updateOrCreate(
+				[
+					'match_id'=>$match,
+					'inning_no'=>1
+				]
+			);
+			$extra = Extra::where('match_id',$match)->get();
+		#//////////////////////
+
+
+
+
+		#others
+	        $options = Option::all();
+	        $optionsE = Option::where('legal','1')->get();
+	        $wickets = Out::all();
+	    #////
+
+	        // return $battingfirst;
+	        return view('admin.scoringscorecard',compact( 'matches' ,'options','optionsE','wickets','battingfirst','battingsecond','ballingfirst','ballingsecond','extra'));
     }
 
+    public function submitbatsmenscore(Request $request)
+    {
+		BatsmenScore::where('match_id', $request->match_id)
+			->sum('balls')->get();
+    	$dots 	=  0 + $request->dots;
+    	$ones 	=  0 + $request->ones;
+    	$twos 	=  0 + $request->twos;
+    	$threes =  0 + $request->threes;
+    	$fours 	=  0 + $request->fours;
+    	$sixes 	=  0 + $request->sixes;
+
+    	$balls= 0;
+    	$runs = 0;
+
+    	$balls = $dots+ $ones+ $twos+ $threes+ $fours+ $sixes;
+    	$runs = ($ones*1)+($twos*2)+($threes*3)+($fours*4)+($sixes*6);
+
+    	DB::table('batsmen_scores')
+	    	->where('match_id',$request->match_id)
+	    	->where('inning_no',$request->innings_no)
+	    	->where('batsmen_id',$request->batsmen_id)
+	    	->update([
+	    		'out_how'=>$request->out_how,
+	    		'out_by'=>$request->out_by,
+	    		'runs'=>$runs,
+	    		'balls'=>$balls,
+	    		'dots'=>$request->dots,
+	    		'ones'=>$request->ones,
+	    		'twos'=>$request->twos,
+	    		'threes'=>$request->threes,
+	    		'fours'=>$request->fours,
+	    		'sixes'=>$request->sixes,
+	    	]);
+    	$data = BatsmenScore::where('match_id',$request->match_id)
+	    					->where('inning_no',$request->innings_no)
+	    					->where('batsmen_id',$request->batsmen_id)
+    						->get(['runs','balls']);
+    	return $data;
+
+    }
+    public function submitbowlerscore(Request $request)
+    {
+    	// return $request->innings_no;
+    	$overs 	 = $request->overs;
+    	$maidens = $request->maidens;
+    	$runs 	 = $request->runs;
+    	$wickets = $request->wickets;
+    	$economy = $runs / $overs;
+
+
+    	BowlerScore::where('match_id',$request->match_id)
+	    	->where('inning_no',$request->innings_no)
+	    	->where('bowler_id',$request->bowler_id)
+	    	->update([
+	    		'overs'=>$overs,
+	    		'maidens'=>$maidens,
+	    		'runs'=>$runs,
+	    		'wickets'=>$wickets,
+	    		'economy'=>$economy,
+	    	]);
+    	$data = BowlerScore::where('match_id',$request->match_id)
+	    					->where('inning_no',$request->innings_no)
+	    					->where('bowler_id',$request->bowler_id)
+    						->get(['economy']);
+    	return $data;
+
+    }
+
+     public function submitextrascore(Request $request)
+    {
+    	// return $request->innings_no;
+    	$wides 	 = $request->wides;
+    	$noballs = $request->no_balls;
+    	$byes 	 = $request->byes;
+    	$legbyes = $request->leg_byes;
+    	// return response()->json($request->match_id)
+
+
+    	Extra::where('match_id',$request->match_id)
+	    	->where('inning_no',$request->inning_no)
+	    	->update([
+	    		'wides'=>$wides,
+	    		'no_balls'=>$noballs,
+	    		'byes'=>$byes,
+	    		'leg_byes'=>$legbyes,
+	    	]);
+	    return response()->json('success');
+
+	}
+
+	public function index2($match)
+    {
+	    	$matches = Match::where('id',$match)->get();
+	    #////////////////////// Batting First
+	    	$battingfirst = Lineup::where('match_id',$match)->where('innings_no',1)->get();
+		    	for ($i=0; $i < sizeof($battingfirst) ; $i++)
+		    	{
+		    		BatsmenScore::updateOrCreate
+		    		(
+		    		 	[
+			    		 	'match_id'=>$matches[0]->id,
+			    		 	'batsmen_id'=>$battingfirst[$i]->player->id,
+			    		 	'inning_no'=>1
+		    		 	]
+		    		);
+		    	}
+	    	$battingfirst = BatsmenScore::where('match_id',$matches[0]->id)->where('inning_no',1)->get();
+	    	// return $battingfirst[0]->balls;
+	    #//////////////////////
+
+
+
+
+	    #////////////////////// Batting Second
+	    	$battingsecond = Lineup::where('match_id',$match)->where('innings_no',2)->get();
+		    	for ($i=0; $i < sizeof($battingsecond) ; $i++)
+		    	{
+		    		BatsmenScore::updateOrCreate
+		    		(
+		    		 	[
+			    		 	'match_id'=>$matches[0]->id,
+			    		 	'batsmen_id'=>$battingsecond[$i]->player->id,
+			    		 	'inning_no'=>2
+		    		 	]
+		    		);
+		    	}
+	    	$battingsecond = BatsmenScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
+	    #//////////////////////
+
+
+
+
+
+	    #////////////////////// Balling First
+	        $ballingfirst = Lineup::where('match_id',$match)->where('innings_no',2)->get();
+	        // return sizeof($ballingfirst);
+	        	for ($i=0; $i < sizeof($ballingfirst) ; $i++)
+		    	{
+		    		// echo 'i(F) =>'. $i . '<br>';
+		    		// echo 'role =>'. $ballingfirst[$i]->player->role_id . '<br>';
+		    		if ($ballingfirst[$i]->player->role_id == 2)
+		    		{
+		    			// echo 'roleReqq1 =>'. $ballingfirst[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingfirst[$i]->player->id,
+				    		 	'inning_no'=>2
+			    		 	]
+			    		);
+		    		}
+		    		elseif ($ballingfirst[$i]->player->role_id == 3)
+		    		{
+		    			// echo 'roleReqq2 =>'. $ballingfirst[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingfirst[$i]->player->id,
+				    		 	'inning_no'=>2
+			    		 	]
+			    		);
+		    		}
+		    	}
+		    	// return"";
+		    $ballingfirst = BowlerScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
+		#//////////////////////
+
+
+
+
+	    #////////////////////// Balling Second
+	    	$ballingsecond = Lineup::where('match_id',$match)->where('innings_no',1)->get();
+	    	// return sizeof($ballingsecond);
+	    		for ($i=0; $i< sizeof($ballingsecond); $i++)
+		    	{
+		    		// echo 'i(S) =>'. $i . '<br>';
+		    		// echo 'role =>'. $ballingsecond[$i]->player->role_id . '<br>';
+		    		if ($ballingsecond[$i]->player->role_id == 2)
+		    		{
+		    			// echo 'roleReq1 =>'. $ballingsecond[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingsecond[$i]->player->id,
+				    		 	'inning_no'=>1
+			    		 	]
+			    		);
+		    		}
+		    		elseif ($ballingsecond[$i]->player->role_id == 3)
+		    		{
+		    			// echo 'roleReq2 =>'. $ballingsecond[$i]->player->role_id . '<br>';
+		    			BowlerScore::updateOrCreate
+			    		(
+			    		 	[
+				    		 	'match_id'=>$matches[0]->id,
+				    		 	'bowler_id'=>$ballingsecond[$i]->player->id,
+				    		 	'inning_no'=>1
+			    		 	]
+			    		);
+		    		}
+		    	}
+		    	// return"";
+		    $ballingsecond = BowlerScore::where('match_id',$matches[0]->id)->where('inning_no',1)->get();
+		#//////////////////////
+
+
+
+		#//////////////////////Extra
+			Extra::updateOrCreate(
+				[
+					'match_id'=>$match,
+					'inning_no'=>2
+				]
+			);
+			$extra = Extra::where('match_id',$match)->get();
+		#//////////////////////
+
+
+
+
+		#others
+	        $options = Option::all();
+	        $optionsE = Option::where('legal','1')->get();
+	        $wickets = Out::all();
+	    #////
+
+	        // return $battingfirst;
+	        return view('admin.scoringscorecard2',compact( 'matches' ,'options','optionsE','wickets','battingfirst','battingsecond','ballingfirst','ballingsecond','extra'));
+    }
+#right now not in use 13-Feb-2019
 	public function batsmenScore($id)
 	{
 		$batsmenScores = BatsmenScore::where('match_id',$id)->get();
@@ -120,6 +470,7 @@ class ScoringController extends Controller
 		$extras = Extra::where('match_id',$id)->get();
 		return Datatables::of($extras)->make(true);
 	}
+#end
 
 
 
@@ -142,7 +493,6 @@ class ScoringController extends Controller
 
 
 
-	
 
 
 

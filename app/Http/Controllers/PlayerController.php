@@ -251,7 +251,7 @@ class PlayerController extends Controller
         $stats = PlayerStat::where('format',1)->get();
         return Datatables::of($stats)
         ->addColumn('names',function($stat){
-            return '<strong style="font-size:10px">'.$stat->player->name.'</strong>';
+            return '<h2><strong style="font-size:12px">'.$stat->player->name.'</strong></h2>';
         })
         ->addColumn('format',function($stat){
             return '<strong style="font-size:10px">T20</strong>';
@@ -265,7 +265,7 @@ class PlayerController extends Controller
         $stats = PlayerStat::where('format',2)->get();
         return Datatables::of($stats)
         ->addColumn('names',function($stat){
-            return '<strong style="font-size:10px">'.$stat->player->name.'</strong>';
+            return '<h2><strong style="font-size:10px">'.$stat->player->name.'</strong></h2>';
         })
         ->addColumn('format',function($stat){
             return '<strong style="font-size:10px">One Day</strong>';

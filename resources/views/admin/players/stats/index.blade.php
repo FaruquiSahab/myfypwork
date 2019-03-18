@@ -8,68 +8,73 @@
 
 
     
-    <h2>Stats Of Players</h2>
+    <u><h2>Stats Of Players</h2></u>
 
+    <fieldset>
+        <legend>One Day Stats</legend>
+        <table class="table table-sm table-hover table-striped col-sm-12" id="mytable">
+            <thead>
+                <tr>
+                    {{-- <th>Format</th> --}}
+                    <th>Name</th>
+                    <th>Matches</th>
+                    <th>Innings</th>
+                    <th>Notouts</th>
+                    <th>Runs</th>
+                    <th>HS</th>
+                    <th>Avg</th>
+                    {{-- <th>S/R</th> --}}
+                    <th>100s</th>
+                    <th>50s</th>
+                    <th>Ct</th>
+                    <th>St</th>
+                    <th>4s</th>
+                    <th>6s</th>
+                    <th>Innings Ball</th>
+                    <th>Overs</th>
+                    <th>Runs</th>
+                    <th>Wickets</th>
+                    <th>Avg</th>
+                    <th>B/F</th>
+                    <th>Eco</th>
+                    <th>5Ws</th>
+                </tr>
+            </thead>
+        </table>
+    </fieldset>
 
-    <table class="table table-sm table-hover table-striped col-sm-12" id="mytable">
-        <thead>
-            <tr>
-                <th>Format</th>
-                <th>Name</th>
-                <th>Matches</th>
-                <th>Innings</th>
-                <th>Notouts</th>
-                <th>Runs</th>
-                <th>HS</th>
-                <th>Avg</th>
-                {{-- <th>S/R</th> --}}
-                <th>100s</th>
-                <th>50s</th>
-                <th>Ct</th>
-                <th>St</th>
-                <th>4s</th>
-                <th>6s</th>
-                <th>Innings Ball</th>
-                <th>Overs</th>
-                <th>Runs</th>
-                <th>Wickets</th>
-                <th>Avg</th>
-                <th>B/F</th>
-                <th>Eco</th>
-                <th>5Ws</th>
-            </tr>
-        </thead>
-    </table>
-
-    <table class="table table-sm table-hover table-striped col-sm-12" id="mytable1">
-        <thead>
-            <tr>
-                <th>Format</th>
-                <th>Name</th>
-                <th>Matches</th>
-                <th>Innings</th>
-                <th>Notouts</th>
-                <th>Runs</th>
-                <th>HS</th>
-                <th>Avg</th>
-                {{-- <th>S/R</th> --}}
-                <th>100s</th>
-                <th>50s</th>
-                <th>Ct</th>
-                <th>St</th>
-                <th>4s</th>
-                <th>6s</th>
-                <th>Innings Ball</th>
-                <th>Overs</th>
-                <th>Runs</th>
-                <th>Wickets</th>
-                <th>Avg</th>
-                <th>B/F</th>
-                <th>Eco</th>
-                <th>5Ws</th>
-            </tr>
-        </thead>
-    </table>
+    <fieldset>
+        <legend>T20 Stats</legend>
+        <table class="table table-sm table-hover table-striped col-sm-12" id="mytable1">
+            <thead>
+                <tr>
+                    {{-- <th>Format</th> --}}
+                    <th>Name</th>
+                    <th>Matches</th>
+                    <th>Innings</th>
+                    <th>Notouts</th>
+                    <th>Runs</th>
+                    <th>HS</th>
+                    <th>Avg</th>
+                    {{-- <th>S/R</th> --}}
+                    <th>100s</th>
+                    <th>50s</th>
+                    <th>Ct</th>
+                    <th>St</th>
+                    <th>4s</th>
+                    <th>6s</th>
+                    <th>Innings Ball</th>
+                    <th>Overs</th>
+                    <th>Runs</th>
+                    <th>Wickets</th>
+                    <th>Avg</th>
+                    <th>B/F</th>
+                    <th>Eco</th>
+                    <th>5Ws</th>
+                </tr>
+            </thead>
+        </table>
+    </fieldset>
     
     <!--begin::DeleteModal-->
 <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -205,7 +210,7 @@
                 "serverSide": true,
                 "ajax": "{{ route('statsdata2') }}",
                 "columns":[
-                    { "data": "format" },
+                    // { "data": "format" },
                     { "data": "names" },
                     { "data": "matches" },
                     { "data": "innings"},
@@ -238,7 +243,7 @@
                 "serverSide": true,
                 "ajax": "{{ route('statsdata1') }}",
                 "columns":[
-                    { "data": "format" },
+                    // { "data": "format" },
                     { "data": "names" },
                     { "data": "matches" },
                     { "data": "innings"},

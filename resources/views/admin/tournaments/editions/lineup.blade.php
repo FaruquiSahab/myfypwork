@@ -7,10 +7,9 @@
 
         <h2>Lineup</h2>
 
-
+    
 
     <div class="row">
-
 
         <div class="col-sm-8">
 
@@ -34,8 +33,8 @@
                     <div class="form-group">
                     <label for="Toss">Toss</label>
 
-                    <select class="form-control" name="toss">
-                        <option disabled selected>Select Team</option>
+                    <select class="form-control" name="toss" required>
+                        <option disabled selected value>Select Team</option>
                         <option value="{{$club1[0]->club_id_1}}">{{$club1[0]->club1->name}}</option>
                         <option value="{{$club2[0]->club_id_2}}">{{$club2[0]->club2->name}}</option>
                     </select>
@@ -45,16 +44,24 @@
                     <div class="form-group">
                         <label for="Toss">Choose To</label>
 
-                        <select class="form-control" name="choose_to">
-                            <option disabled selected>Select Decision</option>
+                        <select class="form-control" name="choose_to" required>
+                            <option disabled selected value>Select Decision</option>
                             <option value="1">Bat</option>
                             <option value="2">Field</option>
                         </select>
                     </div>
 
+                    @if(Session::has('players_length1'))
+                        <div class="alert alert-danger">
+                            <p class="bg-danger">{{session('players_length1')}}</p>
+                        </div>
+                    @elseif(Session::has('players_length3'))
+                        <div class="alert alert-danger">
+                            <p class="bg-danger">{{session('players_length3')}}</p>
+                        </div>
+                    @endif
 
                     <div class="form-group">
-
                         <label for="players">Lineup for {{$club1[0]->club1->name}}</label>
                         <select id="player_id1" name="player_id1[]"  class="form-control players">
                             @foreach($players1 as $key => $player1)
@@ -62,15 +69,19 @@
                             @endforeach
                         </select>
                         </div>
-
-
-
                     <br>
 
-
+                    @if(Session::has('players_length2'))
+                        <div class="alert alert-danger">
+                            <p class="bg-danger">{{session('players_length2')}}</p>
+                        </div>
+                    @elseif(Session::has('players_length3'))
+                        <div class="alert alert-danger">
+                            <p class="bg-danger">{{session('players_length3')}}</p>
+                        </div>
+                    @endif
 
                     <div class="form-group">
-
                         <label for="players">Lineup for {{$club2[0]->club2->name}}</label>
                         <select id="player_id2" name="player_id2[]"  class="form-control">
                             @foreach($players2 as $key => $player2)
@@ -84,7 +95,8 @@
                     <div class="form-group">
                         <label for="Umpires">Umpires</label>
 
-                        <select class="form-control" name="umpire_id">
+                        <select class="form-control" name="umpire_id" required>
+                            <option disabled selected value>Select Umpire For Match</option>
                             @foreach($umpires as $umpire )
                             <option value="{{$umpire->id}}">{{$umpire->name}}</option>
                                 @endforeach
@@ -116,6 +128,15 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <script type="text/javascript">
+        
+        $("document").ready(function()
+        {
+            setTimeout(function()
+            {
+               $("div.alert").remove();
+            }, 7000 ); // 5 secs
+
+        });
 
         $("#player_id1").select2({
             placeholder: "Select Players",
@@ -161,6 +182,7 @@
                 {{--alert('Please Select Exactly 11 Players For '+'{{$club1[0]->club2->name}}');--}}
             {{--}--}}
 //        })
+//        
 
     </script>
 

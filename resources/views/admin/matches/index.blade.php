@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Club </th>
+                <th>Club</th>
                 <th>vs</th>
                 <th>Club</th>
                 <th>Date</th>

@@ -8,7 +8,7 @@ class BowlerScore extends Model
 {
     protected $guarded = [];
 
-    public function batsmen()
+    public function bowler()
     {
     	return $this->belongsTo('App\Player','bowler_id');
     }

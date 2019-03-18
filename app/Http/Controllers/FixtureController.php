@@ -7,6 +7,7 @@ use App\Fixture;
 use App\Ground;
 use App\Match;
 use App\Player;
+use Session;
 use App\TournamentsReference;
 use App\Umpire;
 use Illuminate\Http\Request;
@@ -101,9 +102,20 @@ class FixtureController extends Controller
      */
     public function store(Request $request)
     {
-        if (sizeof($request->player_id1) < 11)
+        if (sizeof($request->player_id1) < 11 && sizeof($request->player_id1) < 11)
         {
-            return redirect()->back();
+            Session::flash('players_length3','Kinldy Select Complete Playing 11 To Avoid Embarssment');
+            return redirect()->back()->withInput($request->all());
+        }
+        elseif (sizeof($request->player_id1) < 11)
+        {
+            Session::flash('players_length1','Kinldy Select Complete Playing 11 To Avoid Embarssment');
+            return redirect()->back()->withInput($request->all());
+        }
+        elseif (sizeof($request->player_id2) < 11)
+        {
+            Session::flash('players_length2','Kinldy Select Complete Playing 11 To Avoid Embarssment');
+            return redirect()->back()->withInput($request->all());
         }
         else {
 

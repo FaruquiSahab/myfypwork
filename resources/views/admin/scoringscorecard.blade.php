@@ -1,10 +1,7 @@
 @extends('layouts.admin')
 	@section('content')
-        
-                    
-                    
-                    {{-- batsmen score --}}                    
-                    <div class="table-responsive table-bordered col-sm-12">          
+                    {{-- batsmen score --}}
+                    <div class="table-responsive table-bordered col-sm-12">
                         <table class="table" id="mytable">
                             <thead>
                                 <tr>
@@ -23,39 +20,46 @@
                                 </tr>
                             </thead>
                             <tbody>
-                              @foreach($battingfirst as $key=>$value)
+                              @foreach($battingfirst as $keyb=>$value)
                                 <div>
-                                    <form class="batsmen">
-                                        <tr>
+                                    <form class="batsmen" data-key="{{ $keyb }}">
+                                        {{ csrf_field() }}
+                                        <input id="match_id{{ $keyb }}" type="hidden" name="match_id" value="{{ $matches[0]->id }}">
+                                        <input id="innings_no{{ $keyb }}" type="hidden" name="innings_no" value="{{ $value->inning_no }}">
+                                        <tr id="row{{ $keyb }}">
                                           <td>
-                                            {{ $value->player->name }}
-                                            <input type="hidden" name="batsmen_id" value="{{ $value->player->id }}">
+                                            {{ $value->batsmen->name }}
+                                            <input id="batsmen_id{{ $keyb }}" type="hidden" name="batsmen_id" value="{{ $value->batsmen->id }}">
                                           </td>
-                                          <td><select name="out_how" class="btn">
-                                              <option value="0" disabled selected>Select Wicket Type</option>
+                                          <td>
+                                            <select id="{{ $keyb }}" name="out_how" class="form-control outhow">
+                                              <option disabled selected value>Select Wicket Type</option>
                                               <option value="nt">Not Out</option>
                                               <option value="rt">Retired Hut</option>
                                               <option value="dnb">Did Not Bat</option>
-                                              @foreach($wickets as $key=>$value)
-                                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                              @foreach($wickets as $key=>$values)
+                                                <option value="{{ $values->value }}">{{ $values->name }}</option>
                                               @endforeach
-                                          </select></td>
-                                          <td><select name="out_by" class="btn">
-                                            <option value="0" disabled selected>Select Bowler</option>
-                                            @foreach($ballingfirst as $key=>$value)
-                                                @if($value->player->role_id == 2 || $value->player->role_id == 3 )
-                                                    <option value="{{ $value->player->id }}">{{ $value->player->name }}</option>
-                                                @endif
-                                            @endforeach
-                                          </select></td>
-                                          <td><input placeholder="auto" value="0" readonly type="number" name="runs" min="0" max="200"></td>
-                                          <td><input placeholder="auto" value="0" readonly type="number" name="balls" min="0" max="200"></td>
-                                          <td><input type="number" min="0" max="100" name="dots"></td>
-                                          <td><input type="number" min="0" max="30" name="ones"></td>
-                                          <td><input type="number" min="0" max="30" name="twos"></td>
-                                          <td><input type="number" min="0" max="30" name="threes"></td>
-                                          <td><input type="number" min="0" max="30" name="fours"></td>
-                                          <td><input type="number" min="0" max="30" name="sixes"></td>
+                                            </select>
+                                          </td>
+                                          <td>
+                                            <select id="out_by_{{ $keyb }}" name="out_by" class="form-control">
+                                                <option disabled selected value>Select Bowler</option>
+                                                @foreach($ballingfirst as $key=>$valuee)
+                                                    @if($valuee->bowler->role_id == 2 || $valuee->bowler->role_id == 3 )
+                                                        <option value="{{ $valuee->bowler->id }}">{{ $valuee->bowler->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                          </td>
+                                          <td><input id="runs{{ $keyb }}" placeholder="Auto"  value="{{ $value->runs }}" disabled type="number" name="runs" min="0" max="200"></td>
+                                          <td><input id="balls{{ $keyb }}" placeholder="Auto" value="{{ $value->balls }}" disabled type="number" name="balls" min="0" max="200"></td>
+                                          <td><input id="dots{{ $keyb }}" type="number" min="0" value="{{ $value->dots }}"  max="100" name="dots"></td>
+                                          <td><input id="ones{{ $keyb }}" type="number" min="0" value="{{ $value->ones }}"  max="30" name="ones"></td>
+                                          <td><input id="twos{{ $keyb }}" type="number" min="0" max="30" value="{{ $value->twos }}"  name="twos"></td>
+                                          <td><input id="threes{{ $keyb }}" type="number" min="0" max="30" value="{{ $value->threes }}"  name="threes"></td>
+                                          <td><input id="fours{{ $keyb }}" type="number" min="0" max="30" value="{{ $value->fours }}"  name="fours"></td>
+                                          <td><input id="sixes{{ $keyb }}" type="number" min="0" max="30"  value="{{ $value->sixes }}"  name="sixes"></td>
                                           <td><button type="submit" class="btn">Submit</button></td>
                                         </tr>
                                     </form>
@@ -63,10 +67,10 @@
                               @endforeach
                             </tbody>
                         </table>
-                    </div> 
+                    </div>
                     <br>
 
-                    {{-- bowler score --}}                    
+                    {{-- bowler score --}}
                     <div>
                         <table class="table table-responsive table-bordered" id="mytable2">
                             <thead class="thead-dark">
@@ -76,133 +80,151 @@
                                     <th>Maidens</th>
                                     <th>Runs</th>
                                     <th>Wickets</th>
+                                    <th>Economy</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($ballingfirst as $key=>$value)
-                                @if($value->player->role_id == 2 || $value->player->role_id == 3 )
-                                <form class="bowler">
-                                    <tr>
+                                <form class="bowler" data-key="{{ $key }}">
+                                    {{ csrf_field() }}
+                                    <tr id="rows{{ $key }}">
+                                        <input id="match_ids{{ $key }}" type="hidden" name="match_id" value="{{ $matches[0]->id }}">
+                                        <input id="innings_nos{{ $key }}" type="hidden" name="innings_no" value="{{ $value->inning_no }}">
                                         <td>
-                                            {{ $value->player->name }}
-                                            <input type="hidden" name="bowler_id" value="{{ $value->player->id }}">
+                                            {{ $value->bowler->name }}
+                                            <input id="bowler_id{{ $key }}" type="hidden" name="bowler_id" value="{{ $value->bowler->id }}">
                                         </td>
                                         @if($matches[0]->match_type_id == 1)
-                                        <td><input type="number" step="0.1" min="0.0" max="4.0" name="overs"></td>
-                                        <td><input type="number" min="0.0" max="4.0" name="maidens"></td>
-                                        <td><input type="number" min="0" max="80" name="runs"></td>
-                                        <td><input type="number" min="0" max="10" name="wickets"></td>
-                                        <td><button class="btn">Submit</button></td>
+                                            <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="4" name="overs" value="{{ $value->overs }}"></td>
+                                            <td><input id="maidens{{ $key }}" type="number" min="0.0" max="4.0" name="maidens" value="{{ $value->maidens }}"></td>
+                                            <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
+                                            <td><input id="wickets{{ $key }}" type="number" min="0" max="10" name="wickets" value="{{ $value->wickets }}"></td>
+                                            <td><input disabled id="eco{{ $key }}" type="number" min="0" max="40" value="{{ $value->economy }}"></td>
+                                            <td><button class="btn">Submit</button></td>
                                         @elseif($matches[0]->match_type_id == 2)
-                                        <td><input type="number" step="0.1" min="0.0" max="10.0" name="overs"></td>
-                                        <td><input type="number" min="0.0" max="10.0" name="maidens"></td>
-                                        <td><input type="number" min="0" max="80" name="runs"></td>
-                                        <td><input type="number" min="0" max="10" name="wickets"></td>
-                                        <td><button type="submit" class="btn">Submit</button></td>
+                                            <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="10" name="overs" value="{{ $value->overs }}"></td>
+                                            <td><input id="maidens{{ $key }}" type="number" min="0.0" max="10.0" name="maidens" value="{{ $value->maidens }}"></td>
+                                            <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
+                                            <td><input id="wickets{{ $key }}" type="number" min="0" max="10" name="wickets" value="{{ $value->wickets }}"></td>
+                                            <td><input disabled id="eco{{ $key }}" type="number" min="0" max="40" value="{{ $value->economy }}"></td>
+                                            <td><button type="submit" class="btn">Submit</button></td>
                                         @endif
                                     </tr>
                                 </form>
-                                @endif
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>  
+                    </div>
                     <br>
 
                     {{-- extras --}}
-                    <strong>Extras</strong>
-                    <div class="table-responsive table-bordered col-sm-12">
-                            <table class="table" id="mytable1">
-                                <thead>
-                                    <tr>
-                                        <th>Wides</th>
-                                        <th>No Balls</th>
-                                        <th>Byes</th>
-                                        <th>Leg Byes</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <form class="extras">
+                        <strong>Extras</strong>
+                        <div class="table-responsive table-bordered col-sm-12">
+                                <table class="table" id="mytable1">
+                                    <thead>
                                         <tr>
-                                            <td><input type="number" name="wides"></td>
-                                            <td><input type="number" name="no_balls"></td>
-                                            <td><input type="number" name="byes"></td>
-                                            <td><input type="number" name="leg_byes"></td>
+                                            <th>Wides</th>
+                                            <th>No Balls</th>
+                                            <th>Byes</th>
+                                            <th>Leg Byes</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form class="extras">
+                                            <tr>
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input id="innings_extra" type="hidden" name="innings_no" value="{{ $extra[0]->inning_no }}">
+                                                <input id="match_extra" type="hidden" name="innings_no" value="{{ $extra[0]->match_id }}">
+                                                <td><input id="wides" type="number" name="wides" value="{{ $extra[0]->wides }}"></td>
+                                                <td><input id="noballs" type="number" name="no_balls" value="{{ $extra[0]->no_balls }}"></td>
+                                                <td><input id="byes" type="number" name="byes" value="{{ $extra[0]->byes }}"></td>
+                                                <td><input id="legbyes" type="number" name="leg_byes" value="{{ $extra[0]->leg_byes }}"></td>
+                                                <td><button type="submit" class="btn">Submit</button></td>
+                                            </tr>
+                                        </form>
+                                    </tbody>
+                                </table>
+                        </div>
+                        <br>
+                    {{-- extras --}}
+
+                    {{--begin fall of wickets --}}
+                        {{--  <strong>Fall Of Wickets</strong>
+                        <style type="text/css">
+                            .tb_horizantal table { border-collapse: collapse; }
+                            .tb_horizantal tr  { display: block; float: left; }
+                            .tb_horizantal th , .tb_horizantal td { display: block; }
+                        </style>
+                        <div class=" table-responsive table-bordered tb_horizantal col-sm-12">
+                            <table class="table" id="_mytable">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Score</th>
+                                    <th>Action</th>
+                                </tr>
+                                @for($i=1; $i<=10; $i++)
+                                    <form class="fow">
+                                        <tr>
+                                            <td><input id="wicket_no{{ $i }}" type="number" min="0" max="10"  name="wicket_no" readonly value="{{ $i }}"></td>
+                                            <td><input id="score{{ $i }}" type="number" min="0" max="500" name="score"></td>
                                             <td><button type="submit" class="btn">Submit</button></td>
                                         </tr>
                                     </form>
-                                </tbody>
-                            </table>
-                    </div>     
-                    <br>
-                    {{-- fall of wickets --}}
-
-                    <strong>Fall Of Wickets</strong>                    
-                    <div class=" table-responsive table-bordered tb_horizantal col-sm-12">
-                        <table class="table" id="_mytable">
-                            <tr>
-                                <th>#</th>
-                                <th>Score</th>
-                                <th>Action</th>
-                            </tr>
-                            @for($i=1; $i<=10; $i++)
-                                <form class="fow">
-                                    <tr>
-                                        <td><input type="number" min="0" max="10"  name="wicket_no" readonly value="{{ $i }}"></td>
-                                        <td><input type="number" min="0" max="500" name="score"></td>
-                                        <td><button type="submit" class="btn">Submit</button></td
-                                    </tr>
-                                </form>
-                            @endfor
-                        </thead>
-                    </div>
-                    <br>    
-
-                    {{-- overs --}}
-                    <strong>Runs Per Over</strong>
-                    <style type="text/css">
-                        .tb_horizantal table { border-collapse: collapse; }
-                        .tb_horizantal tr  { display: block; float: left; }
-                        .tb_horizantal th , .tb_horizantal td { display: block; }
-                    </style>
-                    <div class="table-responsive table-bordered tb_horizantal col-sm-12">
-                        <table class="table">
-                            <tr>
-                                <th>Over</th>
-                                <th>Runs</th>
-                                <th>Action</th>
-                            </tr>
-                            @if($matches[0]->match_type_id == 1)
-                            @for($i=0; $i<20; $i++)
-                            <tr>
-                                <td><input type="number" name="over_no" min="0" max="20" value="{{ $i+1 }}" readonly></td>
-                                <td><input type="number" name="runs" min="0" max="36"></td>
-                                <td><button type="submit" class="btn">Submit</button></td
-                            </tr>
-                            @endfor
-                            @elseif($matches->match_type_id == 2)
-                                @for($i=0; $i<50; $i++)
-                                    <tr>
-                                        <td><input type="number" name="over_no" min="0" max="20" value="{{ $i+1 }}" readonly></td>
-                                        <td><input type="number" name="runs" min="0" max="36"></td>
-                                        <td><button type="submit" class="btn">Submit</button></td
-                                    </tr>
                                 @endfor
-                            @endif
-                        </table>
-                    </div>
+                            </table>
+                        </div>  --}}
+                        <br>
+                    {{-- end fall of wickets --}}
+
+                    {{--begin overs --}}
+                        {{-- <strong>Runs Per Over</strong>
+                        <style type="text/css">
+                            .tb_horizantal table { border-collapse: collapse; }
+                            .tb_horizantal tr  { display: block; float: left; }
+                            .tb_horizantal th , .tb_horizantal td { display: block; }
+                        </style>
+                        <div class="table-responsive table-bordered tb_horizantal col-sm-12">
+                            <table class="table">
+                                <tr>
+                                    <th>Over</th>
+                                    <th>Runs</th>
+                                    <th>Action</th>
+                                </tr>
+                                @if($matches[0]->match_type_id == 1)
+                                @for($i=0; $i<20; $i++)
+                                <tr>
+                                    <td><input type="number" name="over_no" min="0" max="20" value="{{ $i+1 }}" readonly></td>
+                                    <td><input type="number" name="runs" min="0" max="36"></td>
+                                    <td><button type="submit" class="btn">Submit</button></td
+                                </tr>
+                                @endfor
+                                @elseif($matches->match_type_id == 2)
+                                    @for($i=0; $i<50; $i++)
+                                        <tr>
+                                            <td><input type="number" name="over_no" min="0" max="20" value="{{ $i+1 }}" readonly></td>
+                                            <td><input type="number" name="runs" min="0" max="36"></td>
+                                            <td><button type="submit" class="btn">Submit</button></td
+                                        </tr>
+                                    @endfor
+                                @endif
+                            </table>
+                        </div> --}}
+                    {{-- end overs --}}
+                    <br><br>
+                    <button style="margin-left: 87%" class="btn btn-success">Proceed To 2nd Innings</button>
+                    <br><br>
 	@stop
 
     @section('scripts')
         <script type="text/javascript">
             $(document).ready(function(){
-                // $('input').prop('required',true);
-                // $('select').prop('required',true);
+                $('input').prop('required',true);
+                $('select').prop('required',true);
                 // $('input').val(0);
             });
-            $(document).on('change paste', 'input[type=number]', function()
+            $(document).on('change paste keyup keydown keypress', 'input[type=number]', function()
             {
                 var abc = $(this).val();
                 var cba = abc.toString().split(".")[1];
@@ -216,41 +238,132 @@
                     console.log(xyz);
                 }
             });
-            $(document).on('submit', '.batsmen', function(event) {
+            $(document).on('change select','.outhow',function()
+            {
+                console.log('Hello');
+                var key = $(this).attr('id');//working
+                console.log($(this).val())
+                if ($(this).val() == 'nt' || $(this).val() == 'rt' || $(this).val() == '8' || $(this).val() == '9')
+                {
+                    $('#out_by_'+key).prop('disabled',true);
+                }
+                else if($(this).val() == 'dnb')
+                {
+                    $('#row'+key+' input').prop('disabled',true);
+                    $('#out_by_'+key).prop('disabled',true);
+                }
+                else
+                {
+                    $('#out_by_'+key).prop('disabled',false);
+                }
+            })
+            $(document).on('submit', '.batsmen', function(event)
+            {
                 event.preventDefault();
-                console.log($(this).serialize());
-                var data = $(this).serialize();
-
-                var abcc = data.split('&')[3];
-                var xyzz = abcc.split('=')[1];
-
-                var abcd = data.split('&')[4];
-                var xyzx = abcd.split('=')[1];
-
-                var abce = data.split('&')[5];
-                var xyzc = abce.split('=')[1];
-
-                var abcf = data.split('&')[6];
-                var xyzv = abcf.split('=')[1];
-
-                var abcg = data.split('&')[7];
-                var xyzb = abcg.split('=')[1];
-
-                var abch = data.split('&')[8];
-                var xyzn = abch.split('=')[1];
-
-                var balls = (+xyzz)+(+xyzx)+(+xyzc)+(+xyzv)+(+xyzb)+(+xyzn);
-                console.log(balls);
-
-                // var bnm = $(this).find('input[name=balls]')['context'][0];
-                // console.log(bnm);
-                // console.log($(this).children('input').each());
-                // find('input[name=balls]').val())
+                console.log('Key');
+                var key = $(this).data('key');
+                console.log(key);
+                // var data = $(this).serialize();
+                // console.log(data);
 
 
 
+                $.ajax({
+                    url: '{{ route('submitbatsmenscore') }}',
+                    type: 'POST',
+                    data: {
+                        '_token':$('input[name="_token"]').val(),
+                        'match_id':$('#match_id'+key).val(),
+                        'innings_no':$('#innings_no'+key).val(),
+                        'batsmen_id':$('#batsmen_id'+key).val(),
+                        'out_how':$('#'+key).val(),
+                        'out_by':$('#out_by_'+key).val(),
+                        'dots':$('#dots'+key).val(),
+                        'ones':$('#ones'+key).val(),
+                        'twos':$('#twos'+key).val(),
+                        'threes':$('#threes'+key).val(),
+                        'fours':$('#fours'+key).val(),
+                        'sixes':$('#sixes'+key).val(),
+                    },
+                    success:function(data)
+                    {
+                        console.log(data);
+                        // var data1 = JSON.parse(data,true);
+                        $('#runs'+key).val(data[0]['runs']);
+                        $('#balls'+key).val(data[0]['balls']);
+                        toastr.success('Data Submitted Successfully','Success Alert',{timeOut: 3000});
+                    },
+                    error:function()
+                    {
+                        toastr.error('Coresponding Server Is Down','Error Alert',{timeOut: 3000});
+                    }
+                });
+
+            });
+            $(document).on('submit', '.bowler', function(event)
+            {
+                event.preventDefault();
+                console.log('Key');
+                var key = $(this).data('key');
+                console.log(key);
+                // var data = $(this).serialize();
+                // console.log(data);
+
+
+
+                $.ajax({
+                    url: '{{ route('submitbowlerscore') }}',
+                    type: 'POST',
+                    data: {
+                        '_token':$('input[name="_token"]').val(),
+                        'match_id':$('#match_id'+key).val(),
+                        'innings_no':$('#innings_nos'+key).val(),
+                        'bowler_id':$('#bowler_id'+key).val(),
+                        'overs':$('#overs'+key).val(),
+                        'runs':$('#runss'+key).val(),
+                        'maidens':$('#maidens'+key).val(),
+                        'wickets':$('#wickets'+key).val(),
+                    },
+                    success:function(data)
+                    {
+                        console.log(data);
+                        // var data1 = JSON.parse(data,true);
+                        $('#eco'+key).val(data[0]['economy']);
+                        toastr.success('Data Submitted Successfully','Success Alert',{timeOut: 3000});
+                    },
+                    error:function()
+                    {
+                        toastr.error('Coresponding Server Is Down','Error Alert',{timeOut: 3000});
+                    }
+                });
+
+            });
+
+            $(document).on('submit','.extras',function(event)
+            {
+                event.preventDefault();
+                $.ajax({
+                    url:'{{ route('submitextrascore') }}',
+                    type:'POST',
+                    data:{
+                        '_token': $('input[name="_token"]').val(),
+                        'match_id': $('#match_extra').val(),
+                        'inning_no': $('#innings_extra').val(),
+                        'wides' : $('#wides').val(),
+                        'no_balls': $('#noballs').val(),
+                        'byes'  : $('#byes').val(),
+                        'leg_byes': $('#legbyes').val()
+                    },
+                    success:function(data)
+                    {
+                        console.log(data);
+                    },
+                    error:function()
+                    {
+                        toastr.error('Coresponding Server Is Down','Error Alert');
+                    }
+                });
             });
         </script>
     @stop
 
-	
