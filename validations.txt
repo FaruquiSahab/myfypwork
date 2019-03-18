@@ -1,0 +1,7 @@
+cross check
+  number of outs --- wickets total of bowlers
+  total balls played --- total balls bowled
+  total runs + extras -- total runs given
+  total balls played <= 120
+  total balls bowled <= 120
+  total wickets taken <= 10

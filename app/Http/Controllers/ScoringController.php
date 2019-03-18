@@ -15,6 +15,7 @@ use App\Tass;
 use DB;
 use Datatables;
 use Illuminate\Http\Request;
+use Garethellis\CricketStatsHelper\CricketStatsHelper;
 
 class ScoringController extends Controller
 {
@@ -27,6 +28,31 @@ class ScoringController extends Controller
 	}
     public function index1($match)
     {
+		$helper = new CricketStatsHelper();
+
+		$runs = BatsmenScore::where('match_id',$match)->where('inning_no',1)->sum('runs');
+		$balls = BatsmenScore::where('match_id',$match)->where('inning_no',1)->sum('balls');
+		$overs = $helper->convertBallsToOvers($balls);
+		$wicketss = BatsmenScore::where('match_id',$match)->where('inning_no',1)
+							   ->where(function($query) 
+							   {
+								$query->where('out_how', 'b')
+								->orWhere('out_how', 'ct')
+								->orWhere('out_how', 'lbw')
+								->orWhere('out_how', 'otf')
+								->orWhere('out_how', 'hw')
+								->orWhere('out_how', 'hb')
+								->orWhere('out_how', 'ht')
+								->orWhere('out_how', 'to')
+								->orWhere('out_how', 'ro');
+							   })
+							   ->count();
+		$runs1 = BowlerScore::where('match_id',$match)->where('inning_no',2)->sum('runs');
+		$balls1 = BowlerScore::where('match_id',$match)->where('inning_no',2)->sum('balls');
+		$overs1 = $helper->convertBallsToOvers($balls1);
+		$wicketss1 = BowlerScore::where('match_id',$match)->where('inning_no',2)->sum('wickets');
+
+
 	    	$matches = Match::where('id',$match)->get();
 	    #////////////////////// Batting First
 	    	$battingfirst = Lineup::where('match_id',$match)->where('innings_no',1)->get();
@@ -165,13 +191,12 @@ class ScoringController extends Controller
 	    #////
 
 	        // return $battingfirst;
-	        return view('admin.scoringscorecard',compact( 'matches' ,'options','optionsE','wickets','battingfirst','battingsecond','ballingfirst','ballingsecond','extra'));
+	        return view('admin.scoringscorecard',compact('runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingfirst','battingsecond','ballingfirst','ballingsecond','extra'));
     }
 
     public function submitbatsmenscore(Request $request)
     {
-		BatsmenScore::where('match_id', $request->match_id)
-			->sum('balls')->get();
+		// return $request;
     	$dots 	=  0 + $request->dots;
     	$ones 	=  0 + $request->ones;
     	$twos 	=  0 + $request->twos;
@@ -183,7 +208,7 @@ class ScoringController extends Controller
     	$runs = 0;
 
     	$balls = $dots+ $ones+ $twos+ $threes+ $fours+ $sixes;
-    	$runs = ($ones*1)+($twos*2)+($threes*3)+($fours*4)+($sixes*6);
+		$runs = ($ones*1)+($twos*2)+($threes*3)+($fours*4)+($sixes*6);
 
     	DB::table('batsmen_scores')
 	    	->where('match_id',$request->match_id)
@@ -201,11 +226,39 @@ class ScoringController extends Controller
 	    		'fours'=>$request->fours,
 	    		'sixes'=>$request->sixes,
 	    	]);
-    	$data = BatsmenScore::where('match_id',$request->match_id)
-	    					->where('inning_no',$request->innings_no)
-	    					->where('batsmen_id',$request->batsmen_id)
-    						->get(['runs','balls']);
-    	return $data;
+			$data = BatsmenScore::where('match_id',$request->match_id)
+			->where('inning_no',$request->innings_no)
+			->where('batsmen_id',$request->batsmen_id)
+			->get(['runs','balls']);
+			
+			$helper = new CricketStatsHelper();
+			
+			$runss = BatsmenScore::where('match_id',$request->match_id)->sum('runs');
+
+			$ballss = BatsmenScore::where('match_id',$request->match_id)->sum('balls');
+			$overs = $helper->convertBallsToOvers($ballss);
+			$wicketss = BatsmenScore::where('match_id',$request->match_id)
+			->where(function($query) 
+			{
+				$query->where('out_how', 'b')
+				->orWhere('out_how', 'ct')
+				->orWhere('out_how', 'lbw')
+				->orWhere('out_how', 'otf')
+				->orWhere('out_how', 'hw')
+				->orWhere('out_how', 'hb')
+				->orWhere('out_how', 'ht')
+				->orWhere('out_how', 'to')
+				->orWhere('out_how', 'ro');
+			})
+			->count();
+		// return $data;
+		$object= new \stdClass();
+		$object->runs = $runss;
+		$object->overs = $overs;
+		$object->wickets = $wicketss;
+
+		return [$data,json_encode($object)];
+
 
     }
     public function submitbowlerscore(Request $request)
@@ -217,12 +270,15 @@ class ScoringController extends Controller
     	$wickets = $request->wickets;
     	$economy = $runs / $overs;
 
+		$helper = new CricketStatsHelper();
+		$balls = $helper->convertOversToBalls($overs);
 
     	BowlerScore::where('match_id',$request->match_id)
 	    	->where('inning_no',$request->innings_no)
 	    	->where('bowler_id',$request->bowler_id)
 	    	->update([
-	    		'overs'=>$overs,
+				'overs'=>$overs,
+				'balls'=>$balls,
 	    		'maidens'=>$maidens,
 	    		'runs'=>$runs,
 	    		'wickets'=>$wickets,
@@ -231,8 +287,17 @@ class ScoringController extends Controller
     	$data = BowlerScore::where('match_id',$request->match_id)
 	    					->where('inning_no',$request->innings_no)
 	    					->where('bowler_id',$request->bowler_id)
-    						->get(['economy']);
-    	return $data;
+							->get(['economy']);
+		$runs1 = BowlerScore::where('match_id',$request->match_id)->where('inning_no',2)->sum('runs');
+		$balls1 = BowlerScore::where('match_id',$request->match_id)->where('inning_no',2)->sum('balls');
+		$overs1 = $helper->convertBallsToOvers($balls1);
+		$wicketss1 = BowlerScore::where('match_id',$request->match_id)->where('inning_no',2)->sum('wickets');
+		$object= new \stdClass();
+		$object->runs = $runs1;
+		$object->overs = $overs1;
+		$object->wickets = $wicketss1;
+
+		return [$data,json_encode($object)];
 
     }
 

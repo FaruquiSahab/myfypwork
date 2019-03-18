@@ -1,7 +1,13 @@
 @extends('layouts.admin')
-	@section('content')
+    @section('content')
+    <fieldset>
+        <strong>Batting Score</strong> 
+        <span id="t_runs" >{{ $runs }}</span>/
+        <span id="t_wickets">{{ $wicketss }}</span> In
+        <sapn id="t_overs">{{ $overs }}</sapn> Overs
+    </fieldset>
                     {{-- batsmen score --}}
-                    <div class="table-responsive table-bordered col-sm-12">
+                    <div class="table-responsive table-bordered">
                         <table class="table" id="mytable">
                             <thead>
                                 <tr>
@@ -32,34 +38,40 @@
                                             <input id="batsmen_id{{ $keyb }}" type="hidden" name="batsmen_id" value="{{ $value->batsmen->id }}">
                                           </td>
                                           <td>
-                                            <select id="{{ $keyb }}" name="out_how" class="form-control outhow">
+                                            <select style="width: 100%;" id="{{ $keyb }}" name="out_how" class="form-control outhow">
                                               <option disabled selected value>Select Wicket Type</option>
-                                              <option value="nt">Not Out</option>
-                                              <option value="rt">Retired Hut</option>
-                                              <option value="dnb">Did Not Bat</option>
+                                              <option value="nt" @if($value->out_how == 'nt') selected @endif>Not Out</option>
+                                              <option value="rt" @if($value->out_how == 'rt') selected @endif>Retired Hut</option>
+                                              <option value="dnb"@if($value->out_how == 'dnb') selected @endif>Did Not Bat</option>
                                               @foreach($wickets as $key=>$values)
-                                                <option value="{{ $values->value }}">{{ $values->name }}</option>
+                                                <option value="{{ $values->value }}" @if($value->out_how == $values->value) selected @endif>{{ $values->name }}</option>
                                               @endforeach
                                             </select>
                                           </td>
                                           <td>
-                                            <select id="out_by_{{ $keyb }}" name="out_by" class="form-control">
-                                                <option disabled selected value>Select Bowler</option>
-                                                @foreach($ballingfirst as $key=>$valuee)
-                                                    @if($valuee->bowler->role_id == 2 || $valuee->bowler->role_id == 3 )
-                                                        <option value="{{ $valuee->bowler->id }}">{{ $valuee->bowler->name }}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
+                                            @if($value->out_how == 'nt' || $value->out_how == 'rt' ||  $value->out_how == 'dnb' || $value->out_how == 'ro') 
+                                                <select style="width: 100%;" id="out_by_{{ $keyb }}" name="out_by" class="form-control" disabled>
+                                            @else
+                                                <select style="width: 100%;" id="out_by_{{ $keyb }}" name="out_by" class="form-control">
+                                            @endif
+                                                    <option disabled selected value>Select Bowler</option>
+                                                    @foreach($ballingfirst as $key=>$valuee)
+                                                        @if($valuee->bowler->role_id == 2 || $valuee->bowler->role_id == 3 )
+                                                            <option value="{{ $valuee->bowler->id }}" @if($value->out_by == $valuee->bowler->id) selected @endif>
+                                                                {{ $valuee->bowler->name }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
                                           </td>
                                           <td><input id="runs{{ $keyb }}" placeholder="Auto"  value="{{ $value->runs }}" disabled type="number" name="runs" min="0" max="200"></td>
                                           <td><input id="balls{{ $keyb }}" placeholder="Auto" value="{{ $value->balls }}" disabled type="number" name="balls" min="0" max="200"></td>
-                                          <td><input id="dots{{ $keyb }}" type="number" min="0" value="{{ $value->dots }}"  max="100" name="dots"></td>
-                                          <td><input id="ones{{ $keyb }}" type="number" min="0" value="{{ $value->ones }}"  max="30" name="ones"></td>
-                                          <td><input id="twos{{ $keyb }}" type="number" min="0" max="30" value="{{ $value->twos }}"  name="twos"></td>
-                                          <td><input id="threes{{ $keyb }}" type="number" min="0" max="30" value="{{ $value->threes }}"  name="threes"></td>
-                                          <td><input id="fours{{ $keyb }}" type="number" min="0" max="30" value="{{ $value->fours }}"  name="fours"></td>
-                                          <td><input id="sixes{{ $keyb }}" type="number" min="0" max="30"  value="{{ $value->sixes }}"  name="sixes"></td>
+                                          <td><input id="dots{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" value="{{ $value->dots }}"  max="100" name="dots"></td>
+                                          <td><input id="ones{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" value="{{ $value->ones }}"  max="30" name="ones"></td>
+                                          <td><input id="twos{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->twos }}"  name="twos"></td>
+                                          <td><input id="threes{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->threes }}"  name="threes"></td>
+                                          <td><input id="fours{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->fours }}"  name="fours"></td>
+                                          <td><input id="sixes{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30"  value="{{ $value->sixes }}"  name="sixes"></td>
                                           <td><button type="submit" class="btn">Submit</button></td>
                                         </tr>
                                     </form>
@@ -69,7 +81,12 @@
                         </table>
                     </div>
                     <br>
-
+                    <fieldset>
+                        <strong>Bowling Score</strong>
+                        <span id="t_runs1" >{{ $runs1 }}</span>/
+                        <span id="t_wickets1">{{ $wicketss1 }}</span> In
+                        <sapn id="t_overs1">{{ $overs1 }}</sapn> Overs
+                    </fieldset>                            
                     {{-- bowler score --}}
                     <div>
                         <table class="table table-responsive table-bordered" id="mytable2">
@@ -137,10 +154,10 @@
                                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                 <input id="innings_extra" type="hidden" name="innings_no" value="{{ $extra[0]->inning_no }}">
                                                 <input id="match_extra" type="hidden" name="innings_no" value="{{ $extra[0]->match_id }}">
-                                                <td><input id="wides" type="number" name="wides" value="{{ $extra[0]->wides }}"></td>
-                                                <td><input id="noballs" type="number" name="no_balls" value="{{ $extra[0]->no_balls }}"></td>
-                                                <td><input id="byes" type="number" name="byes" value="{{ $extra[0]->byes }}"></td>
-                                                <td><input id="legbyes" type="number" name="leg_byes" value="{{ $extra[0]->leg_byes }}"></td>
+                                                <td><input class="form-control" id="wides" type="number" name="wides" value="{{ $extra[0]->wides }}"></td>
+                                                <td><input class="form-control" id="noballs" type="number" name="no_balls" value="{{ $extra[0]->no_balls }}"></td>
+                                                <td><input class="form-control" id="byes" type="number" name="byes" value="{{ $extra[0]->byes }}"></td>
+                                                <td><input class="form-control" id="legbyes" type="number" name="leg_byes" value="{{ $extra[0]->leg_byes }}"></td>
                                                 <td><button type="submit" class="btn">Submit</button></td>
                                             </tr>
                                         </form>
@@ -219,6 +236,14 @@
 
     @section('scripts')
         <script type="text/javascript">
+            /*$('table').DataTable(
+                {
+                    'searching':false,
+                    'info':false,
+                    'bPaginate': false,
+                    "ordering": false
+                }
+            );*/
             $(document).ready(function(){
                 $('input').prop('required',true);
                 $('select').prop('required',true);
@@ -249,24 +274,25 @@
                 }
                 else if($(this).val() == 'dnb')
                 {
-                    $('#row'+key+' input').prop('disabled',true);
+                    var id = $('#batsmen_id'+key).val();
+                    $('#row'+key+' input').val('0');
+                    $('#row'+key+' input').prop('readonly',true);
                     $('#out_by_'+key).prop('disabled',true);
+                    $('#batsmen_id'+key).val(id);
                 }
                 else
                 {
-                    $('#out_by_'+key).prop('disabled',false);
+                    $('#row'+key+' input').removeAttr('readonly');
+                    $('#out_by_'+key).removeAttr('disabled');
                 }
             })
             $(document).on('submit', '.batsmen', function(event)
             {
                 event.preventDefault();
-                console.log('Key');
                 var key = $(this).data('key');
-                console.log(key);
+                console.log('Key: '+key);
                 // var data = $(this).serialize();
                 // console.log(data);
-
-
 
                 $.ajax({
                     url: '{{ route('submitbatsmenscore') }}',
@@ -288,9 +314,14 @@
                     success:function(data)
                     {
                         console.log(data);
-                        // var data1 = JSON.parse(data,true);
-                        $('#runs'+key).val(data[0]['runs']);
-                        $('#balls'+key).val(data[0]['balls']);
+                        var data1 = JSON.parse(data[1],true);
+                        console.log(data1);
+                        $('#runs'+key).val(data[0][0]['runs']);
+                        $('#balls'+key).val(data[0][0]['balls']);
+                        $('#t_runs').text(data1['runs']);
+                        $('#t_wickets').text(data1['wickets']);
+                        $('#t_overs').text(data1['overs']);
+                        
                         toastr.success('Data Submitted Successfully','Success Alert',{timeOut: 3000});
                     },
                     error:function()
@@ -327,8 +358,11 @@
                     success:function(data)
                     {
                         console.log(data);
-                        // var data1 = JSON.parse(data,true);
-                        $('#eco'+key).val(data[0]['economy']);
+                        var data1 = JSON.parse(data[1],true);
+                        $('#eco'+key).val(data[0][0]['economy']);
+                        $('#t_runs1').text(data1['runs']);
+                        $('#t_wickets1').text(data1['wickets']);
+                        $('#t_overs1').text(data1['overs']);
                         toastr.success('Data Submitted Successfully','Success Alert',{timeOut: 3000});
                     },
                     error:function()
