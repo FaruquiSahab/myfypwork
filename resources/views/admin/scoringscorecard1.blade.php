@@ -26,7 +26,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                              @foreach($battingfirst as $keyb=>$value)
+                              @foreach($battingsecond as $keyb=>$value)
                                 <div>
                                     <form class="batsmen" data-key="{{ $keyb }}">
                                         {{ csrf_field() }}
@@ -55,7 +55,7 @@
                                                 <select style="width: 100%;" id="out_by_{{ $keyb }}" name="out_by" class="form-control">
                                             @endif
                                                     <option disabled selected value>Select Bowler</option>
-                                                    @foreach($ballingfirst as $key=>$valuee)
+                                                    @foreach($ballingsecond as $key=>$valuee)
                                                         @if($valuee->bowler->role_id == 2 || $valuee->bowler->role_id == 3 )
                                                             <option value="{{ $valuee->bowler->id }}" @if($value->out_by == $valuee->bowler->id) selected @endif>
                                                                 {{ $valuee->bowler->name }}
@@ -102,7 +102,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($ballingfirst as $key=>$value)
+                                @foreach($ballingsecond as $key=>$value)
                                 <form class="bowler" data-key="{{ $key }}">
                                     {{ csrf_field() }}
                                     <tr id="rows{{ $key }}">
@@ -232,9 +232,7 @@
                     <br><br>
                     <button class="hidden btn" id="endbtn0">Customize Score</button>
                     <button style="margin-left: 85%" id="endbtn1" class="btn btn-success">Validate Total Score</button>
-                    <form action="{{ route('scoring.match2',$matches[0]->id) }}">
-                    <button type="submit" style="margin-left: 87%" id="endbtn2"class="hidden btn btn-success">Proceed To 2nd Innings</button>
-                    </form>
+                    <button style="margin-left: 87%" id="endbtn2"class="hidden btn btn-success">Proceed To 2nd Innings</button>
                     <br><br>
 	@stop
 
@@ -252,11 +250,9 @@
                             toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
                             $('input').prop('disabled',true);
                             $('button').prop('disabled',true);
+                            $('#endbtn1').removeAttr('disabled');
                             $('#endbtn0').removeClass('hidden');
                             $('#endbtn0').removeAttr('disabled');
-                            $('#endbtn1').addClass('hidden');
-                            $('#endbtn2').removeClass('hidden');
-                            $('#endbtn2').removeAttr('disabled');
                         }
                         else{
                             toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
@@ -336,7 +332,7 @@
                 // console.log(data);
 
                 $.ajax({
-                    url: '{{ route('submitbatsmenscore') }}',
+                    url: '{{ route('submitbatsmenscore2') }}',
                     type: 'POST',
                     data: {
                         '_token':$('input[name="_token"]').val(),
@@ -384,7 +380,7 @@
 
 
                 $.ajax({
-                    url: '{{ route('submitbowlerscore') }}',
+                    url: '{{ route('submitbowlerscore2') }}',
                     type: 'POST',
                     data: {
                         '_token':$('input[name="_token"]').val(),
@@ -418,7 +414,7 @@
             {
                 event.preventDefault();
                 $.ajax({
-                    url:'{{ route('submitextrascore') }}',
+                    url:'{{ route('submitextrascore2') }}',
                     type:'POST',
                     data:{
                         '_token': $('input[name="_token"]').val(),

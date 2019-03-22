@@ -762,6 +762,9 @@ Route::get('/scoring', 'ScoringController@index' )
 Route::get('/scoring/match/{match}', 'ScoringController@index1' )
             ->name('scoring.match')
             ->middleware(['can:create']);
+Route::get('/scoring/match/{match}/inningsecond', 'ScoringController@index2' )
+            ->name('scoring.match2')
+            ->middleware(['can:create']);
 #Obsolute
     Route::get('/batsmenScore/{match_id}','ScoringController@batsmenScore')
                 ->name('batsmenScore')
@@ -791,6 +794,15 @@ Route::POST('/submitbowlerscore','ScoringController@submitbowlerscore')
             ->middleware(['can:create']);
 Route::POST('/submitextrascore','ScoringController@submitextrascore')
             ->name('submitextrascore')
+            ->middleware(['can:create']);
+Route::POST('/submitbatsmenscore/inningsecond','ScoringController@submitbatsmenscore2')
+            ->name('submitbatsmenscore2')
+            ->middleware(['can:create']);
+Route::POST('/submitbowlerscore/inningsecond','ScoringController@submitbowlerscore2')
+            ->name('submitbowlerscore2')
+            ->middleware(['can:create']);
+Route::POST('/submitextrascore/inningsecond','ScoringController@submitextrascore2')
+            ->name('submitextrascore2')
             ->middleware(['can:create']);
 //------------------------------------------------------------------------------------------------------
 //
