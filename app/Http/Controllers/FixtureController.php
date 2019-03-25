@@ -129,8 +129,15 @@ class FixtureController extends Controller
                 'umpire_id' => $request->umpire_id,
                 'match_date' => $request->date,
                 'match_type_id' => $request->match_type_id,
-                'choose_to' => $request->choose_to
+                'choose_to' => $request->choose_to,
+                'fixture_id'=> $request->fixture_id
             ]);
+            if($match)
+            {
+                Fixture::where('id', $request->fixture_id)->update([
+                    'status' => '1'
+                ]);
+            }
 
             $toss = Match::select('toss')->where('id', $match)->first()->toss;
             $c1 = 0;

@@ -93,12 +93,19 @@
                 <td>{{$fix->match_time}}</td>
                 <td>{{$fix->ground->name}}</td>
                 <td>
-
-                    @if($fix->match_date =="2019-02-11")
-                        <form action="{{route('editions.lineup',encrypt($fix->id))}}">
-                            <input type="hidden">
-                            <input type="submit" class="btn btn-success" value="Allowed">
-                        </form>
+                    {{--  "2019-02-11"  --}}
+                    @if(\Carbon\Carbon::parse($fix->match_date)->lte(\Carbon\Carbon::today()))
+                        @if($fix->status == '0')
+                            <form action="{{route('editions.lineup',encrypt($fix->id))}}">
+                                <input type="hidden">
+                                <input type="submit" class="btn-xs btn-success" value="Make Lineup">
+                            </form>
+                        @else
+                            <form action="">
+                                <input type="hidden">
+                                <input type="button" class="btn-xs btn-warning" value="Score Match">
+                            </form>
+                        @endif
                     @else
                         <label for="Not Allowed" class="label label-info">Not Allowed</label>
                     @endif
