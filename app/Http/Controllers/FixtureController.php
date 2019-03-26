@@ -233,4 +233,14 @@ class FixtureController extends Controller
     {
         //
     }
+
+    public function checkmatch($fixtureId)
+    {
+        $status = DB::table('matches')->where('fixture_id',$fixtureId)->select('status')->first()->status;
+        $matchId = DB::table('matches')->where('fixture_id',$fixtureId)->select('id')->first()->id;
+        if($status == '0')
+        {
+            return redirect(route('scoring.match',$matchId));
+        }
+    }
 }

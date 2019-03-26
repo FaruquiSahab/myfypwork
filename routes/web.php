@@ -734,6 +734,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
         'as' => 'editions.lineup.store'
     ]);
 
+    Route::post('/check/match/{fixture}',[
+        'uses'=> 'FixtureController@checkmatch',
+        'as' => 'check.match'
+    ]);
+
 //-----------------------------------------------------------------------------------------------------
 
 //----------------------------------teamStats----------------------------------------------------------

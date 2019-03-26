@@ -1,6 +1,12 @@
 @extends('layouts.admin')
     @section('content')
     <fieldset>
+        <strong>1st Innings Score</strong> 
+        <span id="i1runs" >{{ $i1runs }}</span>/
+        <span id="i1wickets">{{ $i1wickets }}</span> In
+        <sapn id="i1overs">{{ $i1overs }}</sapn> Overs
+    </fieldset>
+    <fieldset>
         <strong>Batting Score</strong> 
         <span id="t_runs" >{{ $runs }}</span>/
         <span id="t_wickets">{{ $wicketss }}</span> In
@@ -241,29 +247,56 @@
 
             $('#endbtn1').on('click',function()
             {
-                if($('#t_runs').text() == $('#t_runs1').text())
+                var max = 0;
+                if({{ $format }} == 1)
                 {
-                    if($('#t_overs').text() == $('#t_overs1').text())
+                    max = 20;
+                }
+                else if({{ $format }} == 2)
+                {
+                    max = 50;
+                }
+                if($('#t_overs').text() > max || $('#t_overs1').text() > max)
+                {
+                    toastr.warning('Record Overs Are More Than Allowed','Validation Message')
+                }
+                else
+                {
+                    if($('#t_runs').text() == $('#t_runs1').text())
                     {
-                        if($('#t_wickets').text() == $('#t_wickets1').text())
+                        if($('#t_overs').text() == $('#t_overs1').text())
                         {
-                            toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
-                            $('input').prop('disabled',true);
-                            $('button').prop('disabled',true);
-                            $('#endbtn1').removeAttr('disabled');
-                            $('#endbtn0').removeClass('hidden');
-                            $('#endbtn0').removeAttr('disabled');
+                            if($('#t_wickets').text() == $('#t_wickets1').text())
+                            {
+                                var temp = $('#i1runs').text();
+                                temp = +temp;
+                                temp = temp + 7;
+                                if($('#t_runs').text() > temp)
+                                {
+                                    toastr.warning('2nd Innings Runs Are Much Greater Than 1st Inning Score','Validation Message')
+                                }
+                                else
+                                {
+                                    toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
+                                    $('input').prop('disabled',true);
+                                    $('button').prop('disabled',true);
+                                    $('select').prop('disabled',true);
+                                    $('#endbtn1').removeAttr('disabled');
+                                    $('#endbtn0').removeClass('hidden');
+                                    $('#endbtn0').removeAttr('disabled');
+                                }
+                            }
+                            else{
+                                toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                            }
                         }
                         else{
-                            toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                            toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                         }
                     }
                     else{
-                        toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                        toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                     }
-                }
-                else{
-                    toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                 }
                 
             });

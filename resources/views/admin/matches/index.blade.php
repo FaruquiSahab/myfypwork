@@ -21,18 +21,30 @@
                 <th>Date</th>
                 <th>Toss</th>
                 <th>Type</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($matches as $key=>$match)
                 <tr>
                     <td>{{$key+1}}</td>
-                    <td>{{$match->club1->name}}</td>
+                    <td style="font-weight:bold">{{$match->club1->name}}</td>
                     <td>vs</td>
-                    <td>{{$match->club2->name}}</td>
+                    <td style="font-weight:bold">{{$match->club2->name}}</td>
                     <td>{{$match->match_date}}</td>
                     <td>{{$match->toss_name->name}}</td>
                     <td>{{$match->matchtype->type_name}}</td>
+                    <td>
+                        @if($match->status == 0)
+                            <form action="{{ route('scoring.match',$match->id) }}">
+                                <button class="btn btn-warning">Score Match</button>
+                            </form>
+                        @elseif($match->status == 1)
+                            <form action="">
+                                <button class="btn btn-danger">View Scorecrad</button>
+                            </form>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

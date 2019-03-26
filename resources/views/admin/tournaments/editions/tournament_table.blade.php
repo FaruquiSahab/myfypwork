@@ -101,13 +101,13 @@
                                 <input type="submit" class="btn-xs btn-success" value="Make Lineup">
                             </form>
                         @else
-                            <form action="">
-                                <input type="hidden">
-                                <input type="button" class="btn-xs btn-warning" value="Score Match">
+                            <form action="{{ route('check.match',$fix->id) }}" method="POST">
+                                {{ csrf_field() }}
+                                <input type="submit" class="btn-xs btn-warning" value="Score Match">
                             </form>
                         @endif
                     @else
-                        <label for="Not Allowed" class="label label-info">Not Allowed</label>
+                        <label class="label label-info">No Actions Yet</label>
                     @endif
 
                 </td>
