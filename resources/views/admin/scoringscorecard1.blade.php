@@ -262,40 +262,48 @@
                 }
                 else
                 {
-                    if($('#t_runs').text() == $('#t_runs1').text())
+                    if( ($('#t_wickets').text()) < 10 && ($('#t_overs').text()< max) )
                     {
-                        if($('#t_overs').text() == $('#t_overs1').text())
+                        toastr.warning('Human Error Cannot Proceed','Validation Message');
+                    }
+                    else
+                    {
+                        if($('#t_runs').text() == $('#t_runs1').text())
                         {
-                            if($('#t_wickets').text() == $('#t_wickets1').text())
+                            if($('#t_overs').text() == $('#t_overs1').text())
                             {
-                                var temp = $('#i1runs').text();
-                                temp = +temp;
-                                temp = temp + 7;
-                                if($('#t_runs').text() > temp)
+                                if($('#t_wickets').text() == $('#t_wickets1').text())
                                 {
-                                    toastr.warning('2nd Innings Runs Are Much Greater Than 1st Inning Score','Validation Message')
+                                    var temp = $('#i1runs').text();
+                                    temp = +temp;
+                                    temp = temp + 7;
+                                    if($('#t_runs').text() > temp)
+                                    {
+                                        toastr.warning('2nd Innings Runs Are Much Greater Than 1st Inning Score','Validation Message')
+                                    }
+                                    else
+                                    {
+                                        toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
+                                        $('input').prop('disabled',true);
+                                        $('button').prop('disabled',true);
+                                        $('select').prop('disabled',true);
+                                        $('#endbtn1').removeAttr('disabled');
+                                        $('#endbtn0').removeClass('hidden');
+                                        $('#endbtn0').removeAttr('disabled');
+                                    }
                                 }
-                                else
-                                {
-                                    toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
-                                    $('input').prop('disabled',true);
-                                    $('button').prop('disabled',true);
-                                    $('select').prop('disabled',true);
-                                    $('#endbtn1').removeAttr('disabled');
-                                    $('#endbtn0').removeClass('hidden');
-                                    $('#endbtn0').removeAttr('disabled');
+                                else{
+                                    toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                                 }
                             }
                             else{
-                                toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                                toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                             }
                         }
-                        else{
-                            toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                        else
+                        {
+                            toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                         }
-                    }
-                    else{
-                        toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                     }
                 }
                 

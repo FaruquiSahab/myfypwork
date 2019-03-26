@@ -232,7 +232,7 @@
                     <br><br>
                     <button class="hidden btn" id="endbtn0">Customize Score</button>
                     <button style="margin-left: 85%" id="endbtn1" class="btn btn-success">Validate Total Score</button>
-                    <form action="{{ route('scoring.match2',$matches[0]->id) }}">
+                    <form action="{{ route('updateandproceed',$matches[0]->id) }}">
                         <button type="submit" style="margin-left: 87%" id="endbtn2"class="hidden btn btn-success">Proceed To 2nd Innings</button>
                     </form>
                     <br><br>
@@ -254,35 +254,43 @@
                 }
                 if($('#t_overs').text() > max || $('#t_overs1').text() > max)
                 {
-                    toastr.warning('Record Overs Are More Than Allowed','Validation Message')
+                    toastr.warning('Record Overs Are More Than Allowed','Validation Message');
                 }
                 else
                 {
-                    if($('#t_runs').text() == $('#t_runs1').text())
+                    if( ($('#t_wickets').text()) < 10 && ($('#t_overs').text()< max) )
                     {
-                        if($('#t_overs').text() == $('#t_overs1').text())
+                        toastr.warning('Human Error Cannot Proceed','Validation Message');
+                    }
+                    else
+                    {
+                        if($('#t_runs').text() == $('#t_runs1').text())
                         {
-                            if($('#t_wickets').text() == $('#t_wickets1').text())
+                            if($('#t_overs').text() == $('#t_overs1').text())
                             {
-                                toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
-                                $('input').prop('disabled',true);
-                                $('button').prop('disabled',true);
-                                $('#endbtn0').removeClass('hidden');
-                                $('#endbtn0').removeAttr('disabled');
-                                $('#endbtn1').addClass('hidden');
-                                $('#endbtn2').removeClass('hidden');
-                                $('#endbtn2').removeAttr('disabled');
+                                if($('#t_wickets').text() == $('#t_wickets1').text())
+                                {
+                                    toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
+                                    $('input').prop('disabled',true);
+                                    $('button').prop('disabled',true);
+                                    $('#endbtn0').removeClass('hidden');
+                                    $('#endbtn0').removeAttr('disabled');
+                                    $('#endbtn1').addClass('hidden');
+                                    $('#endbtn2').removeClass('hidden');
+                                    $('#endbtn2').removeAttr('disabled');
+                                }
+                                else{
+                                    toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                                }
                             }
                             else{
-                                toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                                toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                             }
                         }
-                        else{
-                            toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                        else
+                        {
+                            toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                         }
-                    }
-                    else{
-                        toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
                     }
                 }
                 

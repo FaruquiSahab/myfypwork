@@ -764,6 +764,9 @@ Route::get('/scoring', 'ScoringController@index' )
             ->name('scoring')
             ->middleware(['can:create']);
 
+Route::get('/updateandproceed/{match}','ScoringController@updateandproceed')
+            ->name('updateandproceed')
+            ->middleware(['can:create']);
 Route::get('/scoring/match/{match}', 'ScoringController@index1' )
             ->name('scoring.match')
             ->middleware(['can:create']);

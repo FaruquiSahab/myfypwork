@@ -31,7 +31,7 @@ class ScoringController extends Controller
   public function index1($match)
   {
 		$matches = Match::where('id',$match)->get();
-		if($matches[0]->status == 0)
+		if($matches[0]->status == 0 || $matches[0]->status == 1)
 		{
 			#cached data
 				$helper = new CricketStatsHelper();
@@ -355,139 +355,154 @@ class ScoringController extends Controller
 			'wickets'=>$wicketss1
 			]);
 	}
+	public function updateandproceed($match)
+	{
+		Match::where('id',$match)->update([
+			'status'=> '1'
+			]);
+		return redirect(route('scoring.match2',$match));
+	}
 
 	public function index2($match)
 	{
-		$this->inningscore($match,1);
-		$helper = new CricketStatsHelper();
-	
-		$runs = BatsmenScore::where('match_id',$match)->where('inning_no',2)->sum('runs');
-		$balls = BatsmenScore::where('match_id',$match)->where('inning_no',2)->sum('balls');
-		$overs = $helper->convertBallsToOvers($balls);
-		$wicketss = BatsmenScore::where('match_id',$match)->where('inning_no',2)
-							->where(function($query) 
-							{
-								$query->where('out_how', 'b')
-								->orWhere('out_how', 'ct')
-								->orWhere('out_how', 'lbw')
-								->orWhere('out_how', 'otf')
-								->orWhere('out_how', 'hw')
-								->orWhere('out_how', 'hb')
-								->orWhere('out_how', 'ht')
-								->orWhere('out_how', 'to')
-								->orWhere('out_how', 'ro');
-							})
-							->count();
-		$wides = Extra::where('match_id', $match)->where('inning_no',2)->sum('wides');
-		$noballs = Extra::where('match_id', $match)->where('inning_no',2)->sum('no_balls');
-		$byes = Extra::where('match_id', $match)->where('inning_no',2)->sum('byes');
-		$legbyes = Extra::where('match_id', $match)->where('inning_no',2)->sum('leg_byes');
-		$runs = $runs + $wides + $noballs + $byes + $legbyes;
-	
-	
-		$total_extras = $wides + $noballs + $byes + $legbyes;
-	
-			
-		$runs1 = BowlerScore::where('match_id',$match)->where('inning_no',1)->sum('runs');
-		$balls1 = BowlerScore::where('match_id',$match)->where('inning_no',1)->sum('balls');
-		$overs1 = $helper->convertBallsToOvers($balls1);
-		$wicketss1 = BowlerScore::where('match_id',$match)->where('inning_no',1)->sum('wickets');
-		$wicketsother = BatsmenScore::where('match_id',$match)->where('inning_no',2)
-		->where(function($query) 
+		$matches = Match::where('id',$match)->get();
+		if($matches[0]->status == 1)
 		{
-			$query->where('out_how', 'ro')
-			->orWhere('out_how', 'to');
-		})
-		->count();
-		$wicketss1 = $wicketss1 + $wicketsother;
-		$runs1 = $runs1 + $byes +$legbyes;
-	
-	
-			$matches = Match::where('id',$match)->get();
-	
-	
-		#////////////////////// Batting Second
-			$battingsecond = Lineup::where('match_id',$match)->where('innings_no',2)->get();
-				for ($i=0; $i < sizeof($battingsecond) ; $i++)
-				{
-					BatsmenScore::updateOrCreate
-					(
-						[
-							'match_id'=>$matches[0]->id,
-							'batsmen_id'=>$battingsecond[$i]->player->id,
-							'inning_no'=>2
-						]
-					);
-				}
-			$battingsecond = BatsmenScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
-		#//////////////////////
-	
-	
-	
-		#////////////////////// Balling Second
-			$ballingsecond = Lineup::where('match_id',$match)->where('innings_no',1)->get();
-			// return sizeof($ballingsecond);
-				for ($i=0; $i< sizeof($ballingsecond); $i++)
-				{
-					// echo 'i(S) =>'. $i . '<br>';
-					// echo 'role =>'. $ballingsecond[$i]->player->role_id . '<br>';
-					if ($ballingsecond[$i]->player->role_id == 2)
+			$this->inningscore($match,1);
+			$helper = new CricketStatsHelper();
+		
+			$runs = BatsmenScore::where('match_id',$match)->where('inning_no',2)->sum('runs');
+			$balls = BatsmenScore::where('match_id',$match)->where('inning_no',2)->sum('balls');
+			$overs = $helper->convertBallsToOvers($balls);
+			$wicketss = BatsmenScore::where('match_id',$match)->where('inning_no',2)
+								->where(function($query) 
+								{
+									$query->where('out_how', 'b')
+									->orWhere('out_how', 'ct')
+									->orWhere('out_how', 'lbw')
+									->orWhere('out_how', 'otf')
+									->orWhere('out_how', 'hw')
+									->orWhere('out_how', 'hb')
+									->orWhere('out_how', 'ht')
+									->orWhere('out_how', 'to')
+									->orWhere('out_how', 'ro');
+								})
+								->count();
+			$wides = Extra::where('match_id', $match)->where('inning_no',2)->sum('wides');
+			$noballs = Extra::where('match_id', $match)->where('inning_no',2)->sum('no_balls');
+			$byes = Extra::where('match_id', $match)->where('inning_no',2)->sum('byes');
+			$legbyes = Extra::where('match_id', $match)->where('inning_no',2)->sum('leg_byes');
+			$runs = $runs + $wides + $noballs + $byes + $legbyes;
+		
+		
+			$total_extras = $wides + $noballs + $byes + $legbyes;
+		
+				
+			$runs1 = BowlerScore::where('match_id',$match)->where('inning_no',1)->sum('runs');
+			$balls1 = BowlerScore::where('match_id',$match)->where('inning_no',1)->sum('balls');
+			$overs1 = $helper->convertBallsToOvers($balls1);
+			$wicketss1 = BowlerScore::where('match_id',$match)->where('inning_no',1)->sum('wickets');
+			$wicketsother = BatsmenScore::where('match_id',$match)->where('inning_no',2)
+			->where(function($query) 
+			{
+				$query->where('out_how', 'ro')
+				->orWhere('out_how', 'to');
+			})
+			->count();
+			$wicketss1 = $wicketss1 + $wicketsother;
+			$runs1 = $runs1 + $byes +$legbyes;
+		
+		
+				$matches = Match::where('id',$match)->get();
+		
+		
+			#////////////////////// Batting Second
+				$battingsecond = Lineup::where('match_id',$match)->where('innings_no',2)->get();
+					for ($i=0; $i < sizeof($battingsecond) ; $i++)
 					{
-						// echo 'roleReq1 =>'. $ballingsecond[$i]->player->role_id . '<br>';
-						BowlerScore::updateOrCreate
+						BatsmenScore::updateOrCreate
 						(
 							[
 								'match_id'=>$matches[0]->id,
-								'bowler_id'=>$ballingsecond[$i]->player->id,
-								'inning_no'=>1
+								'batsmen_id'=>$battingsecond[$i]->player->id,
+								'inning_no'=>2
 							]
 						);
 					}
-					elseif ($ballingsecond[$i]->player->role_id == 3)
+				$battingsecond = BatsmenScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
+			#//////////////////////
+		
+		
+		
+			#////////////////////// Balling Second
+				$ballingsecond = Lineup::where('match_id',$match)->where('innings_no',1)->get();
+				// return sizeof($ballingsecond);
+					for ($i=0; $i< sizeof($ballingsecond); $i++)
 					{
-						// echo 'roleReq2 =>'. $ballingsecond[$i]->player->role_id . '<br>';
-						BowlerScore::updateOrCreate
-						(
-							[
-								'match_id'=>$matches[0]->id,
-								'bowler_id'=>$ballingsecond[$i]->player->id,
-								'inning_no'=>1
-							]
-						);
+						// echo 'i(S) =>'. $i . '<br>';
+						// echo 'role =>'. $ballingsecond[$i]->player->role_id . '<br>';
+						if ($ballingsecond[$i]->player->role_id == 2)
+						{
+							// echo 'roleReq1 =>'. $ballingsecond[$i]->player->role_id . '<br>';
+							BowlerScore::updateOrCreate
+							(
+								[
+									'match_id'=>$matches[0]->id,
+									'bowler_id'=>$ballingsecond[$i]->player->id,
+									'inning_no'=>1
+								]
+							);
+						}
+						elseif ($ballingsecond[$i]->player->role_id == 3)
+						{
+							// echo 'roleReq2 =>'. $ballingsecond[$i]->player->role_id . '<br>';
+							BowlerScore::updateOrCreate
+							(
+								[
+									'match_id'=>$matches[0]->id,
+									'bowler_id'=>$ballingsecond[$i]->player->id,
+									'inning_no'=>1
+								]
+							);
+						}
 					}
-				}
-				// return"";
-			$ballingsecond = BowlerScore::where('match_id',$matches[0]->id)->where('inning_no',1)->get();
-		#//////////////////////
-	
-	
-	
-		#//////////////////////Extra
-			Extra::updateOrCreate(
-				[
-					'match_id'=>$match,
-					'inning_no'=>2
-				]
-			);
-			$extra = Extra::where('match_id',$match)->where('inning_no',2)->get();
-		#//////////////////////
-	
-		#1st Innings Score
-			$i1runs = InningScore::where('match_id',$match)->where('inning_no',1)->first()->runs;
-			$i1wickets = InningScore::where('match_id',$match)->where('inning_no',1)->first()->wickets;
-			$i1overs = InningScore::where('match_id',$match)->where('inning_no',1)->first()->overs;
-		#///
-	
-	
-		#others
-			$options = Option::all();
-			$optionsE = Option::where('legal','1')->get();
-			$wickets = Out::all();
-			$format = Match::where('id',$match)->select('match_type_id')->first()->match_type_id;
-		#////
-	
-			// return $battingfirst;
-			return view('admin.scoringscorecard1',compact('format','i1runs','i1wickets','i1overs','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingsecond','ballingsecond','extra'));
+					// return"";
+				$ballingsecond = BowlerScore::where('match_id',$matches[0]->id)->where('inning_no',1)->get();
+			#//////////////////////
+		
+		
+		
+			#//////////////////////Extra
+				Extra::updateOrCreate(
+					[
+						'match_id'=>$match,
+						'inning_no'=>2
+					]
+				);
+				$extra = Extra::where('match_id',$match)->where('inning_no',2)->get();
+			#//////////////////////
+		
+			#1st Innings Score
+				$i1runs = InningScore::where('match_id',$match)->where('inning_no',1)->first()->runs;
+				$i1wickets = InningScore::where('match_id',$match)->where('inning_no',1)->first()->wickets;
+				$i1overs = InningScore::where('match_id',$match)->where('inning_no',1)->first()->overs;
+			#///
+		
+		
+			#others
+				$options = Option::all();
+				$optionsE = Option::where('legal','1')->get();
+				$wickets = Out::all();
+				$format = Match::where('id',$match)->select('match_type_id')->first()->match_type_id;
+			#////
+		
+				// return $battingfirst;
+				return view('admin.scoringscorecard1',compact('format','i1runs','i1wickets','i1overs','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingsecond','ballingsecond','extra'));
+		}
+		else
+		{
+			return redirect(route('scoring.match',$match));
+		}	
 	}
 	
 	public function submitbatsmenscore2(Request $request)
