@@ -262,7 +262,7 @@
                 }
                 else
                 {
-                    if( ($('#t_wickets').text()) < 10 && ($('#t_overs').text()< max) )
+                    if( (($('#t_wickets').text()) < 10 && ($('#t_overs').text()< max)) && ($('#t_runs').text() < $('#i1runs').text() ) )
                     {
                         toastr.warning('Human Error Cannot Proceed','Validation Message');
                     }
