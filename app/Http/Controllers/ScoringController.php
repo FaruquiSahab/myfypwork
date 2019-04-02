@@ -14,6 +14,7 @@ use App\Over;
 use App\Tass;
 use App\InningScore;
 use DB;
+use App\PlayerStat;
 use Datatables;
 use Illuminate\Http\Request;
 use Garethellis\CricketStatsHelper\CricketStatsHelper;
@@ -323,15 +324,25 @@ class ScoringController extends Controller
 
 	    return json_encode($object);
 
-	}
+  }
 
 	public function inningscore($matchId,$inningNo)
 	{
 		$helper = new CricketStatsHelper();
-		$runs1 = BowlerScore::where('match_id',$matchId)->where('inning_no',$inningNo+1)->sum('runs');
-		$balls1 = BowlerScore::where('match_id',$matchId)->where('inning_no',$inningNo+1)->sum('balls');
-		$overs1 = $helper->convertBallsToOvers($balls1);
-		$wicketss1 = BowlerScore::where('match_id',$matchId)->where('inning_no',$inningNo+1)->sum('wickets');
+		if($inningNo == 1)
+		{
+			$runs1 = BowlerScore::where('match_id',$matchId)->where('inning_no',2)->sum('runs');
+			$balls1 = BowlerScore::where('match_id',$matchId)->where('inning_no',2)->sum('balls');
+			$overs1 = $helper->convertBallsToOvers($balls1);
+			$wicketss1 = BowlerScore::where('match_id',$matchId)->where('inning_no',2)->sum('wickets');
+		}
+		elseif($inningNo == 2)
+		{
+			$runs1 = BowlerScore::where('match_id',$matchId)->where('inning_no',1)->sum('runs');
+			$balls1 = BowlerScore::where('match_id',$matchId)->where('inning_no',1)->sum('balls');
+			$overs1 = $helper->convertBallsToOvers($balls1);
+			$wicketss1 = BowlerScore::where('match_id',$matchId)->where('inning_no',1)->sum('wickets');
+		}
 		
 		$byes = Extra::where('match_id', $matchId)->where('inning_no',$inningNo)->sum('byes');
 		$legbyes = Extra::where('match_id', $matchId)->where('inning_no',$inningNo)->sum('leg_byes');
@@ -347,12 +358,13 @@ class ScoringController extends Controller
 		$wicketss1 = $wicketss1 + $wicketsother;
 		InningScore::updateOrCreate(
 			[
-			'match_id'=>$matchId,
-			'inning_no'=>$inningNo],
+				'match_id'=>$matchId,
+				'inning_no'=>$inningNo
+			],
 			[
-			'runs'=>$runs1,
-			'overs'=>$overs1,
-			'wickets'=>$wicketss1
+				'runs'=>$runs1,
+				'overs'=>$overs1,
+				'wickets'=>$wicketss1
 			]);
 	}
 	public function updateandproceed($match)
@@ -574,8 +586,6 @@ class ScoringController extends Controller
 		$object->wickets = $wicketss;
 	
 		return [$data,json_encode($object)];
-	
-	
 	}
 	public function submitbowlerscore2(Request $request)
 	{
@@ -628,7 +638,6 @@ class ScoringController extends Controller
 		$object->wickets = $wicketss1;
 	
 		return [$data,json_encode($object)];
-	
 	}
 	
 	public function submitextrascore2(Request $request)
@@ -665,9 +674,146 @@ class ScoringController extends Controller
 			$object->runss = $runss;
 			$object->runs1 = $runs1;
 	
-		return json_encode($object);
-	
+		return json_encode($object);	
 	}
+
+	public function statsupdate($matchId)
+	{
+		$count = 0;
+		$records = BatsmenScore::where('match_id',$matchId)->get();
+		foreach ($records as $key => $value)
+		{
+			$playerId = $value->batsmen_id;
+			// return $playerId; ID Found
+			$stats = PlayerStat::where('player_id',$playerId)->get();
+			if(count($stats) > 0 ) {
+				$count++;
+			}
+			else{
+				$stats = new PlayerStat;
+				$stats->player_id = $playerId;
+				$stats->format = '1';
+				$stats->matches = '0';
+				$stats->save();
+				$stats = PlayerStat::where('player_id',$playerId)->get();
+			}
+			echo "key".$key."<br>";
+			echo "stat:".$stats[0]->balls_played."<br>";
+			$matches = $stats[0]->matches;
+			$innings = $stats[0]->innings;
+			$notouts = $stats[0]->notouts;
+			$runs = $stats[0]->runs;
+			$highscore = $stats[0]->highscore;
+			$balls_played = $stats[0]->balls_played;
+			$average_bat = $stats[0]->average_bat;
+			$strikerate= $stats[0]->strikerate;
+			$centuries = $stats[0]->centuries;
+			$halfcenturies = $stats[0]->halfcenturies;
+			$fours = $stats[0]->fours;
+			$sixes = $stats[0]->sixes;
+
+			
+			if ($value->out_how == 'dnb'){
+				$player_stat = PlayerStat::where('player_id',$playerId)->first();
+				$matches = $matches + 1;
+				$player_stat->matches = $matches;
+				$player_stat->save();
+			}
+			elseif ($value->out_how == 'nt') {
+				$player_stat = PlayerStat::where('player_id',$playerId)->first();
+				$matches = $matches + 1;
+				$player_stat->matches = $matches;
+				$player_stat->notouts = $notouts + 1;
+				$player_stat->runs = $runs + $value->runs;
+				if ($value->runs > $highscore) {
+					$highscore = $value->runs;
+				}
+				if ($innings == 0) {
+					$player_stat->average_bat = 0.00;
+				}
+				else{
+					$player_stat->average_bat = $runs/$innings;
+				}
+				$player_stat->balls_played = $balls_played + $value->balls;
+				if ($balls_played == "0"){
+					echo "ball played aaj tk 1:". $balls_played ."<br>";
+					if ($value->balls > 0){
+						echo "ball value match ma: ".$value->balls."<br>";
+						$player_stat->strikerate = ($value->runs/$value->balls)*100;
+						echo "SR1:". ($value->runs/$value->balls)*100 ."<br>" ;
+					}
+					else{
+						echo "aaj k match ma zero balls: ".$value->balls."<br>";
+						$player_stat->strikerate = 0;
+					}
+				}
+				else{
+					$player_stat->strikerate = ($runs/$balls_played)*100;
+				}
+				if ($value->runs >= 100) {
+					$player_stat->centuries = $centuries + 1;
+				}
+				if ($value->runs >= 50 && $value->runs < 100 ) {
+					$player_stat->halfcenturies = $halfcenturies + 1;
+				}
+				$player_stat->fours = $fours + $value->fours;
+				$player_stat->sixes = $sixes + $value->sixes;
+				$player_stat->save();
+			}
+			else
+			{
+				$player_stat = PlayerStat::where('player_id',$playerId)->first();
+				$matches = $matches + 1;
+				$player_stat->matches = $matches;
+				$player_stat->innings = $innings + 1;
+				$player_stat->runs = $runs + $value->runs;
+				if ($value->runs > $highscore) {
+					$player_stat->highscore = $value->runs;
+				}
+				if ($innings == 0) {
+					$player_stat->average_bat = $runs;
+				}
+				else{
+					$player_stat->average_bat = $runs/$innings;
+				}
+				$player_stat->balls_played = $balls_played + $value->balls;
+				if ($balls_played == 0){
+					echo "ball played aaj tk: ". $balls_played."<br>";
+					if ($value->balls > 0){
+						echo "ball value match ma: ".$value->balls."<br>";
+						$player_stat->strikerate = ($value->runs/$value->balls)*100;
+						echo "SR:". ($value->runs/$value->balls)*100 ."<br>" ;
+					}
+					else{
+						echo "aj k match ma zero balls: ".$value->balls."<br>";
+						$player_stat->strikerate = 0;
+					}
+				}
+				else{
+					$player_stat->strikerate = ($runs/$balls_played)*100;
+				}
+				if ($value->runs >= 100) {
+					$player_stat->centuries = $centuries + 1;
+				}
+				if ($value->runs >= 50 && $value->runs < 100 ) {
+					$player_stat->halfcenturies = $halfcenturies + 1;
+				}
+				$player_stat->fours = $fours + $value->fours;
+				$player_stat->sixes = $sixes + $value->sixes;
+				$player_stat->save();
+			}
+			echo "-----------"."<br>";
+		}
+	}
+
+	public function finishmatch(Request $request, $matchId)
+	{
+		$this->inningscore($matchId,2);
+		return $this->statsupdate($matchId);
+		return "Done";
+	}
+
+	
 #right now not in use 13-Feb-2019
 	public function batsmenScore($id)
 	{

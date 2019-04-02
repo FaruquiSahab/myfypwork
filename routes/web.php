@@ -812,6 +812,9 @@ Route::POST('/submitbowlerscore/inningsecond','ScoringController@submitbowlersco
 Route::POST('/submitextrascore/inningsecond','ScoringController@submitextrascore2')
             ->name('submitextrascore2')
             ->middleware(['can:create']);
+Route::POST('/finishmatch/{match}','ScoringController@finishmatch')
+            ->name('finishmatch')
+            ->middleware(['can:create']);
 //------------------------------------------------------------------------------------------------------
 //
 //

@@ -238,7 +238,10 @@
                     <br><br>
                     <button class="hidden btn" id="endbtn0">Customize Score</button>
                     <button style="margin-left: 85%" id="endbtn1" class="btn btn-success">Validate Total Score</button>
-                    <button style="margin-left: 87%" id="endbtn2"class="hidden btn btn-success">Proceed To 2nd Innings</button>
+                    <form method="POST" action="{{ route('finishmatch',$matches[0]->id) }}">
+                        {{ csrf_field() }}
+                        <button type="submit" style="margin-left: 87%" id="endbtn2"class="hidden btn btn-danger">Finish This Match</button>
+                    </form>
                     <br><br>
 	@stop
 
@@ -287,9 +290,12 @@
                                         $('input').prop('disabled',true);
                                         $('button').prop('disabled',true);
                                         $('select').prop('disabled',true);
-                                        $('#endbtn1').removeAttr('disabled');
+                                        $('#endbtn1').addClass('hidden');
                                         $('#endbtn0').removeClass('hidden');
                                         $('#endbtn0').removeAttr('disabled');
+                                        $('#endbtn2').removeClass('hidden');
+                                        $('#endbtn2').removeAttr('disabled');
+                                        $('input[name="_token"]').removeAttr('disabled');
                                     }
                                 }
                                 else{
@@ -450,7 +456,6 @@
                 });
 
             });
-
             $(document).on('submit','.extras',function(event)
             {
                 event.preventDefault();
