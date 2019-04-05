@@ -16,7 +16,7 @@ use App\Tass;
 use App\InningScore;
 use DB;
 use App\PlayerStat;
-use Datatables;
+use DataTables;
 use Illuminate\Http\Request;
 use Garethellis\CricketStatsHelper\CricketStatsHelper;
 
@@ -1006,12 +1006,38 @@ class ScoringController extends Controller
 		return "Done";
 	}
 
+	public function scorecard($match)
+	{
+		$status = Match::where('id',$match)->select('status')->first()->status;
+		if ($status == 2) {
+			$club1 = Match::where('id',$match)->select('club_id_1')->first()->club_id_1;
+			$club2 = Match::where('id',$match)->select('club_id_2')->first()->club_id_2;
+			$clubname1 = Club::where('id',$club1)->select('name')->first()->name;
+			$clubname2 = Club::where('id',$club2)->select('name')->first()->name;
+			$batfirst = BatsmenScore::where('match_id',$match)->where('inning_no',1)->get();
+			$batsecond = BatsmenScore::where('match_id',$match)->where('inning_no',2)->get();
+			$ballfirst = BowlerScore::where('match_id',$match)->where('inning_no',2)->get();
+			$ballsecond = BowlerScore::where('match_id',$match)->where('inning_no',1)->get();
+			$extrafirst = Extra::where('match_id',$match)->where('inning_no',1)->first();
+			$extrasecond = Extra::where('match_id',$match)->where('inning_no',2)->first();
+			$inningscorefirst = InningScore::where('match_id',$match)->where('inning_no',1)->first();
+			$inningscoresecond = InningScore::where('match_id',$match)->where('inning_no',2)->first();
+			$result = Match::where('id',$match)->select('result')->first()->result;
+			return view('admin.scorecard',compact('batfirst','batsecond','ballfirst','ballsecond','extrafirst','extrasecond','inningscorefirst','inningscoresecond','result','wickets','format','club1','club2','clubname1','clubname2'));
+
+		}
+		else{
+			return view('unauthorized');
+		}
+
+	}
+
 	
 #right now not in use 13-Feb-2019
 	public function batsmenScore($id)
 	{
 		$batsmenScores = BatsmenScore::where('match_id',$id)->get();
-		return Datatables::of($batsmenScores)
+		return DataTables::of($batsmenScores)
 		->addColumn('batsmen',function($batsmenScore){
 			return '<strong>'.$batsmenScore->batsmen->name.'</strong>';
 		})
@@ -1033,7 +1059,7 @@ class ScoringController extends Controller
 	public function bowlerScore($id)
 	{
 		$bowlerScores = BowlerScore::where('match_id',$id)->get();
-		return Datatables::of($bowlerScores)
+		return DataTables::of($bowlerScores)
 		->addColumn('bowler',function($bowlerScore){
 			return '<strong>'.$bowlerScore->batsmen->name.'</strong>';
 		})
@@ -1044,7 +1070,7 @@ class ScoringController extends Controller
 	public function fallofwickets($id)
 	{
 		$fallofwickets = FallOfWicket::select(['score'])->where('match_id',$id)->get();
-		return Datatables::of($fallofwickets)
+		return DataTables::of($fallofwickets)
 		// ->addColumn('batsmen',function($fallofwicket){
 		// 	return '<strong>'.$fallofwicket->batsmen->name.'</strong>';
 		// })
@@ -1061,7 +1087,7 @@ class ScoringController extends Controller
 	public function runsovers($id)
 	{
 		$runsovers = Over::select(['runs'])->where('match_id',$id)->get();
-		return Datatables::of($runsovers)
+		return DataTables::of($runsovers)
 		->addColumn('runs',function($runsover){
 			return $runsover->runs;
 		})
@@ -1075,7 +1101,7 @@ class ScoringController extends Controller
 	public function extras($id)
 	{
 		$extras = Extra::where('match_id',$id)->get();
-		return Datatables::of($extras)->make(true);
+		return DataTables::of($extras)->make(true);
 	}
 #end
 

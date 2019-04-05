@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Validator;
-use Datatables;
+use DataTables;
 use App\Ground;
 use App\GroundType;
 use App\Photo;
@@ -24,7 +24,7 @@ class GroundController extends Controller
     public function grounddata()
     {
         $grounds = Ground::all();
-        return Datatables::of($grounds)
+        return DataTables::of($grounds)
         ->addColumn('names',function($ground)
         {
             return '<strong style="font-size:20px">'.$ground->name. '</strong>';

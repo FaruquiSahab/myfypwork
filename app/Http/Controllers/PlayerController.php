@@ -9,7 +9,7 @@ use App\Photo;
 use App\Player;
 use App\PlayerRole;
 use App\PlayerStat;
-use Yajra\Datatables\Facades\Datatables;
+use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -32,7 +32,7 @@ class PlayerController extends Controller
     public function playersData()
     {
         $players = Player::all();
-        return Datatables::of($players)
+        return DataTables::of($players)
         ->addColumn('names',function($player)
         {
             return '<strong>'.$player->name. '</strong>';
@@ -249,7 +249,7 @@ class PlayerController extends Controller
     public function statsdata1()
     {
         $stats = PlayerStat::where('format',1)->get();
-        return Datatables::of($stats)
+        return DataTables::of($stats)
         ->addColumn('names',function($stat){
             return '<h2><strong style="font-size:12px">'.$stat->player->name.'</strong></h2>';
         })
@@ -263,7 +263,7 @@ class PlayerController extends Controller
     public function statsdata2()
     {
         $stats = PlayerStat::where('format',2)->get();
-        return Datatables::of($stats)
+        return DataTables::of($stats)
         ->addColumn('names',function($stat){
             return '<h2><strong style="font-size:10px">'.$stat->player->name.'</strong></h2>';
         })

@@ -1,92 +1,93 @@
 @extends('layouts.admin')
     @section('content')
-    <fieldset>
-        <strong>1st Innings Score</strong> 
-        <span id="i1runs" >{{ $i1runs }}</span>/
-        <span id="i1wickets">{{ $i1wickets }}</span> In
-        <sapn id="i1overs">{{ $i1overs }}</sapn> Overs
-    </fieldset>
-    <fieldset>
-        <strong>Batting Score</strong> 
-        <span id="t_runs" >{{ $runs }}</span>/
-        <span id="t_wickets">{{ $wicketss }}</span> In
-        <sapn id="t_overs">{{ $overs }}</sapn> Overs
-    </fieldset>
+                    <fieldset>
+                        <strong>1st Innings Score</strong> 
+                        <span id="i1runs" >{{ $i1runs }}</span>/
+                        <span id="i1wickets">{{ $i1wickets }}</span> In
+                        <sapn id="i1overs">{{ $i1overs }}</sapn> Overs
+                    </fieldset>
+                    <fieldset>
+                        <strong>Batting Score</strong> 
+                        <span id="t_runs" >{{ $runs }}</span>/
+                        <span id="t_wickets">{{ $wicketss }}</span> In
+                        <sapn id="t_overs">{{ $overs }}</sapn> Overs
+                    </fieldset>
                     {{-- batsmen score --}}
-                    <div class="table-responsive table-bordered">
-                        <table class="table" id="mytable">
-                            <thead>
-                                <tr>
-                                    <th>Batsmen</th>
-                                    <th>Out How</th>
-                                    <th>Out By</th>
-                                    <th>Runs</th>
-                                    <th>Balls</th>
-                                    <th>0(s)</th>
-                                    <th>1(s)</th>
-                                    <th>2(s)</th>
-                                    <th>3(s)</th>
-                                    <th>4(s)</th>
-                                    <th>6(s)</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                              @foreach($battingsecond as $keyb=>$value)
-                                <div>
-                                    <form class="batsmen" data-key="{{ $keyb }}">
-                                        {{ csrf_field() }}
-                                        <input id="match_id{{ $keyb }}" type="hidden" name="match_id" value="{{ $matches[0]->id }}">
-                                        <input id="innings_no{{ $keyb }}" type="hidden" name="innings_no" value="{{ $value->inning_no }}">
-                                        <tr id="row{{ $keyb }}">
-                                          <td>
-                                            {{ $value->batsmen->name }}
-                                            <input id="batsmen_id{{ $keyb }}" type="hidden" name="batsmen_id" value="{{ $value->batsmen->id }}">
-                                          </td>
-                                          <td>
-                                            <select style="width: 100%;" id="{{ $keyb }}" name="out_how" class="form-control outhow">
-                                              <option disabled selected value>Select Wicket Type</option>
-                                              <option value="nt" @if($value->out_how == 'nt') selected @endif>Not Out</option>
-                                              <option value="rt" @if($value->out_how == 'rt') selected @endif>Retired Hut</option>
-                                              <option value="dnb"@if($value->out_how == 'dnb') selected @endif>Did Not Bat</option>
-                                              @foreach($wickets as $key=>$values)
-                                                <option value="{{ $values->value }}" @if($value->out_how == $values->value) selected @endif>{{ $values->name }}</option>
-                                              @endforeach
-                                            </select>
-                                          </td>
-                                          <td>
-                                            @if($value->out_how == 'nt' || $value->out_how == 'rt' ||  $value->out_how == 'dnb' || $value->out_how == 'ro') 
-                                                <select style="width: 100%;" id="out_by_{{ $keyb }}" name="out_by" class="form-control" disabled>
-                                            @else
-                                                <select style="width: 100%;" id="out_by_{{ $keyb }}" name="out_by" class="form-control">
-                                            @endif
-                                                    <option disabled selected value>Select Bowler</option>
-                                                    @foreach($ballingsecond as $key=>$valuee)
-                                                        @if($valuee->bowler->role_id == 2 || $valuee->bowler->role_id == 3 )
-                                                            <option value="{{ $valuee->bowler->id }}" @if($value->out_by == $valuee->bowler->id) selected @endif>
-                                                                {{ $valuee->bowler->name }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
+                        <div class="table-responsive table-bordered">
+                            <table class="table" id="mytable">
+                                <thead>
+                                    <tr>
+                                        <th>Batsmen</th>
+                                        <th>Out How</th>
+                                        <th>Out By</th>
+                                        <th>Runs</th>
+                                        <th>Balls</th>
+                                        <th>0(s)</th>
+                                        <th>1(s)</th>
+                                        <th>2(s)</th>
+                                        <th>3(s)</th>
+                                        <th>4(s)</th>
+                                        <th>6(s)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  @foreach($battingsecond as $keyb=>$value)
+                                    <div>
+                                        <form class="batsmen" data-key="{{ $keyb }}">
+                                            {{ csrf_field() }}
+                                            <input id="match_id{{ $keyb }}" type="hidden" name="match_id" value="{{ $matches[0]->id }}">
+                                            <input id="innings_no{{ $keyb }}" type="hidden" name="innings_no" value="{{ $value->inning_no }}">
+                                            <tr id="row{{ $keyb }}">
+                                              <td>
+                                                {{ $value->batsmen->name }}
+                                                <input id="batsmen_id{{ $keyb }}" type="hidden" name="batsmen_id" value="{{ $value->batsmen->id }}">
+                                              </td>
+                                              <td>
+                                                <select style="width: 100%;" id="{{ $keyb }}" name="out_how" class="form-control outhow">
+                                                  <option disabled selected value>Select Wicket Type</option>
+                                                  <option value="nt" @if($value->out_how == 'nt') selected @endif>Not Out</option>
+                                                  <option value="rt" @if($value->out_how == 'rt') selected @endif>Retired Hut</option>
+                                                  <option value="dnb"@if($value->out_how == 'dnb') selected @endif>Did Not Bat</option>
+                                                  @foreach($wickets as $key=>$values)
+                                                    <option value="{{ $values->value }}" @if($value->out_how == $values->value) selected @endif>{{ $values->name }}</option>
+                                                  @endforeach
                                                 </select>
-                                          </td>
-                                          <td><input id="runs{{ $keyb }}" placeholder="Auto"  value="{{ $value->runs }}" disabled type="number" name="runs" min="0" max="200"></td>
-                                          <td><input id="balls{{ $keyb }}" placeholder="Auto" value="{{ $value->balls }}" disabled type="number" name="balls" min="0" max="200"></td>
-                                          <td><input id="dots{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" value="{{ $value->dots }}"  max="100" name="dots"></td>
-                                          <td><input id="ones{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" value="{{ $value->ones }}"  max="30" name="ones"></td>
-                                          <td><input id="twos{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->twos }}"  name="twos"></td>
-                                          <td><input id="threes{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->threes }}"  name="threes"></td>
-                                          <td><input id="fours{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->fours }}"  name="fours"></td>
-                                          <td><input id="sixes{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30"  value="{{ $value->sixes }}"  name="sixes"></td>
-                                          <td><button type="submit" class="btn">Submit</button></td>
-                                        </tr>
-                                    </form>
-                                </div>
-                              @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <br>
+                                              </td>
+                                              <td>
+                                                @if($value->out_how == 'nt' || $value->out_how == 'rt' ||  $value->out_how == 'dnb' || $value->out_how == 'ro') 
+                                                    <select style="width: 100%;" id="out_by_{{ $keyb }}" name="out_by" class="form-control" disabled>
+                                                @else
+                                                    <select style="width: 100%;" id="out_by_{{ $keyb }}" name="out_by" class="form-control">
+                                                @endif
+                                                        <option disabled selected value>Select Bowler</option>
+                                                        @foreach($ballingsecond as $key=>$valuee)
+                                                            @if($valuee->bowler->role_id == 2 || $valuee->bowler->role_id == 3 )
+                                                                <option value="{{ $valuee->bowler->id }}" @if($value->out_by == $valuee->bowler->id) selected @endif>
+                                                                    {{ $valuee->bowler->name }}
+                                                                </option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                              </td>
+                                              <td><input id="runs{{ $keyb }}" placeholder="Auto"  value="{{ $value->runs }}" disabled type="number" name="runs" min="0" max="200"></td>
+                                              <td><input id="balls{{ $keyb }}" placeholder="Auto" value="{{ $value->balls }}" disabled type="number" name="balls" min="0" max="200"></td>
+                                              <td><input id="dots{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" value="{{ $value->dots }}"  max="100" name="dots"></td>
+                                              <td><input id="ones{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" value="{{ $value->ones }}"  max="30" name="ones"></td>
+                                              <td><input id="twos{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->twos }}"  name="twos"></td>
+                                              <td><input id="threes{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->threes }}"  name="threes"></td>
+                                              <td><input id="fours{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30" value="{{ $value->fours }}"  name="fours"></td>
+                                              <td><input id="sixes{{ $keyb }}" @if($value->out_how == 'dnb') readonly @endif type="number" min="0" max="30"  value="{{ $value->sixes }}"  name="sixes"></td>
+                                              <td><button type="submit" class="btn">Submit</button></td>
+                                            </tr>
+                                        </form>
+                                    </div>
+                                  @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                    {{-- batsmen score --}}
                     <fieldset>
                         <strong>Bowling Score</strong>
                         <span id="t_runs1" >{{ $runs1 }}</span>/
@@ -94,53 +95,54 @@
                         <sapn id="t_overs1">{{ $overs1 }}</sapn> Overs
                     </fieldset>                            
                     {{-- bowler score --}}
-                    <div>
-                        <table class="table table-responsive table-bordered" id="mytable2">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Bowler Name</th>
-                                    <th>Overs</th>
-                                    <th>Maidens</th>
-                                    <th>Runs</th>
-                                    <th>Wickets</th>
-                                    <th>Economy</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($ballingsecond as $key=>$value)
-                                <form class="bowler" data-key="{{ $key }}">
-                                    {{ csrf_field() }}
-                                    <tr id="rows{{ $key }}">
-                                        <input id="match_ids{{ $key }}" type="hidden" name="match_id" value="{{ $matches[0]->id }}">
-                                        <input id="innings_nos{{ $key }}" type="hidden" name="innings_no" value="{{ $value->inning_no }}">
-                                        <td>
-                                            {{ $value->bowler->name }}
-                                            <input id="bowler_id{{ $key }}" type="hidden" name="bowler_id" value="{{ $value->bowler->id }}">
-                                        </td>
-                                        @if($matches[0]->match_type_id == 1)
-                                            <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="4" name="overs" value="{{ $value->overs }}"></td>
-                                            <td><input id="maidens{{ $key }}" type="number" min="0.0" max="4.0" name="maidens" value="{{ $value->maidens }}"></td>
-                                            <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
-                                            <td><input id="wickets{{ $key }}" type="number" min="0" max="10" name="wickets" value="{{ $value->wickets }}"></td>
-                                            <td><input disabled id="eco{{ $key }}" type="number" min="0" max="40" value="{{ $value->economy }}"></td>
-                                            <td><button class="btn">Submit</button></td>
-                                        @elseif($matches[0]->match_type_id == 2)
-                                            <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="10" name="overs" value="{{ $value->overs }}"></td>
-                                            <td><input id="maidens{{ $key }}" type="number" min="0.0" max="10.0" name="maidens" value="{{ $value->maidens }}"></td>
-                                            <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
-                                            <td><input id="wickets{{ $key }}" type="number" min="0" max="10" name="wickets" value="{{ $value->wickets }}"></td>
-                                            <td><input disabled id="eco{{ $key }}" type="number" min="0" max="40" value="{{ $value->economy }}"></td>
-                                            <td><button type="submit" class="btn">Submit</button></td>
-                                        @endif
+                        <div>
+                            <table class="table table-responsive table-bordered" id="mytable2">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Bowler Name</th>
+                                        <th>Overs</th>
+                                        <th>Maidens</th>
+                                        <th>Runs</th>
+                                        <th>Wickets</th>
+                                        <th>Economy</th>
+                                        <th>Action</th>
                                     </tr>
-                                </form>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <br>
-
+                                </thead>
+                                <tbody>
+                                    @foreach($ballingsecond as $key=>$value)
+                                    <form class="bowler" data-key="{{ $key }}">
+                                        {{ csrf_field() }}
+                                        <tr id="rows{{ $key }}">
+                                            <input id="match_ids{{ $key }}" type="hidden" name="match_id" value="{{ $matches[0]->id }}">
+                                            <input id="innings_nos{{ $key }}" type="hidden" name="innings_no" value="{{ $value->inning_no }}">
+                                            <td>
+                                                {{ $value->bowler->name }}
+                                                <input id="bowler_id{{ $key }}" type="hidden" name="bowler_id" value="{{ $value->bowler->id }}">
+                                            </td>
+                                            @if($matches[0]->match_type_id == 1)
+                                                <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="4" name="overs" value="{{ $value->overs }}"></td>
+                                                <td><input id="maidens{{ $key }}" type="number" min="0.0" max="4.0" name="maidens" value="{{ $value->maidens }}"></td>
+                                                <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
+                                                <td><input id="wickets{{ $key }}" type="number" min="0" max="10" name="wickets" value="{{ $value->wickets }}"></td>
+                                                <td><input disabled id="eco{{ $key }}" type="number" min="0" max="40" value="{{ $value->economy }}"></td>
+                                                <td><button class="btn">Submit</button></td>
+                                            @elseif($matches[0]->match_type_id == 2)
+                                                <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="10" name="overs" value="{{ $value->overs }}"></td>
+                                                <td><input id="maidens{{ $key }}" type="number" min="0.0" max="10.0" name="maidens" value="{{ $value->maidens }}"></td>
+                                                <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
+                                                <td><input id="wickets{{ $key }}" type="number" min="0" max="10" name="wickets" value="{{ $value->wickets }}"></td>
+                                                <td><input disabled id="eco{{ $key }}" type="number" min="0" max="40" value="{{ $value->economy }}"></td>
+                                                <td><button type="submit" class="btn">Submit</button></td>
+                                            @endif
+                                        </tr>
+                                    </form>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                    {{-- bowler score --}}
+                    
                     {{-- extras --}}
                         <strong>Extras </strong><span id="extras">{{ $total_extras }}</span>
                         <div class="table-responsive table-bordered col-sm-12">

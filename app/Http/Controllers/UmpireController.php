@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Validator;
-use Datatables;
+use DataTables;
 use App\Photo;
 use App\Umpire;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class UmpireController extends Controller
     public function umpiredata()
     {
         $umpires = Umpire::all();
-        return Datatables::of($umpires)
+        return DataTables::of($umpires)
         ->addColumn('names',function($umpire)
         {
             return '<strong style="font-size:20px">'.$umpire->name. '</strong>';

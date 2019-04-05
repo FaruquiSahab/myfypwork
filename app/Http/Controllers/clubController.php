@@ -6,7 +6,7 @@ use App\Club;
 use App\Level;
 use Illuminate\Http\Request;
 use App\Photo;
-use Datatables;
+use DataTables;
 use Validator;
 use Illuminate\Support\Facades\Session;
 
@@ -26,7 +26,7 @@ class clubController extends Controller
     function clubdata()
     {
         $clubs = Club::all();
-        return Datatables::of($clubs)
+        return DataTables::of($clubs)
                         // ->addColumn('image',function($club)
                         // {
                         //     return  '<img height="50" src="'. $club->photo->file .'>';

@@ -15,7 +15,7 @@ class BatsmenScore extends Model
 
     public function bowler()
     {
-    	return $this->belongsTo('App\Player','bowler_id');
+    	return $this->belongsTo('App\Player','out_by');
     }
 
     public function fielder()
@@ -24,6 +24,6 @@ class BatsmenScore extends Model
     }
     public function out()
     {
-    	return $this->belongsTo('App\Out','out_how');
+    	return $this->belongsTo('App\Out','out_how','value');
     }
 }

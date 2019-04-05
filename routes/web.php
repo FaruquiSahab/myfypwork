@@ -815,6 +815,9 @@ Route::POST('/submitextrascore/inningsecond','ScoringController@submitextrascore
 Route::POST('/finishmatch/{match}','ScoringController@finishmatch')
             ->name('finishmatch')
             ->middleware(['can:create']);
+Route::GET('/scorecard/{match}','ScoringController@scorecard')
+            ->name('scorecard')
+            ->middleware(['can:create']);
 //------------------------------------------------------------------------------------------------------
 //
 //
