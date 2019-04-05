@@ -1,0 +1,7 @@
+show scoreacard --
+csv insert
+shirt number
+take care of delete(replace with update active_status)
+active_status field in all tables and controller logic for those(show where status is 0).
+
+delete all data and insert again all and manuplate
