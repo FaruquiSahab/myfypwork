@@ -40,7 +40,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
     <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 
     <link rel="stylesheet" type="text/css" href="{{ URL::to('css/jquery.bracket.min.css') }}">
@@ -350,10 +350,6 @@
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('edition.index')}}">Edition</a>
-                            </li>
-
-                            <li>
-                                <a href="#">Finalize</a>
                             </li>
 
                             {{-- <li>

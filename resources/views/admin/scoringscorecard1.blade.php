@@ -240,6 +240,7 @@
                     <button style="margin-left: 85%" id="endbtn1" class="btn btn-success">Validate Total Score</button>
                     <form method="POST" action="{{ route('finishmatch',$matches[0]->id) }}">
                         {{ csrf_field() }}
+                        <input type="hidden" name="format" value="{{ $format }}" required>
                         <button type="submit" style="margin-left: 87%" id="endbtn2"class="hidden btn btn-danger">Finish This Match</button>
                     </form>
                     <br><br>
@@ -296,6 +297,7 @@
                                         $('#endbtn2').removeClass('hidden');
                                         $('#endbtn2').removeAttr('disabled');
                                         $('input[name="_token"]').removeAttr('disabled');
+                                        $('input[name="format"]').removeAttr('disabled');
                                     }
                                 }
                                 else{

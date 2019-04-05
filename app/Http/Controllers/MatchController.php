@@ -10,7 +10,7 @@ use App\Tournament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use phpDocumentor\Reflection\Types\Null_;
-use Yajra\Datatables\Facades\Datatables;
+use DataTables;
 
 class MatchController extends Controller
 {
@@ -22,8 +22,6 @@ class MatchController extends Controller
     public function index()
     {
         $matches = Match::all();
-
-
         return view('admin.matches.index',compact('matches'));
 
 

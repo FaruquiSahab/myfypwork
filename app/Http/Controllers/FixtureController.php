@@ -12,7 +12,7 @@ use App\TournamentsReference;
 use App\Umpire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Yajra\Datatables\Facades\Datatables;
+use DataTables;
 
 class FixtureController extends Controller
 {
@@ -20,7 +20,8 @@ class FixtureController extends Controller
     {
         $clubs = Club::pluck('name','id');
         $grounds = Ground::pluck('name','id');
-        return view('admin.fixtures.index',compact('clubs','grounds'));
+        $fixtures = Fixture::all();
+        return view('admin.fixtures.index',compact('fixtures','clubs','grounds'));
     }
 
     public function fixturedata()
@@ -28,17 +29,17 @@ class FixtureController extends Controller
         $fixtures = Fixture::all();
         return Datatables::of($fixtures)
             ->addColumn('club1',function($fixture){
-                return $fixture->club1->name;
+                return $fixture->club1->name ?? 'NULL';
             })
             ->addColumn('club2',function($fixture){
-                return $fixture->club2->name;
+                return $fixture->club2->name ?? 'NULL';
             })
             ->addColumn('ground',function($fixture){
-                return $fixture->ground->name;
+                return $fixture->ground->name ?? 'NULL';
             })
             ->addColumn('tournament',function($fixture){
                 if($fixture->tournament->name)
-                    return $fixture->tournament->name;
+                    return $fixture->tournament->name ?? 'NULL';
                 else
                     return 'Friendly Match';
             })

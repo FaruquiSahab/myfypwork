@@ -40,9 +40,11 @@
                                 <button class="btn btn-warning">Score Match</button>
                             </form>
                         @elseif($match->status == 1)
-                            <form action="">
-                                <button class="btn btn-danger">View Scorecrad</button>
+                            <form action="{{ route('scoring.match2',$match->id) }}">
+                                <button class="btn btn-info">Score Match</button>
                             </form>
+                        @elseif($match->status == 2)
+                            <label class="label label-success">{{ $match->result }}</label>
                         @endif
                     </td>
                 </tr>
@@ -53,6 +55,7 @@
 
 @section('scripts')
     <script type="text/javascript">
+        $('table').DataTable();
         {{--$('#mytable').DataTable(--}}
             {{--{--}}
                 {{--"processing": true,--}}
