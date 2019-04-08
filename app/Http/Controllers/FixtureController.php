@@ -70,17 +70,18 @@ class FixtureController extends Controller
         $type = TournamentsReference::select('tournament_type_id')->where('id',$club1[0]->refer_id)->first()->tournament_type_id;
 
 
-//       return $club1[0]->club1->name;
+        //  return $club1[0]->club1->name;
         $club2 = Fixture::where('id',$id )->get();
 
         $players1 = Player::where('club_id',$club1[0]->club_id_1)->get();
         $players2 = Player::where('club_id',$club2[0]->club_id_2)->get();
 
         $umpires = Umpire::all();
-//        return $umpires;
+        //  return $umpires;
 
 
         return view('admin.tournaments.editions.lineup',compact('club1','club2','umpires','players1','players2','type'));
+    
     }
 
     /**
@@ -118,7 +119,7 @@ class FixtureController extends Controller
         }
         else {
 
-//        return $request->player_id1[0];
+        //  return $request->player_id1[0];
             $match = DB::table('matches')->insertGetId([
                 'toss' => $request->toss,
                 'club_id_1' => $request->club1,
@@ -142,22 +143,22 @@ class FixtureController extends Controller
             $c1 = 0;
             $c2 = 0;
             if ($toss == $request->club1 && $request->choose_to == 1) {
-//            club1 innings1
+        //  club1 innings1
                // echo 'agya c1_I1';
                 $c1 = 1;
                 $c2 = 2;
             } elseif ($toss == $request->club1 && $request->choose_to == 2) {
-//            club1 innings2
+        //  club1 innings2
                // echo 'agya c1_I2';
                 $c1 = 2;
                 $c2 = 1;
             } elseif ($toss == $request->club2 && $request->choose_to == 1) {
-//            club1 innings2
+        //  club1 innings2
               //  echo 'agya c1_I2';
                 $c1 = 2;
                 $c2 = 1;
             } elseif ($toss == $request->club2 && $request->choose_to == 2) {
-//            club1 innings1
+        //  club1 innings1
              //   echo 'agya c1_I1';
                 $c1 = 1;
                 $c2 = 2;
@@ -184,7 +185,7 @@ class FixtureController extends Controller
             }
 
             return redirect( route('scoring.match',$match));
-//            return response()->json(array('success' => true, 'html' => $returnHtml));
+        //  return response()->json(array('success' => true, 'html' => $returnHtml));
         }
     }
 
@@ -237,9 +238,13 @@ class FixtureController extends Controller
     {
         $status = DB::table('matches')->where('fixture_id',$fixtureId)->select('status')->first()->status;
         $matchId = DB::table('matches')->where('fixture_id',$fixtureId)->select('id')->first()->id;
-        if($status == '0')
+        if($status == '0' || $status == '1')
         {
             return redirect(route('scoring.match',$matchId));
+        }
+        elseif ($status == '2') 
+        {
+            return redirect(route('scorecard',$matchId));
         }
     }
 }

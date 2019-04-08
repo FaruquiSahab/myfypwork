@@ -682,22 +682,22 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
 
 
 
-//---------------waheed
+    //---------------waheed
 
-/*Route::get('/tournament/edition/clubs/show/{id}', [
-        'uses' => 'TournamentClubController@edit',
-        'as' => 'edition.club.edit'
+    /*Route::get('/tournament/edition/clubs/show/{id}', [
+            'uses' => 'TournamentClubController@edit',
+            'as' => 'edition.club.edit'
+
+            ])->middleware(['can:create']);*/
+
+
+
+    //-------------waheed changes
+        /*Route::get('/tournament/edition/{id}', [
+            'uses' => 'TournamentClubController@index',
+            'as' => 'edition.club.index'
 
         ])->middleware(['can:create']);*/
-
-
-
-//-------------waheed changes
-    /*Route::get('/tournament/edition/{id}', [
-        'uses' => 'TournamentClubController@index',
-        'as' => 'edition.club.index'
-
-    ])->middleware(['can:create']);*/
 
 
     Route::POST('/clubBy/club',[
@@ -739,9 +739,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
         'as' => 'check.match'
     ]);
 
-//-----------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------
 
-//----------------------------------teamStats----------------------------------------------------------
+    //----------------------------------teamStats----------------------------------------------------------
 
         Route::get('/players/stats', [
             'uses' => 'PlayerController@statsindex',
@@ -755,10 +755,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
             ->middleware(['can:create']);
 
 });
-// -------------------------------------------------------------------------------------------------------
-// 
-// 
-//--------------------------------------------scoring-----------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
+    // 
+    // 
+    //--------------------------------------------scoring-----------------------------------------------------
 
 Route::get('/scoring', 'ScoringController@index' )
             ->name('scoring')

@@ -100,7 +100,7 @@
                                 <input type="hidden">
                                 <input type="submit" class="btn-xs btn-success" value="Make Lineup">
                             </form>
-                        @else
+                        @elseif($fix->status == '1')
                             <form action="{{ route('check.match',$fix->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 <input type="submit" class="btn-xs btn-warning" value="Score Match">

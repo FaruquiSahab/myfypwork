@@ -24,7 +24,7 @@ class TournamentReferenceController extends Controller
      */
     public function index()
     {
-        $tournaments = TournamentsReference::where('active_status',0);
+        $tournaments = TournamentsReference::where('active_status',0)->get();
         $tournamentss = Tournament::where('active_status',0)->pluck('name','id');
 
         // wo tornment id jo ban chkii hain
