@@ -9,6 +9,7 @@ use App\FallOfWicket;
 use App\Lineup;
 use App\Match;
 use App\Option;
+use App\Player;
 use App\Club;
 use App\Out;
 use App\Over;
@@ -331,7 +332,9 @@ class ScoringController extends Controller
   	}
 
 	public function inningscore($matchId,$inningNo)
-	{
+	{	
+		$playerId =  BatsmenScore::where('match_id',$matchId)->where('inning_no',$inningNo)->first()->batsmen_id;
+		$clubid = Player::where('id',$playerId)->first()->club_id;
 		$helper = new CricketStatsHelper();
 		if($inningNo == 1)
 		{
@@ -366,6 +369,7 @@ class ScoringController extends Controller
 				'inning_no'=>$inningNo
 			],
 			[
+				'club_id'=>$clubid,
 				'runs'=>$runs1,
 				'overs'=>$overs1,
 				'wickets'=>$wicketss1
@@ -943,47 +947,41 @@ class ScoringController extends Controller
 					 		  ->first()->wickets;
 
 		
-		$club1 = Match::where('id',$matchId)->select('club_id_1')->first()->club_id_1;
-		$club2 = Match::where('id',$matchId)->select('club_id_2')->first()->club_id_2;
+		$club1 = InningScore::where('match_id',$matchId)->where('inning_no',1)->select('club_id')->first()->club_id;
+		echo "CLUB 1: ".$club1."<br>";
+		$club2 = InningScore::where('match_id',$matchId)->where('inning_no',2)->select('club_id')->first()->club_id;
+		echo "CLUB 2: ".$club2."<br>";
+
 		$clubname1 = Club::where('id',$club1)->select('name')->first()->name;
+		echo "CLUB 1: ".$clubname1."<br>";
 		$clubname2 = Club::where('id',$club2)->select('name')->first()->name;
+		echo "CLUB 2: ".$clubname2."<br>";
+
 		$toss = Match::where('id',$matchId)->select('toss')->first()->toss;
+		echo "TOSS: ". $toss . "<br>";
+
 		$action = Match::where('id',$matchId)->select('choose_to')->first()->choose_to;
+		echo "Action: ". $action . "<br>";
+
 		$winnerclub = '0';
 		$winnerclubname= 'Name';
 		$result = 'empty';
 
 		if ($runsone > $runstwo)
 		{
+			echo "If"."<br>";
 			$winner = '1st Inning';
-			if ($toss == $club1 && $action == 1)
-			{
-			 	$winnerclub = $club1;
-			 	$winnerclubname = $clubname1;
-			 	$result = '"' .$winnerclubname. '"Won By' .($runsone-$runstwo). 'Runs';
-			}
-			elseif ($toss == $club1 && $action == 2)
-			{
-			 	$winnerclub = $club2;
-			 	$winnerclubname = $clubname2;
-			 	$result = '"' .$winnerclubname. '"Won By' .($runsone-$runstwo). 'Runs';
-			} 
+			$winnerclub = $club1;
+			$winnerclubname = $clubname1;
+			$result = '"' .$winnerclubname. '" Won By ' .($runsone-$runstwo). ' Runs'; 
 		}
 		elseif ($runsone < $runstwo)
 		{
+			echo "ELSE If"."<br>";
 			$winner = '2nd Inning';
-			if ($toss == $club1 && $action == 1)
-			{
-			 	$winnerclub = $club2;
-			 	$winnerclubname = $clubname2;
-			 	$result = '"' .$winnerclubname. '" Won By' .(10 - $wicketsone). ' Wickets';
-			}
-			elseif ($toss == $club1 && $action == 2)
-			{
-			 	$winnerclub = $club1;
-			 	$winnerclubname = $clubname1;
-			 	$result = '"' .$winnerclubname. '" Won By' .(10 -$wicketstwo). ' Wickets';
-			} 
+			$winnerclub = $club2;
+			$winnerclubname = $clubname2;
+			$result = '"' .$winnerclubname. '" Won By ' .(10 - $wicketstwo). ' Wickets'; 
 		}
 		else
 		{
@@ -996,6 +994,8 @@ class ScoringController extends Controller
 			'result'=>$result,
 			'status'=>'2'
 		]);
+		echo "Result: ". $result ."<br>";
+		return "<br>"."END"."<br>";
 	}
 
 	public function finishmatch(Request $request, $matchId)
@@ -1003,15 +1003,16 @@ class ScoringController extends Controller
 		$this->inningscore($matchId,2);
 		$this->statsupdate($matchId,$request->format);
 		$this->generateResult($matchId);
-		return "Done";
+		return redirect(route('scorecard',$matchId));
 	}
 
 	public function scorecard($match)
 	{
 		$status = Match::where('id',$match)->select('status')->first()->status;
+		// return $status;
 		if ($status == 2) {
-			$club1 = Match::where('id',$match)->select('club_id_1')->first()->club_id_1;
-			$club2 = Match::where('id',$match)->select('club_id_2')->first()->club_id_2;
+			$club1 = InningScore::where('match_id',$match)->where('inning_no',1)->select('club_id')->first()->club_id;
+			$club2 = InningScore::where('match_id',$match)->where('inning_no',2)->select('club_id')->first()->club_id;
 			$clubname1 = Club::where('id',$club1)->select('name')->first()->name;
 			$clubname2 = Club::where('id',$club2)->select('name')->first()->name;
 			$batfirst = BatsmenScore::where('match_id',$match)->where('inning_no',1)->get();
