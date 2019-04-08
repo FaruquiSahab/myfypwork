@@ -20,13 +20,13 @@ class FixtureController extends Controller
     {
         $clubs = Club::pluck('name','id');
         $grounds = Ground::pluck('name','id');
-        $fixtures = Fixture::all();
+        $fixtures = Fixture::where('active_status',0)->get();
         return view('admin.fixtures.index',compact('fixtures','clubs','grounds'));
     }
 
     public function fixturedata()
     {
-        $fixtures = Fixture::all();
+        $fixtures = Fixture::where('active_status',0);
         return Datatables::of($fixtures)
             ->addColumn('club1',function($fixture){
                 return $fixture->club1->name ?? 'NULL';
@@ -66,8 +66,6 @@ class FixtureController extends Controller
     {
 
         $id = decrypt($id);
-
-
         $club1 = Fixture::where('id',$id )->get();
         $type = TournamentsReference::select('tournament_type_id')->where('id',$club1[0]->refer_id)->first()->tournament_type_id;
 

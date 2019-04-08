@@ -16,7 +16,7 @@ class TournamentController extends Controller
      */
     public function index()
     {
-        $tournaments = Tournament::all();
+        $tournaments = Tournament::where('active_status',0);
         return view('admin.tournaments.index',compact('tournaments'));
     }
 
@@ -27,9 +27,7 @@ class TournamentController extends Controller
      */
     public function create()
     {
-        $tournaments = Tournament::all();
-
-        //$types = GroundType::pluck('type','id')->all();
+        $tournaments = Tournament::where('active_status',0);
 
         return view('admin.tournaments.create', compact('tournaments'));
     }
@@ -152,17 +150,11 @@ class TournamentController extends Controller
     public function destroy($id)
     {
         $tournament = Tournament::findOrFail($id);
-
-
-        unlink(public_path() . $tournament->photo->file);
-
-
-        $tournament->delete();
-
-
-        Session::flash('deleted_tournament','The tournament has been deleted.');
-
-
-        return redirect('/admin/tournaments');
+        $count =0;
+        $count = Tournament::where('id',$id)->update(['active_status'=>1]);
+        if ($count > 0 ) {
+            Session::flash('deleted_tournament','The tournament has been deleted.');
+            return redirect('/admin/tournaments');
+        }
     }
 }

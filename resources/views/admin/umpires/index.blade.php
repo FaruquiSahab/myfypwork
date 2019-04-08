@@ -266,7 +266,7 @@
             event.preventDefault();
             var id = $('#deleteid').val();
             $.ajax({
-                url:"/admin/umpire/delete/"+id,
+                url:"/admin/Umpire/delete/"+id,
                 method:'DELETE',
                 data: {
                     id:id,

@@ -21,14 +21,14 @@ class MatchController extends Controller
      */
     public function index()
     {
-        $matches = Match::all();
+        $matches = Match::where('active_status',0);
         return view('admin.matches.index',compact('matches'));
 
 
     }
     public function matchdata()
     {
-        $matches = Match::all();
+        $matches = Match::where('active_status',0);
         return Datatables::of($matches)
         ->addColumn('club1',function($match){
             if($match->club1->name)
@@ -87,7 +87,7 @@ class MatchController extends Controller
      */
     public function create()
     {
-        $matches = Match::all();
+        $matches = Match::where('active_status',0);
         $grounds = Ground::pluck('name','id')->all();
         $clubs = Club::pluck('name','id')->all();
         $tournaments = Tournament::pluck('name','id')->all();

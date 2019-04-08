@@ -23,7 +23,7 @@ class GroundController extends Controller
     }
     public function grounddata()
     {
-        $grounds = Ground::all();
+        $grounds = Ground::where('active_status',0);
         return DataTables::of($grounds)
         ->addColumn('names',function($ground)
         {
@@ -49,7 +49,7 @@ class GroundController extends Controller
      */
     public function create()
     {
-        $grounds = Ground::all();
+        $grounds = Ground::where('active_status',0);
 
         //$types = GroundType::pluck('type','id')->all();
 
@@ -98,7 +98,8 @@ class GroundController extends Controller
         
         $output = array(
             'error'     =>  $error_array,
-            'success'   =>  $success_output
+            'success'   =>  $success_output,
+            'active_status'=>'0'
         );
         echo json_encode($output);
     }
@@ -181,7 +182,11 @@ class GroundController extends Controller
     public function destroy($id)
     {
         $ground = Ground::findOrFail($id);
-        if($ground->delete())
+        $count =0;
+        $count = Ground::where('id',$id)->update([
+            'active_status'=>'1'
+        ]);
+        if($count > 0)
         {
             echo 'Ground '.$ground->name.' Deleted Successfully';
         }

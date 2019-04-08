@@ -25,7 +25,7 @@ class clubController extends Controller
     }
     function clubdata()
     {
-        $clubs = Club::all();
+        $clubs = Club::where('active_status',0);
         return DataTables::of($clubs)
                         // ->addColumn('image',function($club)
                         // {
@@ -56,7 +56,7 @@ class clubController extends Controller
      */
     public function create()
     {
-        $clubs = Club::all();
+        $clubs = Club::where('active_status',0);
 
         $levels = Level::pluck('name','id')->all();
 
@@ -98,7 +98,8 @@ class clubController extends Controller
             {
                 $club = new Club([
                     'name'    =>  $request->name,
-                    'level_id'     =>  $request->level_id
+                    'level_id'     =>  $request->level_id,
+                    'active_status'=> '0'
                 ]);
                 $club->save();
                 $success_output = 'Club '.$request->name.' Inserted';
@@ -206,7 +207,9 @@ class clubController extends Controller
     public function destroy($id)
     {
         $club = Club::findOrFail($id);
-        if($club->delete())
+        $count=0;
+        $count = Club::where('id',$id)->update(['active_status'=>'1']);
+        if($count > 0)
         {
             echo 'Club '.$club->name.' Deleted Successfully';
         }

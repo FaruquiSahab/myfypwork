@@ -22,7 +22,7 @@ class UmpireController extends Controller
     }
     public function umpiredata()
     {
-        $umpires = Umpire::all();
+        $umpires = Umpire::where('active_status',0);
         return DataTables::of($umpires)
         ->addColumn('names',function($umpire)
         {
@@ -49,7 +49,7 @@ class UmpireController extends Controller
      */
     public function create()
     {
-        $umpires = Umpire::all();
+        $umpires = Umpire::where('active_status',0);
 
         //$clubs = Club::pluck('name','id')->all();
 
@@ -184,7 +184,9 @@ class UmpireController extends Controller
     public function destroy($id)
     {
         $umpire = Umpire::findOrFail($id);
-        if($umpire->delete())
+        $count = 0;
+        $count = Umpire::where('id', $id)->update(['active_status'=>1]);
+        if($count>0)
         {
             echo 'Umpire '.$umpire->name.' Deleted Successfully';
         }

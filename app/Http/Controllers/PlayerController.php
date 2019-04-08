@@ -25,13 +25,13 @@ class PlayerController extends Controller
     {
         $roles = PlayerRole::pluck('name','id')->all();
         $batting_styles = BattingStyle::pluck('name','id')->all();
-        $clubs = Club::pluck('name','id')->all();
+        $clubs = Club::where('active_status',0)->pluck('name','id')->all();
         $bowling_styles = BowlingStyle::pluck('name','id')->all();
         return view('admin.players.index',compact('roles','batting_styles','bowling_styles','clubs'));
     }
     public function playersData()
     {
-        $players = Player::all();
+        $players = Player::where('active_status',0);
         return DataTables::of($players)
         ->addColumn('names',function($player)
         {
@@ -73,7 +73,7 @@ class PlayerController extends Controller
 
     public function club($id)
     {
-        $players = Player::where('club_id',$id)->get();
+        $players = Player::where('club_id',$id)->where('active_status',0)->get();
         $roles = PlayerRole::pluck('name','id')->all();
         $batting_styles = BattingStyle::pluck('name','id')->all();
         $clubs = Club::where('id',$id)->pluck('name','id');
@@ -88,16 +88,10 @@ class PlayerController extends Controller
      */
     public function create()
     {
-        $players = Player::all();
-
+        $players = Player::where('active_status',0);
         $roles = PlayerRole::pluck('name','id')->all();
-
-
         $batting_styles = BattingStyle::pluck('name','id')->all();
-
         $clubs = Club::pluck('name','id')->all();
-
-
         $bowling_styles = BowlingStyle::pluck('name','id')->all();
 
         return view('admin.players.create', compact('players','roles','batting_styles','bowling_styles','clubs'));
@@ -148,6 +142,7 @@ class PlayerController extends Controller
                     'role_id' => $request->role_id,
                     'batting_style_id' => $request->batting_style_id,
                     'bowling_style_id' => $request->bowling_style_id,
+                    'active_status'=>0
                 ]);
                 $player->save();
                 $success_output = 'Player '.$request->name.' Inserted';
@@ -231,7 +226,9 @@ class PlayerController extends Controller
     public function destroy($id)
     {
         $player = Player::findOrFail($id);
-        if($player->delete())
+        $count = 0;
+        $count = Player::where('id',$id)->update(['active_status'=>'1']);
+        if($count > 0)
         {
             echo 'Player '.$player->name.' Deleted Successfully';
         }
@@ -251,7 +248,7 @@ class PlayerController extends Controller
         $stats = PlayerStat::where('format',1)->get();
         return DataTables::of($stats)
         ->addColumn('names',function($stat){
-            return '<h2><strong style="font-size:12px">'.$stat->player->name.'</strong></h2>';
+            return '<h2><strong style="font-size:12px">'.$stat->player->name ?? '--'.'</strong></h2>';
         })
         ->addColumn('format',function($stat){
             return '<strong style="font-size:10px">T20</strong>';
@@ -265,7 +262,7 @@ class PlayerController extends Controller
         $stats = PlayerStat::where('format',2)->get();
         return DataTables::of($stats)
         ->addColumn('names',function($stat){
-            return '<h2><strong style="font-size:10px">'.$stat->player->name.'</strong></h2>';
+            return '<h2><strong style="font-size:10px">'.$stat->player->name ?? 'NULL'.'</strong></h2>';
         })
         ->addColumn('format',function($stat){
             return '<strong style="font-size:10px">One Day</strong>';

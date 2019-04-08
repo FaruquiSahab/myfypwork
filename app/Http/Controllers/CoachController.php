@@ -17,8 +17,8 @@ class CoachController extends Controller
      */
     public function index()
     {
-        $coaches = Coach::all();
-        $clubs = Club::pluck('name','id')->all();
+        $coaches = Coach::where('active_status',0)->get();
+        $clubs = Club::where('active_status',0)->get();
         return view('admin.coaches.index',compact('coaches','clubs'));
     }
 
@@ -29,9 +29,9 @@ class CoachController extends Controller
      */
     public function create()
     {
-        $coaches = Coach::all();
+        $coaches = Coach::where('active_status',0)->get();
 
-        $clubs = Club::pluck('name','id')->all();
+        $clubs = Club::pluck('name','id')->where('active_status',0)->get();
 
         return view('admin.coaches.create', compact('clubs','coaches'));
     }
@@ -101,7 +101,7 @@ class CoachController extends Controller
         $coach = Coach::findOrFail($id);
 
         //$roles = Role::pluck('name','id')->all();
-        $clubs = Club::pluck('name','id')->all();
+        $clubs = Club::pluck('name','id')->where('active_status',0)->get();
 
 
         return view('admin.coaches.edit', compact('coach','clubs'));
@@ -156,19 +156,25 @@ class CoachController extends Controller
      */
     public function destroy($id)
     {
+        // return $id;
         $coach = Coach::findOrFail($id);
 
 
         unlink(public_path() . $coach->photo->file);
 
 
-        $coach->delete();
+        $count =0;
+        $count = Coach::where('id',$id)->update([
+            'active_status'=>1
+        ]);
 
 
-        Session::flash('deleted_coach','The coach has been deleted.');
+        if ($count >0) 
+        {
+            Session::flash('deleted_coach','The Coach'.  $coach->name .'has been deleted.');
 
-
-        return redirect('/admin/coaches');
+            return redirect('/admin/coaches');
+        }
 
     }
 }

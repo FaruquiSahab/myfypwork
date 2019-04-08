@@ -24,8 +24,8 @@ class TournamentReferenceController extends Controller
      */
     public function index()
     {
-        $tournaments = TournamentsReference::all();
-        $tournamentss = Tournament::pluck('name','id');
+        $tournaments = TournamentsReference::where('active_status',0);
+        $tournamentss = Tournament::where('active_status',0)->pluck('name','id');
 
         // wo tornment id jo ban chkii hain
         $tour_id = TournamentsReference::where('edition','=',Carbon::now()->format('Y'))->get();
@@ -85,8 +85,7 @@ class TournamentReferenceController extends Controller
 
         $m_type = MatchType::pluck('type_name','id');
         $t_format = TournamentFormat::pluck('format_name','id');
-        $t_grounds = Ground::pluck('name','id');
-
+        $t_grounds = Ground::where('active_status',0)->pluck('name','id');
 
         return view('admin.tournaments.editions.index',compact('tournaments','tournamentss','m_type','t_format','t_grounds'));
     }
@@ -98,11 +97,11 @@ class TournamentReferenceController extends Controller
      */
     public function create()
     {
-        $tournaments = Tournament::pluck('name','id');
+        $tournaments = Tournament::where('active_status',0)->pluck('name','id');
 
         $m_type = MatchType::pluck('type_name','id');
-        $t_format = TournamentFormat::pluck('format_name','id');
-        $t_grounds = Ground::pluck('name','id');
+        $t_format = TournamentFormat::where('active_status',0)->pluck('format_name','id');
+        $t_grounds = Ground::where('active_status',0)->pluck('name','id');
 
         return view('admin.tournaments.editions.create',compact('tournaments','m_type','t_format','t_grounds'));
     }
@@ -241,8 +240,13 @@ class TournamentReferenceController extends Controller
     public function destroy($id)
     {
         $did = decrypt($id);
-        TournamentsReference::find($did)->delete();
-        return redirect()->back();
+        $tournament = TournamentsReference::find($did);
+        $count = 0;
+        $count = TournamentsReference::where('id',$did)->update(['active_status',0]);
+        if ($count > 0)
+        {
+            return redirect()->back();
+        }
     }
 
 }

@@ -1009,8 +1009,8 @@ class ScoringController extends Controller
 	public function scorecard($match)
 	{
 		$status = Match::where('id',$match)->select('status')->first()->status;
-		// return $status;
-		if ($status == 2) {
+		if ($status == 2)
+		{
 			$club1 = InningScore::where('match_id',$match)->where('inning_no',1)->select('club_id')->first()->club_id;
 			$club2 = InningScore::where('match_id',$match)->where('inning_no',2)->select('club_id')->first()->club_id;
 			$clubname1 = Club::where('id',$club1)->select('name')->first()->name;
@@ -1027,7 +1027,8 @@ class ScoringController extends Controller
 			return view('admin.scorecard',compact('batfirst','batsecond','ballfirst','ballsecond','extrafirst','extrasecond','inningscorefirst','inningscoresecond','result','wickets','format','club1','club2','clubname1','clubname2'));
 
 		}
-		else{
+		else
+		{
 			return view('unauthorized');
 		}
 

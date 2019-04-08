@@ -48,7 +48,7 @@
                     <td>{{$coach->created_at->diffForHumans()}}</td>
                     <td>{{$coach->updated_at->diffForHumans()}}</td>
                     <td>
-                        <a href="{{-- {{route('coaches.edit',['id'=> $coach->id])}} --}}" class=" col-sm-8 btn btn-info btn-circle" data-toggle="modal" data-target="#addmodel1" data-id="{{ $coach->id }}"><i class="fa fa-wrench fa-fw"></i></a>
+                        <a href="{{-- {{route('coaches.edit',['id'=> $coach->id])}} --}}" class=" col-sm-8 btn btn-info btn-circle" data-toggle="modal" data-target="#addmodel1" data-id="{{ $coach->id }}" data-name="{{ $coach->name }}" data-nationality="{{ $coach->nationality }}" data-club_id="{{ $coach->club_id }}" ><i class="fa fa-wrench fa-fw"></i></a>
                     </td>
                     <td>
                         <a href="{{-- {{route('coaches.delete',['id'=>$coach->id])}} --}}" class="col-sm-8 btn btn-danger btn-circle" data-id="{{ $coach->id }}" title="Delete" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash fa-fw"></i></a>
@@ -76,11 +76,11 @@
                 </h3>
             </div>
             <div class="modal-footer">
-                <input type="hidden" id="deleteid" name="">
+                {!! Form::open(['method'=>'DELETE', 'id'=>'deleteform', 'action'=> ['CoachController@destroy', 0],'files'=>true]) !!}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Cancel
                 </button>
-                <button type="submit" id="showtoast"  class="btn btn-danger delete" data-dismiss="modal">
+                <button type="submit" class="btn btn-warning">
                     Delete
                 </button>
                 {!! Form::close() !!}
@@ -101,22 +101,27 @@
   <div class="modal-body">
 
 
-       {!! Form::model($coach, ['method'=>'PATCH', 'action'=> ['CoachController@update', $coach->id],'files'=>true]) !!}
+       {!! Form::open(['method'=>'PATCH', 'id'=>'updateform', 'action'=> ['CoachController@update', 0],'files'=>true]) !!}
             <div class="form-group">
                 {!! Form::label('', 'Name') !!}
-                {!! Form::text('name', null, ['class'=>'form-control'])!!}
+                {!! Form::text('name', null, ['class'=>'form-control','id'=>'name1'])!!}
             </div>
             <div class="form-group">
                 {!! Form::label('', 'Nationality') !!}
-                {!! Form::text('nationality', null, ['class'=>'form-control'])!!}
+                {!! Form::text('nationality', null, ['class'=>'form-control','id'=>'nationality1'])!!}
             </div>
             <div class="form-group">
                 {!! Form::label('', 'Club') !!}
-                {!! Form::select('club_id',  $clubs, null, ['class'=>'form-control'])!!}
+                <select class="form-control" name="club_id" id="club_id1">
+                    <option value selected disabled>Select Club</option>
+                    @foreach($clubs as $club)
+                        <option value="{{ $club->id }}">{{ $club->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 {!! Form::label('', 'Photo') !!}
-                {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
+                {!! Form::file('photo_id', null, ['class'=>'form-control','id'=>'photo_id1'])!!}
             </div>
             <div class="form-group">
                 {!! Form::submit('Edit coach', ['class'=>'btn btn-primary col-sm-3']) !!}
@@ -156,7 +161,13 @@
 
     <div class="form-group">
         {!! Form::label('club_id', 'Club') !!}
-        {!! Form::select('club_id', [''=>'Choose Club'] + $clubs, null, ['class'=>'form-control'])!!}
+        {{-- {!! Form::select('club_id', [''=>'Choose Club'] + $clubs, null, ['class'=>'form-control'])!!} --}}
+        <select class="form-control" name="club_id">
+            <option value selected disabled>Select Club</option>
+            @foreach($clubs as $club)
+                <option value="{{ $club->id }}">{{ $club->name }}</option>
+            @endforeach
+        </select>
     </div>
 
     <div class="form-group">
@@ -183,6 +194,17 @@
 
 @section('scripts')
     <script type="text/javascript">
-        
+        $('table').DataTable();
+        $(document).on('click','.btn-info',function(){
+            $('#name1').val($(this).data('name'));
+            $('#nationality1').val($(this).data('nationality'));
+            $('#club_id1').val($(this).data('club_id'));
+            var id = $(this).data('id');
+            $('#updateform').attr('action','{{ url('admin/coach/update/') }}/'+ id);
+        });
+        $(document).on('click','.btn-danger',function(){
+            var id = $(this).data('id');
+            $('#deleteform').attr('action','{{ url('admin/coach/delete/') }}/'+ id);
+        });
     </script>
 @stop
