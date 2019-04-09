@@ -1,15 +1,15 @@
-name,shirt_no,date_of_birth,role,batting_style,bowling_style
-Fakhar Zaman,39,1981/04/21,batsmen,left,off-spin
-Abid Ali,51,1981/04/21,batsmen,right,none
-Muhammad Hafeez,8,1979/07/29,all-rounder,right,off-spin
-Shoaib Malik,18,1980/01/21,batsmen,right,off-spin
-Sarfaraz Ahmed,26,1981/02/11,wicket-keeper,right,none
-Umar Akmal,96,1991/03/01,batsmen,right,none
-Shadab Khan,17,1989/05/31,all-rounder,right,leg-spin
-Faheem Ashraf,33,1990/09/17,all-rounder,left,medium-fast
-Muhammad Aamir,5,1981/04/21,bowler,left,fast
-Junaid Khan,83,1981/04/21,bowler,left,fast
-Usman Khan,36,1981/04/21,bowler,left,fast
-Imam ul Haq,88,1981/04/21,batsmen,left,none
-Shaheen Shinwari,73,1981/04/21,bowler,right,fast
-Imad Wasim,51,1981/04/21,all-rounder,left,off-spin
+name,shirt_no,date_of_birth,role,batting_hand,bowling_style,
+Fakhar Zaman,39,4-21-1981,batsmen,left,off break,
+Abid Ali,51,3-5-1987,batsmen,right,off break,
+Muhammad Hafeez,8,4-17-1988,all-rounder,right,off break,
+Shoaib Malik,18,4-17-1988,batsmen,right,off break,
+Sarfaraz Ahmed,26,4-17-1988,wicket-keeper,right,off break,
+Umar Akmal,96,4-17-1988,batsmen,right,off break,
+Shadab Khan,17,4-17-1988,all-rounder,right,leg break,
+Faheem Ashraf,33,4-17-1988,all-rounder,left,right arm fast medium,
+Muhammad Aamir,5,4-17-1988,bowler,left,righ arm fast,
+Junaid Khan,83,4-17-1988,bowler,left,left arm fast,
+Usman Khan,36,4-17-1988,bowler,left,left arm fast,
+Imam ul Haq,88,4-17-1988,batsmen,left,off break,
+Shaheen Shinwari,73,4-17-1988,bowler,right,right arm fast,
+Imad Wasim,51,4-17-1988,all-rounder,left,off break,

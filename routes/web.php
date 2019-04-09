@@ -205,7 +205,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     Route::post('/player/store', [
         'uses' => 'PlayerController@store',
         'as' => 'players.store'
+    ])->middleware(['can:create']);
 
+    Route::post('/player/import',[
+        'uses'=>'PlayerController@import',
+        'as'=>'import'
     ])->middleware(['can:create']);
 
 
