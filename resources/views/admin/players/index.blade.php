@@ -143,7 +143,7 @@
 
                     <div class="form-group">
                         {!! Form::label('date_of_birth', 'Date of Birth') !!}
-                        {!! Form::date('date_of_birth', null, ['class'=>'form-control','id'=>'editdob'])!!}
+                        {!! Form::text('date_of_birth', null, ['class'=>'form-control','id'=>'editdob'])!!}
                     </div>
 
 
@@ -212,7 +212,7 @@
                         <input type="hidden" name="button_action" value="0">
                         <div class="form-group">
                             {!! Form::label('date_of_birth', 'Date of Birth') !!}
-                            {!! Form::date('date_of_birth', null, ['class'=>'form-control'])!!}
+                            {!! Form::text('date_of_birth', null, ['class'=>'form-control','id'=>'adddob'])!!}
                         </div>
 
 
@@ -269,7 +269,8 @@
     <script type="text/javascript">
 
         $(document).ready(function(){
-
+            $("#adddob").datepicker({
+        });
 
 
 

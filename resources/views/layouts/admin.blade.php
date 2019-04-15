@@ -45,6 +45,12 @@
 
     <link rel="stylesheet" type="text/css" href="{{ URL::to('css/jquery.bracket.min.css') }}">
     <script type="text/javascript" src="{{ URL::to('js/jquery.bracket.min.js') }}"></script>
+    <!--Bootstrap Datepicker-->
+      <link href="{{ asset('assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <!--Bootstrap Timepicker-->
+      <link href="{{ asset('assets/css/bootstrap-timepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <!--Full Calendar Css-->
+      <link href='{{ asset('assets/plugins/fullcalendar/css/fullcalendar.css') }}' rel='stylesheet' />
 
 
     {{--<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
@@ -645,6 +651,14 @@
 <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!--Bootstrap Datepicker Js-->
+  <script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+  <!--Bootstrap Timepicker Js-->
+  <script src="{{ asset('assets/js/bootstrap-timepicker.min.js') }}"></script>
+  <!-- Full Calendar -->
+  <script src='{{ asset('assets/plugins/fullcalendar/js/moment.js') }}'></script>
+  <script src='{{ asset('assets/plugins/fullcalendar/js/fullcalendar.min.js') }}'></script>
+  <script src="{{ asset('assets/plugins/fullcalendar/js/fullcalendar-custom-script.js') }}"></script>
 
 
 @yield('scripts')
