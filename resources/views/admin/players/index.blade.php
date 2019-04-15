@@ -111,7 +111,7 @@
                         </button>
                         
                         <button type="submit" id="batchformbtn" class="btn btn-success">
-                            Delete
+                            Submit
                         </button>
                         {!! Form::close() !!}
                     </div>
@@ -401,7 +401,7 @@
                     contentType: false,
                     processData: false,
                     success:function(data){
-                        
+
                         if (data == 'required'){
                             toastr.error('File Is Required Kindly Insert It','Error Alert');
                         }
