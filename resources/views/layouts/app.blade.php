@@ -62,6 +62,11 @@
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
+                                    <li>
+                                        <a href="/admin/home">
+                                            <i class="fa fa-dashboard fa-fw"></i>Dashboard
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         @endif

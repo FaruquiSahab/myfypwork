@@ -16,7 +16,7 @@ class TournamentController extends Controller
      */
     public function index()
     {
-        $tournaments = Tournament::where('active_status',0);
+        $tournaments = Tournament::where('active_status',0)->get();
         return view('admin.tournaments.index',compact('tournaments'));
     }
 
@@ -27,7 +27,7 @@ class TournamentController extends Controller
      */
     public function create()
     {
-        $tournaments = Tournament::where('active_status',0);
+        $tournaments = Tournament::where('active_status',0)->get();
 
         return view('admin.tournaments.create', compact('tournaments'));
     }
@@ -57,9 +57,6 @@ class TournamentController extends Controller
             $input['name'] = $request->name;
 
             //$input['type_id'] = $request->type_id;
-
-
-
 
         }
 
@@ -95,7 +92,6 @@ class TournamentController extends Controller
 
         //$roles = Role::pluck('name','id')->all();
         //$types = GroundType::pluck('name','id')->all();
-
 
         return view('admin.tournaments.edit', compact('tournament'));
     }

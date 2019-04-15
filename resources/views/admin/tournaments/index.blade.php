@@ -46,8 +46,6 @@
             <th>Id</th>
             <th>Logo</th>
             <th>Name</th>
-            {{--<th>Edit</th>--}}
-            {{--<th>Delete</th>--}}
         </tr>
         </thead>
         <tbody>
@@ -56,35 +54,20 @@
 
 
             @foreach($tournaments as $key=> $tournament)
-
-
                 <tr>
-                    <td>{{$key+1}}</td>
-                    <td> <img height="50" src="{{$tournament->photo ? $tournament->photo->file : 'http://placehold.it/400x400'}}" alt="" ></td>
-                    <td><strong><h4>{{$tournament->name}}</h4></strong></td>
-                    {{--<td>{{$Tournament->type}}</td>--}}
-
-
-                    {{--<td>{{$tournament->created_at->diffForHumans()}}</td>--}}
-                    {{--<td>{{$tournament->updated_at->diffForHumans()}}</td>--}}
-
-                    {{--<td>--}}
-                        {{--<a href="" class=" col-sm-8 btn btn-info btn-circle" data-toggle="modal" data-target="#addmodel1"><i class="fa fa-pencil fa-fw"></i></a>--}}
-                    {{--</td>--}}
-
-
-                    {{--<td>--}}
-                        {{--<a href="" class="col-sm-8 btn btn-danger btn-circle" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash fa-fw"></i></a>--}}
-                    {{--</td>--}}
-
-
-
+                    <td>
+                        {{$key+1}}
+                    </td>
+                    <td>
+                        <img height="50" src="{{$tournament->photo ? $tournament->photo->file : 'http://placehold.it/400x400'}}" alt="" >
+                    </td>
+                    <td><strong><h4>
+                        {{$tournament->name}}
+                    </h4></strong></td>
                 </tr>
-
             @endforeach
 
         @else
-
             <th colspan="5" class="text-center">No any Tournaments</th>
         @endif
 
@@ -134,36 +117,7 @@
   <div class="modal-body">
 
 
-       {!! Form::model($tournament, ['method'=>'PATCH', 'action'=> ['TournamentController@update', $tournament->id],'files'=>true]) !!}
-
-
-            <div class="form-group">
-                {!! Form::label('name', 'Name') !!}
-                {!! Form::text('name', null, ['class'=>'form-control','required'])!!}
-            </div>
-
-
-       {{--     <div class="form-group">
-                {!! Form::label('type_id', 'Type') !!}
-                {!! Form::select('type_id',  $types, null, ['class'=>'form-control'])!!}
-            </div>--}}
-
-
-
-
-            <div class="form-group">
-                {!! Form::label('photo_id', 'Photo') !!}
-                {!! Form::file('photo_id', null, ['class'=>'form-control','required'])!!}
-            </div>
-
-
-
-
-            <div class="form-group">
-                {!! Form::submit('Edit Tournament', ['class'=>'btn btn-primary col-sm-3']) !!}
-            </div>
-
-            {!! Form::close() !!}
+       
 
 </div>
 <div class="modal-footer"></div>
@@ -179,7 +133,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><strong>Coach</strong></h5>
+        <h5 class="modal-title"><strong>Tournament</strong></h5>
   </div>
   <div class="modal-body">
     {!! Form::open(['method'=>'POST', 'action'=> 'TournamentController@store','files'=>true]) !!}
@@ -190,11 +144,6 @@
                     {!! Form::text('name', null, ['class'=>'form-control','required'])!!}
                 </div>
 
-
-                {{--<div class="form-group">
-                    {!! Form::label('type_id', 'Type') !!}
-                    {!! Form::select('type_id', [''=>'Choose Type'] + $types, null, ['class'=>'form-control'])!!}
-                </div>--}}
 
 
 
@@ -208,6 +157,7 @@
 
                 <div class="form-group">
                     {!! Form::submit('Add Tournament', ['class'=>'btn btn-primary col-sm-3']) !!}
+                    {!! Form::button('Cancel', ['class'=>'btn btn-danger col-sm-3','data-dismiss'=>'modal']) !!}
                 </div>
 
                 {!! Form::close() !!}

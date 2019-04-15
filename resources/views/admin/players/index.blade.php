@@ -362,7 +362,27 @@
                     },
                     error:function(data)
                     {
-                        toastr.error('Server Responded With Error','Error Alert');
+                        if (data.status == '403') {
+                            toastr.error('Permission Not Granted', 'Action Denied');
+                        }
+                        else if(data.status == '419')
+                        {
+                            toastr.info('Session Timeout','Login Again');
+                            setTimeout( function() 
+                            {
+                                if (confirm('Session Timeout! Page Will Reload UnSave Changes Will Be Lost'))
+                                {
+                                    setTimeout( function() { location.reload(); }, 1000);
+                                }
+                                else{
+
+                                }
+                            }, 2000);
+                            
+                        }
+                        else{
+                            toastr.error(data, 'Error Alert');
+                        }
                     }
                 });
             });
@@ -387,7 +407,27 @@
                     },
                     error:function(data)
                     {
-                        toastr.error(data, 'Error Alert');
+                        if (data.status == '403') {
+                            toastr.error('Permission Not Granted', 'Action Denied');
+                        }
+                        else if(data.status == '419')
+                        {
+                            toastr.info('Session Timeout','Login Again');
+                            setTimeout( function() 
+                            {
+                                if (confirm('Session Timeout! Page Will Reload UnSave Changes Will Be Lost'))
+                                {
+                                    setTimeout( function() { location.reload(); }, 1000);
+                                }
+                                else{
+
+                                }
+                            }, 2000);
+                            
+                        }
+                        else{
+                            toastr.error(data, 'Error Alert');
+                        }
                     }
                 });
             });
@@ -418,7 +458,27 @@
                     },
                     error:function(data){
                         console.log(data);
-                        toastr.error('Server Responded With Status 500','Error Alert');
+                        if (data.status == '403') {
+                            toastr.error('Permission Not Granted', 'Action Denied');
+                        }
+                        else if(data.status == '419')
+                        {
+                            toastr.info('Session Timeout','Login Again');
+                            setTimeout( function() 
+                            {
+                                if (confirm('Session Timeout! Page Will Reload UnSave Changes Will Be Lost'))
+                                {
+                                    setTimeout( function() { location.reload(); }, 1000);
+                                }
+                                else{
+
+                                }
+                            }, 2000);
+                            
+                        }
+                        else{
+                            toastr.error(data, 'Error Alert');
+                        }
                     }
                 });
             });

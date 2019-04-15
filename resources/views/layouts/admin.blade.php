@@ -101,12 +101,12 @@
                     </i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                    </li>
+                    {{-- <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                    </li> --}}
                     <li><a href="{{ route('admin.create') }}"><i class="fa fa-user fa-fw"></i> Register</a>
                     </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
+                    {{-- <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                    </li> --}}
                     <li class="divider"></li>
                     <li><a href="{{ url('/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
@@ -418,20 +418,19 @@
 
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Posts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('posts.index')}}">All Posts</a>
                             </li>
 
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('posts.create')}}">Add Post</a>
-                            </li> --}}
+                            </li>
 
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
 
 
