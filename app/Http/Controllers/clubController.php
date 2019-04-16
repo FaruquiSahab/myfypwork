@@ -25,7 +25,7 @@ class clubController extends Controller
     }
     function clubdata()
     {
-        $clubs = Club::where('active_status',0);
+        $clubs = Club::where('active_status',0)->get();
         return DataTables::of($clubs)
                         // ->addColumn('image',function($club)
                         // {

@@ -26,7 +26,7 @@ class FixtureController extends Controller
 
     public function fixturedata()
     {
-        $fixtures = Fixture::where('active_status',0);
+        $fixtures = Fixture::where('active_status',0)->get();
         return Datatables::of($fixtures)
             ->addColumn('club1',function($fixture){
                 return $fixture->club1->name ?? 'NULL';

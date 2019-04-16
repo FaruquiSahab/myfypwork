@@ -270,6 +270,8 @@
 
         $(document).ready(function(){
             $("#adddob").datepicker({
+                dateFormat: "yy-mm-dd",
+                maxDate: new Date('2019-4-17')
         });
 
 
@@ -326,39 +328,46 @@
                     success:function(data)
                     {
                         console.log(data);
-                        var dt = JSON.parse(data,true);
-                        console.log(dt);
-                        if(dt.error.length)
+                        if(data == 'k')
                         {
-                            toastr.warning('Fill In The Required Fields', 'Error Alert');
-                            var error_html = '';
-                            for(var count = 0; count < dt.error.length; count++)
-                            {
-                                error_html += '<div class="alert alert-danger">'+dt.error[count]+'</div>';
-                            }
-                            $('#form_output').html(error_html);
-                            $('#addmodel').modal('hide');
-                            $('.moodal #addmodel1').modal('hide');
-                            $('body').removeClass('modal-open');
-                            $('.modal-backdrop').remove();
-                            setTimeout(function(){
-                                $('.alert-danger').remove();
-                            }, 6000)
-                            
+                            toastr.error('Age Is Not Correct','Date Validation');
                         }
                         else
                         {
-                            // $('#form_output').html(dt.success);
-                            toastr.success(dt.success, 'Data Inserted Successfully');
-                            $('form')[0].reset();
-                            $('#addmodel').modal('hide');
-                            $('body').removeClass('modal-open');
-                            $('.modal-backdrop').remove();
-                            
-                            // $('#action').val('Add');
-                            // $('.modal-title').text('Add Data');
-                            // $('#button_action').val('insert');
-                            $('#mytable').DataTable().ajax.reload();
+                            var dt = JSON.parse(data,true);
+                            console.log(dt);
+                            if(dt.error.length)
+                            {
+                                toastr.warning('Fill In The Required Fields', 'Error Alert');
+                                var error_html = '';
+                                for(var count = 0; count < dt.error.length; count++)
+                                {
+                                    error_html += '<div class="alert alert-danger">'+dt.error[count]+'</div>';
+                                }
+                                $('#form_output').html(error_html);
+                                $('#addmodel').modal('hide');
+                                $('.moodal #addmodel1').modal('hide');
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                setTimeout(function(){
+                                    $('.alert-danger').remove();
+                                }, 6000)
+                                
+                            }
+                            else
+                            {
+                                // $('#form_output').html(dt.success);
+                                toastr.success(dt.success, 'Data Inserted Successfully');
+                                $('form')[0].reset();
+                                $('#addmodel').modal('hide');
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                
+                                // $('#action').val('Add');
+                                // $('.modal-title').text('Add Data');
+                                // $('#button_action').val('insert');
+                                $('#mytable').DataTable().ajax.reload();
+                            }
                         }
                     },
                     error:function(data)

@@ -35,7 +35,7 @@ class PlayerController extends Controller
     }
     public function playersData()
     {
-        $players = Player::where('active_status',0);
+        $players = Player::where('active_status',0)->get();
         return DataTables::of($players)
         ->addColumn('names',function($player)
         {
@@ -125,6 +125,10 @@ class PlayerController extends Controller
             'bowling_style_id'  => 'required',
 
         ]);
+        $dateOfBirth = Validator::make($request->all(), [
+            'date_of_birth'  => ['before:5 years ago'],
+
+        ]);
         $error_array = array();
         $success_output = '';
         if ($validation->fails())
@@ -134,6 +138,10 @@ class PlayerController extends Controller
                 $error_array[] = $messages;
             }
         }
+        elseif($dateOfBirth->fails())
+        {
+            return 'k';
+        }
         else
         {
             if($request->button_action == 0)
@@ -141,7 +149,7 @@ class PlayerController extends Controller
                 $player = new Player([
                     'name' => $request->name,
                     'age' => \Carbon\Carbon::parse($request->date_of_birth)->age,
-                    'date_of_birth' => $request->date_of_birth,
+                    'date_of_birth' => \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d'),
                     'club_id' => $request->club_id,
                     'role_id' => $request->role_id,
                     'batting_style_id' => $request->batting_style_id,
