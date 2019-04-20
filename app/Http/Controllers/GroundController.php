@@ -23,7 +23,7 @@ class GroundController extends Controller
     }
     public function grounddata()
     {
-        $grounds = Ground::where('active_status',0);
+        $grounds = Ground::where('active_status',0)->get();
         return DataTables::of($grounds)
         ->addColumn('names',function($ground)
         {

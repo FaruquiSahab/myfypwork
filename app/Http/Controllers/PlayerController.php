@@ -9,7 +9,11 @@ use App\Photo;
 use App\Player;
 use App\PlayerRole;
 use App\PlayerStat;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Excel;
 use DataTables;
+use \Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -31,7 +35,7 @@ class PlayerController extends Controller
     }
     public function playersData()
     {
-        $players = Player::where('active_status',0);
+        $players = Player::where('active_status',0)->get();
         return DataTables::of($players)
         ->addColumn('names',function($player)
         {
@@ -121,6 +125,10 @@ class PlayerController extends Controller
             'bowling_style_id'  => 'required',
 
         ]);
+        $dateOfBirth = Validator::make($request->all(), [
+            'date_of_birth'  => ['before:5 years ago'],
+
+        ]);
         $error_array = array();
         $success_output = '';
         if ($validation->fails())
@@ -130,6 +138,10 @@ class PlayerController extends Controller
                 $error_array[] = $messages;
             }
         }
+        elseif($dateOfBirth->fails())
+        {
+            return 'k';
+        }
         else
         {
             if($request->button_action == 0)
@@ -137,7 +149,7 @@ class PlayerController extends Controller
                 $player = new Player([
                     'name' => $request->name,
                     'age' => \Carbon\Carbon::parse($request->date_of_birth)->age,
-                    'date_of_birth' => $request->date_of_birth,
+                    'date_of_birth' => \Carbon\Carbon::parse($request->date_of_birth)->format('Y-m-d'),
                     'club_id' => $request->club_id,
                     'role_id' => $request->role_id,
                     'batting_style_id' => $request->batting_style_id,
@@ -169,6 +181,126 @@ class PlayerController extends Controller
         );
         echo json_encode($output);
 
+    }
+
+    public function import(Request $request)
+    {
+        $required = Validator::make($request->all(), [
+            'select_file' => 'required',
+
+        ]);
+        $format = Validator::make($request->all(), [
+            'select_file' => 'mimes:xls,xlsx',
+        ]);
+
+        if ($required->fails()) {
+            return 'required';
+        }
+        elseif ($format->fails()) {
+            return 'format';
+        }
+        else
+        {
+            // return 'Else';
+            if ($request->hasFile('select_file'))
+            {
+                // return "File";
+                $file = $request->file('select_file');
+                $extension = $file->getClientOriginalExtension();
+                Storage::disk('public')->put($file->getFilename().'.'.$extension,  File::get($file));
+                $path = $request->file('select_file')->getRealPath();
+                $data = Excel::load($path)->toArray();
+                if(count($data) > 0)
+                {
+                    foreach ($data as $key => $value) {
+                        #role
+                            if (strtolower($value['role']) == 'batsmen') {
+                                $role = '1';
+                                // echo "Qeemat: ".$role."<br>";
+                            }
+                            elseif (strtolower($value['role']) == 'bowler') {
+                                $role = '2';
+                                // echo "Qeemat: ".$role."<br>";
+                            }
+                            elseif (strtolower($value['role']) == 'all-rounder') {
+                                $role = '3';
+                                // echo "Qeemat: ".$role."<br>";
+                            }
+                            elseif (strtolower($value['role']) == 'wicket-keeper') {
+                                $role = '4';
+                                // echo "Qeemat: ".$role."<br>";
+                            }
+                        #end
+
+                        #battinghand
+                                if (strtolower($value['batting_hand']) == 'right') {
+                                    $batting_style = '1';
+                                    // echo "Qeemat: ".$batting_style."<br>";
+                                }
+                                elseif (strtolower($value['batting_hand']) == 'left') {
+                                    $batting_style = '2';
+                                    // echo "Qeemat: ".$batting_style."<br>";
+                                }
+                        #end
+
+                        #bowlingstyle
+                                if (strtolower($value['bowling_style']) == 'right arm fast') {
+                                    $bowling_style = 1;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                                if (($value['bowling_style']) == 'right arm fast medium') {
+                                    $bowling_style = 2;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                                if (($value['bowling_style']) == 'left arm fast') {
+                                    $bowling_style = 3;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                                if (($value['bowling_style']) == 'left arm fast medium') {
+                                    $bowling_style = 4;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                                if (($value['bowling_style']) == 'right arm off break') {
+                                    $bowling_style = 5;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                                if (($value['bowling_style']) == 'right arm leg break') {
+                                    $bowling_style = 6;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                                if (($value['bowling_style']) == 'left arm orthodox') {
+                                    $bowling_style = 7;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                                if (($value['bowling_style']) == 'left arm chinaman') {
+                                    $bowling_style = 8;
+                                    // echo "Qeemat: ".$bowling_style."<br>";
+                                }
+                        #end
+                        $player = new PLayer;
+                        $player->shirt_no = $value['shirt_no'];
+                        $player->name = $value['name'];
+                        $player->date_of_birth = Carbon::parse($value['date_of_birth'])->format('Y-m-d');
+                        $player->club_id = $request->club_id;
+                        $player->role_id = $role;
+                        $player->batting_style_id = $batting_style;
+                        $player->bowling_style_id = $bowling_style;
+                        $player->age = \Carbon\Carbon::parse($value['date_of_birth'])->age;
+                        $player->active_status = '0';
+                        $player->save();
+                    }
+                    return 'success';
+                }
+                else
+                {
+                    return "No Data";
+                }   
+            }
+            else
+            {
+                return "No File";
+            }
+        }
     }
 
     /**

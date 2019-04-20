@@ -65,10 +65,23 @@
                             <label for="password" class="col-md-4 control-label">Role</label>
 
                             <div class="col-md-6">
-                                <select name="role" value="{{ old('role') }}" class="form-control" placeholder="Select Roles" required>
-                                    @foreach($roles as $id=>$role)
-                                        <option value="{{ $id }}">{{ $role }}</option>
-                                    @endforeach
+                                <select name="role" value="{{ old('role') }}" class="form-control" required>
+                                    <option value selected disabled>Select Roles</option>
+                                    @can(['delete','update','create','read'])
+                                        <option value="1">SuperAdmin</option>
+                                    @endcan
+                                    @can(['create','read','update'])
+                                        <option value="2">Admin</option>
+                                    @endcan
+                                    @can(['read','update'])
+                                        <option value="3">Editor</option>
+                                    @endcan
+                                    @can(['create','read'])
+                                        <option value="4">Author</option>
+                                    @endcan
+                                    @can('read')
+                                        <option value="5">Subscriber</option>
+                                    @endcan
                                 </select>
 
                                 @if ($errors->has('role_id'))

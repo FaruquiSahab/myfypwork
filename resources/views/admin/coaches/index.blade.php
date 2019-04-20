@@ -30,8 +30,6 @@
             <th>Name</th>
             <th>Club</th>
             <th>Nationality</th>
-            <th>Created at</th>
-            <th>Updated at</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -45,8 +43,6 @@
                     <td><a href="{{route('coaches.edit', $coach->id)}}">{{$coach->name}}</a></td>
                     <td>{{$coach->club->name}}</td>
                     <td>{{$coach->nationality}}</td>
-                    <td>{{$coach->created_at->diffForHumans()}}</td>
-                    <td>{{$coach->updated_at->diffForHumans()}}</td>
                     <td>
                         <a href="{{-- {{route('coaches.edit',['id'=> $coach->id])}} --}}" class=" col-sm-8 btn btn-info btn-circle" data-toggle="modal" data-target="#addmodel1" data-id="{{ $coach->id }}" data-name="{{ $coach->name }}" data-nationality="{{ $coach->nationality }}" data-club_id="{{ $coach->club_id }}" ><i class="fa fa-wrench fa-fw"></i></a>
                     </td>

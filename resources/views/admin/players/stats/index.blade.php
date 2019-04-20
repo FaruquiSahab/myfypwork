@@ -10,12 +10,11 @@
     
     <u><h2>Stats Of Players</h2></u>
 
-    <fieldset>
+    {{-- <fieldset>
         <legend>One Day Stats</legend>
         <table class="table table-sm table-hover table-striped col-sm-12" id="mytable">
             <thead>
                 <tr>
-                    {{-- <th>Format</th> --}}
                     <th>Name</th>
                     <th>Matches</th>
                     <th>Innings</th>
@@ -23,7 +22,6 @@
                     <th>Runs</th>
                     <th>HS</th>
                     <th>Avg</th>
-                    {{-- <th>S/R</th> --}}
                     <th>100s</th>
                     <th>50s</th>
                     <th>Ct</th>
@@ -41,7 +39,7 @@
                 </tr>
             </thead>
         </table>
-    </fieldset>
+    </fieldset> --}}
 
     <fieldset>
         <legend>T20 Stats</legend>

@@ -22,7 +22,7 @@ class UmpireController extends Controller
     }
     public function umpiredata()
     {
-        $umpires = Umpire::where('active_status',0);
+        $umpires = Umpire::where('active_status',0)->get();
         return DataTables::of($umpires)
         ->addColumn('names',function($umpire)
         {

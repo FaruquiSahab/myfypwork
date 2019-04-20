@@ -184,14 +184,6 @@
         
         $(document).ready(function()
         {
-
-            // Display a success toast, with a title
-            
-
-
-
-
-                    // $('table').dataTable({searching:false, paging:false, info:false})
             $('#club_table').DataTable(
             {
                 "processing": true,
@@ -230,41 +222,42 @@
                 data:form_data,
                 success:function(data)
                 {
-                    console.log(data);
-                    var dt = JSON.parse(data,true);
-                    console.log(dt);
-                    if(dt.error.length)
-                    {
-                        toastr.warning('Fill In The Required Fields', 'Error Alert');
-                        var error_html = '';
-                        for(var count = 0; count < dt.error.length; count++)
-                        {
-                            error_html += '<div class="alert alert-danger">'+dt.error[count]+'</div>';
-                        }
-                        $('#form_output').html(error_html);
-                        $('#addmodel').modal('hide');
-                        $('.moodal #addmodel1').modal('hide');
-                        $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove();
-                        setTimeout(function(){
-                            $('.alert-danger').remove();
-                        }, 6000)
-                        
-                    }
-                    else
-                    {
-                        // $('#form_output').html(dt.success);
-                        toastr.success(dt.success, 'Data Inserted Successfully');
-                        $('#addForm')[0].reset();
-                        $('#addmodel').modal('hide');
-                        $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove();
-                        
-                        // $('#action').val('Add');
-                        // $('.modal-title').text('Add Data');
-                        // $('#button_action').val('insert');
-                        $('#club_table').DataTable().ajax.reload();
-                    }
+                    
+                            console.log(data);
+                            var dt = JSON.parse(data,true);
+                            console.log(dt);
+                            if(dt.error.length)
+                            {
+                                toastr.warning('Fill In The Required Fields', 'Error Alert');
+                                var error_html = '';
+                                for(var count = 0; count < dt.error.length; count++)
+                                {
+                                    error_html += '<div class="alert alert-danger">'+dt.error[count]+'</div>';
+                                }
+                                $('#form_output').html(error_html);
+                                $('#addmodel').modal('hide');
+                                $('.moodal #addmodel1').modal('hide');
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                setTimeout(function(){
+                                    $('.alert-danger').remove();
+                                }, 6000)
+                                
+                            }
+                            else
+                            {
+                                // $('#form_output').html(dt.success);
+                                toastr.success(dt.success, 'Data Inserted Successfully');
+                                $('#addForm')[0].reset();
+                                $('#addmodel').modal('hide');
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                
+                                // $('#action').val('Add');
+                                // $('.modal-title').text('Add Data');
+                                // $('#button_action').val('insert');
+                                $('#club_table').DataTable().ajax.reload();
+                            }
                 }
             });
         });
@@ -288,7 +281,27 @@
                 },
                 error:function(data)
                 {
-                    toastr.error(data, 'Error Alert');
+                    if (data.status == '403') {
+                        toastr.error('Permission Not Granted', 'Action Denied');
+                    }
+                    else if(data.status == '419')
+                    {
+                        toastr.info('Session Timeout','Login Again');
+                        setTimeout( function() 
+                        {
+                            if (confirm('Session Timeout! Page Will Reload UnSave Changes Will Be Lost'))
+                            {
+                                setTimeout( function() { location.reload(); }, 1000);
+                            }
+                            else{
+
+                            }
+                        }, 2000);
+                        
+                    }
+                    else{
+                        toastr.error(data, 'Error Alert');
+                    }
                 }
             });
         });

@@ -28,7 +28,7 @@ class MatchController extends Controller
     }
     public function matchdata()
     {
-        $matches = Match::where('active_status',0);
+        $matches = Match::where('active_status',0)->get();
         return Datatables::of($matches)
         ->addColumn('club1',function($match){
             if($match->club1->name)

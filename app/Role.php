@@ -28,6 +28,6 @@ class Role extends Model
     public function hasPermission(string $permission)
     {
     	$permissions = json_decode($this->permissions,true);
-    	return $permissions[$permission]??false;
+    	return $permissions[$permission] ?? false;
     }
 }

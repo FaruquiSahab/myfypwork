@@ -124,7 +124,7 @@
       <div class="form-group">
           {!! Form::label('starting_date', 'Starting Date') !!}
           {{--{!! Form::text('starting_date', null, ['class'=>'form-control','required', 'id' => 'start_date'])!!}--}}
-          <input name="starting_date" class="form-control" type="text" id="datepicker" required>
+          <input name="starting_date" class="form-control" type="text" id="datepicker" required autocomplete="off">
       </div>
 
 

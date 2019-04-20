@@ -38,13 +38,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
-    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 
     <link rel="stylesheet" type="text/css" href="{{ URL::to('css/jquery.bracket.min.css') }}">
     <script type="text/javascript" src="{{ URL::to('js/jquery.bracket.min.js') }}"></script>
+    <!--Bootstrap Datepicker-->
+      <link href="{{ asset('assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <!--Bootstrap Timepicker-->
+      <link href="{{ asset('assets/css/bootstrap-timepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <!--Full Calendar Css-->
+      <link href='{{ asset('assets/plugins/fullcalendar/css/fullcalendar.css') }}' rel='stylesheet' />
 
 
     {{--<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
@@ -101,12 +107,12 @@
                     </i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                    </li>
+                    {{-- <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                    </li> --}}
                     <li><a href="{{ route('admin.create') }}"><i class="fa fa-user fa-fw"></i> Register</a>
                     </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
+                    {{-- <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                    </li> --}}
                     <li class="divider"></li>
                     <li><a href="{{ url('/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
@@ -418,20 +424,19 @@
 
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Posts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('posts.index')}}">All Posts</a>
                             </li>
 
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('posts.create')}}">Add Post</a>
-                            </li> --}}
+                            </li>
 
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
 
 
@@ -642,10 +647,17 @@
 
 <!-- jQuery -->
 <script src="{{asset('js/libs.js')}}"></script>
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
-<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!--Bootstrap Datepicker Js-->
+  <script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+  <!--Bootstrap Timepicker Js-->
+  <script src="{{ asset('assets/js/bootstrap-timepicker.min.js') }}"></script>
+  <!-- Full Calendar -->
+  <script src='{{ asset('assets/plugins/fullcalendar/js/moment.js') }}'></script>
+  <script src='{{ asset('assets/plugins/fullcalendar/js/fullcalendar.min.js') }}'></script>
+  <script src="{{ asset('assets/plugins/fullcalendar/js/fullcalendar-custom-script.js') }}"></script>
 
 
 @yield('scripts')

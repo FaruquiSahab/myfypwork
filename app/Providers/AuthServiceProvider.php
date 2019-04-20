@@ -33,39 +33,19 @@ class AuthServiceProvider extends ServiceProvider
     public function registerUserPolicies()
     {
         Gate::define('create',function($user){
-            if($user->hasAccess(['create'])) {
-                return $user->hasAccess(['create']);
-            }
-            else{
-                return new Response(view('unauthorized'));
-            }
+            return $user->hasAccess(['create']);
         });
 
         Gate::define('read',function($user){
-            if($user->hasAccess(['read'])) {
-                return $user->hasAccess(['read']);
-            }
-            else{
-                return new Response(view('unauthorized'));
-            }
+            return $user->hasAccess(['read']);
         });
 
         Gate::define('update',function($user){
-            if($user->hasAccess(['update'])) {
-                return $user->hasAccess(['update']);
-            }
-            else{
-                return new Response(view('unauthorized'));
-            }
+            return $user->hasAccess(['update']);
         });
 
         Gate::define('delete',function($user){
-            if($user->hasAccess(['delete'])) {
-                return $user->hasAccess(['delete']);
-            }
-            else{
-                return new Response(view('unauthorized'));
-            }
+            return $user->hasAccess(['delete']);
         });
     }
 }
