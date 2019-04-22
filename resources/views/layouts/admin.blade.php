@@ -218,12 +218,29 @@
 
 					
 					
-						                    <li>
+				    <li>
                         <a href="#"><i class="fa fa-fire fa-fw"></i>Stats<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('stats.index')}}">Index</a>
                             </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-list-ul fa-fw"></i>Rankings<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{route('batsmen_stats.index')}}">Batsmen Rankings</a>
+                            </li>
+
+                            <li>
+                                <a href="{{route('bowler_stats.index')}}">Bowler Rankings</a>
+                            </li>
+                            <li>
+                                <a href="{{route('team_stats.index')}}">Team Rankings</a>
+                            </li>
+
                         </ul>
                     </li>
                     {{--<li>--}}
@@ -239,20 +256,19 @@
 
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-list-ul fa-fw"></i> Player Ranking ODs<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('playerRankingOds.index')}}">All Rankings</a>
                             </li>
 
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('playerRankingOds.create')}}">Add Rankings</a>
-                            </li> --}}
+                            </li>
 
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
 
 
@@ -260,56 +276,53 @@
 
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-list fa-fw"></i> Player Ranking T20s<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('playerRankingt20.index')}}">All Rankings</a>
                             </li>
 
-                           {{--  <li>
+                            <li>
                                 <a href="{{route('playerRankingt20.create')}}">Add Rankings</a>
-                            </li> --}}
+                            </li>
 
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
 
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-list-ol fa-fw"></i> Team Ranking ODs<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('teamRankingOds.index')}}">All Rankings</a>
                             </li>
 
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('teamRankingOds.create')}}">Add Rankings</a>
-                            </li> --}}
+                            </li>
 
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
 
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-list-ol fa-fw"></i> Team Ranking T20s<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('teamRankingt20.index')}}">All Rankings</a>
                             </li>
 
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('teamRankingt20.create')}}">Add Rankings</a>
-                            </li> --}}
+                            </li>
 
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
 
                     <li>
@@ -389,6 +402,15 @@
 
                         </ul>
                         <!-- /.nav-second-level -->
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Series<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{route('series.index1')}}">All Series</a>
+                            </li>
+                        </ul>
                     </li>
 
 

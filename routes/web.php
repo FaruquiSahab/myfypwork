@@ -383,11 +383,49 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     ])->middleware(['can:create']);
 
 
-    Route::get('/playersRankingODs', [
-        'uses' => 'PlayerRankingODController@index',
-        'as' => 'playerRankingOds.index'
+    Route::get('/playersRanking/Batsmen', [
+        'uses' => 'Batsmen_StatsController@index',
+        'as' => 'batsmen_stats.index'
 
     ]);
+    Route::get('batsmendata', 'Batsmen_StatsController@batsmendata')->name('batsmendata');
+    Route::get('batsmendatatabes', 'Batsmen_StatsController@batsmendatatabes')->name('batsmendatatabes');
+
+
+
+    Route::get('/playersRanking/Bowlers/', [
+        'uses' => 'Bowler_StatsController@index',
+        'as' => 'bowler_stats.index'
+
+    ]);
+    Route::get('bowlerdata', 'Bowler_StatsController@bowlerdata')->name('bowlerdata');
+    Route::get('bowlerdatatabes', 'Bowler_StatsController@bowlerdatatabes')->name('bowlerdatatabes');
+
+
+
+
+    Route::get('/teamsRanking/', [
+        'uses' => 'Team_StatsController@index',
+        'as' => 'team_stats.index'
+
+    ]);
+    Route::get('teamdata', 'team_StatsController@teamdata')->name('teamdata');
+    Route::get('teamdatatabes', 'Team_StatsController@teamdatatabes')->name('teamdatatabes');
+
+
+
+//
+    Route::get('/playersRanking/Bowlers/{id}', [
+        'uses' => 'Bowler_StatsController@show',
+        'as' => 'bowler_stats.show'
+
+    ]);
+
+//    Route::get('/clubs', [
+//        'uses' => 'ClubController@index',
+//        'as' => 'clubs.index'
+//    ]);
+//    Route::get('clubdata', 'ClubController@clubdata')->name('clubdata');
 
 
     Route::post('/playersRankingOD/store', [
@@ -844,3 +882,97 @@ Route::get('fixture/delete/{id}', [
             'as' => 'fixtures.delete'
         ]);
 
+//------------------------------------------Series--------------------------------------------------------------------
+
+
+Route::get('/series', [
+    'uses' => 'SeriesController@index',
+    'as' => 'series.index1'
+]);
+Route::get('seriesdata', 'SeriesController@seriesdata')->name('seriesdata');
+
+
+
+Route::post('/series/store', [
+    'uses' => 'SeriesController@store',
+    'as' => 'series.store'
+])->middleware(['can:create']);
+
+
+Route::get('/series/table/{id}', [
+    'uses' => 'SeriesController@table',
+    'as' => 'series.series_table'
+]);
+
+
+Route::get('/line-up/{id}',[
+    'uses'=> 'SeriesController@series_matches_index',
+    'as' => 'series.lineup'
+]);
+
+
+Route::post('/line-up/', [
+    'uses' => 'SeriesController@series_matches_store',
+    'as' => 'fixtures.store'
+]);
+
+//-----------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------Graphs------------------------------------------------------
+
+//----for bowlers
+
+Route::get('/graph/bowlers/points', [
+    'uses' => 'Bowler_StatsController@points_graph',
+    'as' => 'bowlers.point'
+]);
+
+
+Route::get('/graph/bowlers/economy', [
+    'uses' => 'Bowler_StatsController@econ_graph',
+    'as' => 'bowlers.econ'
+]);
+
+
+
+Route::get('/graph/bowlers/average', [
+    'uses' => 'Bowler_StatsController@avg_graph',
+    'as' => 'bowlers.avg'
+]);
+
+
+//----for batsmen
+
+Route::get('/graph/batsmen/points', [
+    'uses' => 'Batsmen_StatsController@points_graph',
+    'as' => 'batsmen.point'
+]);
+
+
+Route::get('/graph/batsmen/strike_rate', [
+    'uses' => 'Batsmen_StatsController@sr_graph',
+    'as' => 'batsmen.sr'
+]);
+
+
+
+Route::get('/graph/batsmen/average', [
+    'uses' => 'Batsmen_StatsController@avg_graph',
+    'as' => 'batsmen.avg'
+]);
+
+
+
+Route::get('/graph/batsmen/runs', [
+    'uses' => 'Batsmen_StatsController@runs_graph',
+    'as' => 'batsmen.runs'
+]);
+
+
+//----for team
+
+Route::get('/graph/team/points', [
+    'uses' => 'Team_StatsController@points_graph',
+    'as' => 'team.point'
+]);

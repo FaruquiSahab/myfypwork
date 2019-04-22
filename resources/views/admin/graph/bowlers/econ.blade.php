@@ -1,0 +1,48 @@
+@extends('layouts.admin')
+
+
+
+
+@section('content')
+
+    <a href="{{route('bowler_stats.index')}}" class="btn btn-info">Back</a>
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+    <div class="container" style="">
+
+        <div class="row">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">Bowlers Economy</div>
+
+
+                <div class="panel-body">
+
+
+                    <div id="poll_div"></div>
+
+                    <?= $line->render('LineChart', 'eco_max', 'poll_div') ?>
+
+
+                </div>
+
+
+
+
+
+
+@stop
+
+
+
+
