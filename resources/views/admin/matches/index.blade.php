@@ -44,7 +44,7 @@
                                 <button class="btn btn-info">Score Match</button>
                             </form>
                         @elseif($match->status == 2)
-                            <a href="{{ url('/scorecard/30') }}" class="btn btn-success">{{ $match->result }}</a>
+                            <a href="{{ url('/scorecard') }}/{{ $match->id }}" class="btn btn-success">{{ $match->result }}</a>
                         @endif
                     </td>
                 </tr>

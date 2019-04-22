@@ -21,7 +21,7 @@ class MatchController extends Controller
      */
     public function index()
     {
-        $matches = Match::where('active_status',0);
+        $matches = Match::where('active_status',0)->get();
         return view('admin.matches.index',compact('matches'));
 
 
