@@ -93,7 +93,13 @@
                     <div class="modal-header">
                         <h3 class="modal-title" id="exampleModalLabel">
                             Insert Excel File
+                            <form action="{{ url('/sample-download') }}">
+                                <button style="float: right;" class="btn btn-success" type="submit">
+                                    Sample File
+                                </button>
+                            </form>
                         </h3>
+
                     </div>
                     
                     <div class="modal-footer">
@@ -104,7 +110,7 @@
                         </div>
                         <div class="form-group">
                             <label style="float: left;"for="select_file">Players File</label>
-                            <input class="form-control" type="file" name="select_file" accept=".xls,.xlsx" required>
+                            <input class="form-control" type="file" name="select_file" accept=".xls,.xlsx,.csv" required>
                         </div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             Cancel
@@ -212,7 +218,7 @@
                         <input type="hidden" name="button_action" value="0">
                         <div class="form-group">
                             {!! Form::label('date_of_birth', 'Date of Birth') !!}
-                            {!! Form::text('date_of_birth', null, ['class'=>'form-control','id'=>'adddob'])!!}
+                            {!! Form::text('date_of_birth', null, ['class'=>'form-control','id'=>'datepicker','autocomplete'=>'off'])!!}
                         </div>
 
 
@@ -266,12 +272,15 @@
 @stop
 
 @section('scripts')
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all">
     <script type="text/javascript">
 
         $(document).ready(function(){
-            $("#adddob").datepicker({
-                dateFormat: "yy-mm-dd",
-                maxDate: new Date('2019-4-17')
+            $("#datepicker").datepicker({
+                format: 'yyyy-mm-dd',
+                minDate: "-30Y",
+                maxDate: new Date('2010-12-01')
         });
 
 

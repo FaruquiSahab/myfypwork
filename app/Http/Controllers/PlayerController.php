@@ -12,6 +12,7 @@ use App\PlayerStat;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Excel;
+use Response;
 use DataTables;
 use \Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -190,15 +191,15 @@ class PlayerController extends Controller
 
         ]);
         $format = Validator::make($request->all(), [
-            'select_file' => 'mimes:xls,xlsx',
+            'select_file' => 'mimes:xls,xlsx,csv',
         ]);
 
         if ($required->fails()) {
             return 'required';
         }
-        elseif ($format->fails()) {
-            return 'format';
-        }
+        // elseif ($format->fails()) {
+        //     return 'format';
+        // }
         else
         {
             // return 'Else';
@@ -372,6 +373,7 @@ class PlayerController extends Controller
 
     public function statsindex()
     {
+
         return view('admin.players.stats.index');
     }
     //twenty 20
@@ -401,5 +403,15 @@ class PlayerController extends Controller
         })
         ->rawColumns(['names','format'])
         ->make(true);
+    }
+    public function download()
+    {
+        $file= storage_path(). "/app/public/sample/Sample.csv";
+
+        $headers = array(
+                'Content-Type: application/csv',
+                );
+
+        return Response::download($file, 'Samples.csv', $headers);
     }
 }

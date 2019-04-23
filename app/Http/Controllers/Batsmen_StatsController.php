@@ -35,7 +35,7 @@ class Batsmen_StatsController extends Controller
 
             $fours = Batsmen_Stats::where('id',$value->id)->select('fours')->first()->fours;
 
-            // $ducks = Batsmen_Stats::where('id',$value->id)->select('ducks')->first()->ducks;
+            $ducks = Batsmen_Stats::where('id',$value->id)->select('ducks')->first()->ducks;
 
             $fifties = Batsmen_Stats::where('id',$value->id)->select('halfcenturies')->first()->halfcenturies;
 

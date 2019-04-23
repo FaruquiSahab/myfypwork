@@ -194,7 +194,7 @@
                     <div class="form-group">
 
                         <label for="date">Date</label>
-                        <input name="starting_date" class="form-control" type="text" id="date_picker4" required>
+                        <input type="text" name="starting_date" class="form-control" id="datepicker" required autocomplete="off">
 
 
                     </div>
@@ -275,14 +275,12 @@
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all">
     <script type="text/javascript">
 
-        //         Get today's date
         var today = new Date();
         console.log(today);
-
-        $("#datepicker").datepicker({
-            minDate: today, // set the minDate to the today's date
-            maxDate: '+1y'
-            // you can add other options heres
+        $('#datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            minDate: today,
+            maxDate: "+1Y"
         });
 
         /* $('#start_date').on('change select',function () {

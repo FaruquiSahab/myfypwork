@@ -976,3 +976,6 @@ Route::get('/graph/team/points', [
     'uses' => 'Team_StatsController@points_graph',
     'as' => 'team.point'
 ]);
+
+//--- download sample file
+Route::get('/sample-download', 'PlayerController@download');

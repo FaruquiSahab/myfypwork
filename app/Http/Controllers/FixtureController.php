@@ -102,22 +102,45 @@ class FixtureController extends Controller
      */
     public function store(Request $request)
     {
+        $wk_count = 0;
+        $b_count = 0;
         if (sizeof($request->player_id1) < 11 && sizeof($request->player_id1) < 11)
         {
+            return "both";
             Session::flash('players_length3','Kinldy Select Complete Playing 11 To Avoid Embarssment');
             return redirect()->back()->withInput($request->all());
         }
         elseif (sizeof($request->player_id1) < 11)
         {
+            return "one";
             Session::flash('players_length1','Kinldy Select Complete Playing 11 To Avoid Embarssment');
             return redirect()->back()->withInput($request->all());
         }
         elseif (sizeof($request->player_id2) < 11)
         {
+            return "two";
             Session::flash('players_length2','Kinldy Select Complete Playing 11 To Avoid Embarssment');
             return redirect()->back()->withInput($request->all());
         }
         else {
+            foreach ($request->player_id1 as $player)
+            {
+                $roleid = Player::where('id',$player)->first()->role_id;
+                if ($roleid == 4){ $wk_count = $wk_count + 1; }
+                elseif ($roleid == 2 ||$roleid == 3){ $b_count = $b_count + 1; }
+            }
+            if ($wk_count == 0) { return "wk1"; }
+            elseif ($b_count < 5) { return "b1"; }
+            $wk_count=0;
+            $b_count=0;
+            foreach ($request->player_id2 as $player)
+            {
+                $roleid = Player::where('id',$player)->first()->role_id;
+                if ($roleid == 4){ $wk_count = $wk_count + 1; }
+                elseif ($roleid == 2 ||$roleid == 3){ $b_count = $b_count + 1; }
+            }
+            if ($wk_count == 0) { return "wk2"; }
+            elseif ($b_count < 5) { return "b2"; }
 
         //  return $request->player_id1[0];
             $match = DB::table('matches')->insertGetId([
@@ -183,7 +206,7 @@ class FixtureController extends Controller
                 ]);
 
             }
-
+            return $match;
             return redirect( route('scoring.match',$match));
         //  return response()->json(array('success' => true, 'html' => $returnHtml));
         }

@@ -692,7 +692,7 @@ class ScoringController extends Controller
 		if ($status == '0' || $status == '1')
 		{
 			$count = 0;
-			// updating batting stats
+				// updating batting stats
 			$records = BatsmenScore::where('match_id',$matchId)->get();
 			foreach ($records as $key => $value)
 			{
@@ -715,6 +715,7 @@ class ScoringController extends Controller
 				$matches = $stats[0]->matches;
 				$innings = $stats[0]->innings;
 				$notouts = $stats[0]->notouts;
+				$ducks = $stats[0]->ducks;
 				$runs = $stats[0]->runs;
 				$highscore = $stats[0]->highscore;
 				$balls_played = $stats[0]->balls_played;
@@ -792,6 +793,10 @@ class ScoringController extends Controller
 
 					$runs = $runs + $value->runs;
 					$player_stat->runs = $runs;
+					if ($value->runs == 0) {
+						$ducks = $ducks + 1;
+						$player_stat->ducks = $ducks;
+					}
 
 					if ($value->runs > $highscore) {
 						$highscore = $value->runs;
@@ -833,7 +838,7 @@ class ScoringController extends Controller
 				}
 				// echo "-----------"."<br>";
 			}
-			// updating balling stats
+				// updating balling stats
 			$records = BowlerScore::where('match_id',$matchId)->get();
 			foreach ($records as $key => $value) 
 			{
@@ -854,6 +859,8 @@ class ScoringController extends Controller
 				$innings_bowl = $stats[0]->innings_bowl;
 				$overs = $stats[0]->overs;
 				$runs_ball =$stats[0]->runs_ball;
+				$wides = $stats[0]->wides;
+				$noballs = $stats[0]->noballs;
 				$wickets =$stats[0]->wickets;
 				$average_ball = $stats[0]->average_ball;
 				$best_ball = $stats[0]->best_ball;
@@ -870,11 +877,21 @@ class ScoringController extends Controller
 					$innings_bowl = $innings_bowl + 1;
 					$player_stat->innings_bowl = $innings_bowl;
 
-					$overs = $overs + $value->overs;
-					$player_stat->overs = $overs;
+					$helper = new CricketStatsHelper();
+					$ballsBowled = $helper->convertOversToBalls($overs);
+					$inMatch = $helper->convertOversToBalls($value->overs);
+					$totalBalls = $ballsBowled + $inMatch;
+					$overs = $helper->convertBallsToOvers($totalBalls);
+					$player_stat->overs = $helper->convertBallsToOvers($totalBalls);
 					
 					$runs_ball = $runs_ball + $value->runs;
 					$player_stat->runs_ball = $runs_ball;
+
+					$wides = $wides + mt_rand(0,5);
+					$player_stat->wides = $wides;
+
+					$noballs = $noballs + mt_rand(0,3);
+					$player_stat->noballs = $noballs;
 
 					$wickets = $wickets + $value->wickets;
 					$player_stat->wickets = $wickets;
@@ -920,6 +937,8 @@ class ScoringController extends Controller
 
 				}
 			}
+
+			$pastRuns = Team_Stats::where('club_id',$club1)->select('runs')->first()->runs;
 		}
 		else{
 			return view('unauthorized');
@@ -936,6 +955,10 @@ class ScoringController extends Controller
 					 		  ->where('inning_no','1')
 					 		  ->select('wickets')
 					 		  ->first()->wickets;
+		$oversone = InningScore::where('match_id',$matchId)
+					 		  ->where('inning_no','1')
+					 		  ->select('overs')
+					 		  ->first()->overs;			 		  
 		$winner = '0';
 		$runstwo = InningScore::where('match_id',$matchId)
 					 		  ->where('inning_no','2')
@@ -945,6 +968,10 @@ class ScoringController extends Controller
 					 		  ->where('inning_no','2')
 					 		  ->select('wickets')
 					 		  ->first()->wickets;
+		$overstwo = InningScore::where('match_id',$matchId)
+					 		  ->where('inning_no','2')
+					 		  ->select('overs')
+					 		  ->first()->overs;
 
 		
 		$club1 = InningScore::where('match_id',$matchId)->where('inning_no',1)->select('club_id')->first()->club_id;
@@ -994,6 +1021,96 @@ class ScoringController extends Controller
 			'result'=>$result,
 			'status'=>'2'
 		]);
+		///////////////////////////////Team Stats 1/////////////////////////////////////
+			$allRunsScored = Team_Stats::where('club_id',$club1)->first()->total_runs_scored;
+			$allOversFaced = Team_Stats::where('club_id',$club1)->first()->total_overs_faced;
+			$allRunsConceed = Team_Stats::where('club_id',$club1)->first()->total_runs_conceded;
+			$allOversBowled = Team_Stats::where('club_id',$club1)->first()->total_overs_bowled;
+			$matches = Team_Stats::where('club_id',$club1)->first()->matches;
+			$wins = Team_Stats::where('club_id',$club1)->first()->win;
+			$lost = Team_Stats::where('club_id',$club1)->first()->loss;
+			$nr = Team_Stats::where('club_id',$club1)->first()->nr;
+			///////////////////////////////CALCULATIONS///////////////////////////////////////
+			$allRunsScored = (int)$runsone + (int)$allRunsScored;
+
+				$helper = new CricketStatsHelper();
+				$numberOfAllBalls = $helper->convertOversToBalls($allOversFaced);
+				$numberOfBalls = $helper->convertOversToBalls($oversone);
+				$totalBalls = $numberOfAllBalls + $numberOfBalls;
+			$allOversFaced = $helper->convertBallsToOvers($totalBalls);
+
+			$allRunsConceed = (int)$runstwo + (int)$allRunsConceed;
+
+				$helper = new CricketStatsHelper();
+				$numberOfAllBalls = $helper->convertOversToBalls($allOversBowled);
+				$numberOfBalls = $helper->convertOversToBalls($overstwo);
+				$totalBalls = $numberOfAllBalls + $numberOfBalls;
+			$allOversBowled = $helper->convertBallsToOvers($totalBalls);
+
+			$runsrateA = $total_runs_scored + $total_overs_faced;
+			$runrateB = $total_runs_conceded + $total_overs_bowled;
+			$matches = $matches + 1;
+			if ($winnerclub == $club1) 		{ $wins = $wins + 1; }
+			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
+			elseif($winnerclub == $club2) 	{ $loss = $loss + 1; }
+			////////////////////////////UPDATING//////////////////////////////////
+			$team_stats = Team_Stats::where('club_id',$club1)->first();
+			$team_stats->total_runs_scored = $allRunsScored;
+			$team_stats->total_overs_faced = $allOversFaced;
+			$team_stats->total_runs_conceded = $allRunsConceed;
+			$team_stats->total_overs_bowled = $allOversBowled;
+			$team_stats->nrr = $runsrateA - $runrateB;
+			$team_stats->matches = $matches;
+			$team_stats->win = $win;
+			$team_stats->loss = $loss;
+			$team_stats->nr = $nr;
+		/////////////////////////////////////END////////////////////////////////////////
+
+		///////////////////////////////Team Stats 2/////////////////////////////////////
+			$allRunsScored = Team_Stats::where('club_id',$club2)->first()->total_runs_scored;
+			$allOversFaced = Team_Stats::where('club_id',$club2)->first()->total_overs_faced;
+			$allRunsConceed = Team_Stats::where('club_id',$club2)->first()->total_runs_conceded;
+			$allOversBowled = Team_Stats::where('club_id',$club2)->first()->total_overs_bowled;
+			$matches = Team_Stats::where('club_id',$club2)->first()->matches;
+			$wins = Team_Stats::where('club_id',$club2)->first()->win;
+			$lost = Team_Stats::where('club_id',$club2)->first()->loss;
+			$nr = Team_Stats::where('club_id',$club2)->first()->nr;
+			///////////////////////////////CALCULATIONS///////////////////////////////////////
+			$allRunsScored = (int)$runsone + (int)$allRunsScored;
+
+				$helper = new CricketStatsHelper();
+				$numberOfAllBalls = $helper->convertOversToBalls($allOversFaced);
+				$numberOfBalls = $helper->convertOversToBalls($overstwo);
+				$totalBalls = $numberOfAllBalls + $numberOfBalls;
+			$allOversFaced = $helper->convertBallsToOvers($totalBalls);
+
+			$allRunsConceed = (int)$runstwo + (int)$allRunsConceed;
+
+				$helper = new CricketStatsHelper();
+				$numberOfAllBalls = $helper->convertOversToBalls($allOversBowled);
+				$numberOfBalls = $helper->convertOversToBalls($oversone);
+				$totalBalls = $numberOfBalls + $numberOfAllBalls;
+			$allOversBowled = $helper->convertBallsToOvers($totalBalls);
+
+			$matches = $matches + 1;
+			if ($winnerclub == $club2) 		{ $wins = $wins + 1; }
+			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
+			elseif($winnerclub == $club1) 	{ $loss = $loss + 1; }
+			////////////////////////////UPDATING//////////////////////////////////
+			$team_stats = Team_Stats::where('club_id',$club2)->first();
+			$team_stats->total_runs_scored = $allRunsScored;
+			$team_stats->total_overs_faced = $allOversFaced;
+			$team_stats->total_runs_conceded = $allRunsConceed;
+			$team_stats->total_overs_bowled = $allOversBowled;
+			$team_stats->nrr = $total_runs_scored / $total_overs_faced;
+			$team_stats->matches = $matches;
+			$team_stats->win = $win;
+			$team_stats->loss = $loss;
+			$team_stats->nr = $nr;
+		/////////////////////////////////////END////////////////////////////////////////
+
+
+
 		echo "Result: ". $result ."<br>";
 		return "<br>"."END"."<br>";
 	}
@@ -1031,7 +1148,6 @@ class ScoringController extends Controller
 		{
 			return view('unauthorized');
 		}
-
 	}
 
 	

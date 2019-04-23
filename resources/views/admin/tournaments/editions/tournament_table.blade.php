@@ -68,7 +68,7 @@
         <h3 align="left">Schedule</h3>
         <br>
 
-        <table class="table table-bordered" align="center">
+        <table class="table table-bordered mytable" align="center">
             <thead class="thead-dark">
             <tr>
 
@@ -306,4 +306,10 @@
 
     @include('includes.form_error')
 
+@stop
+
+@section('scripts')
+    <script type="text/javascript">
+        $('.mytable').DataTable();
+    </script>
 @stop

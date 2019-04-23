@@ -212,9 +212,14 @@
         console.log(today);
 
         $("#datepicker").datepicker({
-            minDate: today // set the minDate to the today's date
-            // you can add other options heres
+            format: 'yyyy-mm-dd',
+            minDate: today,
+            maxDate: "+1Y"
         });
+
+        /*
+            format: 'yyyy-mm-dd',
+        */
 
        /* $('#start_date').on('change select',function () {
            $('#end_date').prop('disabled',false);

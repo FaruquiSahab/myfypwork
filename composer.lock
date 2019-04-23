@@ -51,16 +51,16 @@
         },
         {
             "name": "consoletvs/charts",
-            "version": "6.4.0",
+            "version": "6.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConsoleTVs/Charts.git",
-                "reference": "4057cf90470f7633b34d9dc401a0721254c5b20d"
+                "reference": "63e8c604e65df77e8844527906ee80b53695e219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConsoleTVs/Charts/zipball/4057cf90470f7633b34d9dc401a0721254c5b20d",
-                "reference": "4057cf90470f7633b34d9dc401a0721254c5b20d",
+                "url": "https://api.github.com/repos/ConsoleTVs/Charts/zipball/63e8c604e65df77e8844527906ee80b53695e219",
+                "reference": "63e8c604e65df77e8844527906ee80b53695e219",
                 "shasum": ""
             },
             "require": {
@@ -93,7 +93,7 @@
                 }
             ],
             "description": "The laravel charting package",
-            "time": "2019-03-28T15:54:42+00:00"
+            "time": "2019-04-21T13:30:11+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1687,16 +1687,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v6.2.0",
+            "version": "v6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "6fa3232ff9d3f8237c0fae4b7ff05e1baa4cd707"
+                "reference": "5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/6fa3232ff9d3f8237c0fae4b7ff05e1baa4cd707",
-                "reference": "6fa3232ff9d3f8237c0fae4b7ff05e1baa4cd707",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a",
+                "reference": "5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a",
                 "shasum": ""
             },
             "require": {
@@ -1745,7 +1745,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2019-03-10T07:52:41+00:00"
+            "time": "2019-04-21T09:21:45+00:00"
         },
         {
             "name": "symfony/console",
