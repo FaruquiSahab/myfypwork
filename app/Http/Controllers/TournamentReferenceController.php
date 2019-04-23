@@ -32,7 +32,7 @@ class TournamentReferenceController extends Controller
         /*
 
 
-
+        
         foreach ($tour_id as $tour)
         {
            $ids =  $tour->tournament_id . '<br>';
