@@ -166,14 +166,14 @@
                 {
                     console.log('success');
                     if (data == 'both'){ toastr.error('Team Length Less Than Required','Formation Error'); }
-                    if (data == 'one'){ toastr.error('Team One: Length Less Than Required','Formation Error'); }
-                    if (data == 'two'){ toastr.error('Team Two: Length Less Than Required','Formation Error'); }
-                    if (data == 'wk1'){ toastr.error('Team One: At Least One Wikcet Keeper Is Required','Formation Error'); }
-                    if (data == 'b1'){ toastr.error('Team One: At Least 5 Bowlers Or Allrounders (combined) required','Formation Error'); }
-                    if (data == 'wk2'){ toastr.error('Team Two: At Least One Wikcet Keeper Is Required','Formation Error'); }
-                    if (data == 'b2'){ toastr.error('Team One: At Least 5 Bowlers Or Allrounders (combined) required','Formation Error'); }
+                    else if (data == 'one'){ toastr.error('Team One: Length Less Than Required','Formation Error'); }
+                    else if (data == 'two'){ toastr.error('Team Two: Length Less Than Required','Formation Error'); }
+                    else if (data == 'wk1'){ toastr.error('Team One: At Least One Wikcet Keeper Is Required','Formation Error'); }
+                    else if (data == 'b1'){ toastr.error('Team One: At Least 5 Bowlers Or Allrounders (combined) required','Formation Error'); }
+                    else if (data == 'wk2'){ toastr.error('Team Two: At Least One Wikcet Keeper Is Required','Formation Error'); }
+                    else if (data == 'b2'){ toastr.error('Team One: At Least 5 Bowlers Or Allrounders (combined) required','Formation Error'); }
                     else{
-                        window.location.href = "{{ route('scoring.match',data) }}";
+                        window.location.href = "/scoring/match/"+data;
                     }
                     
                 },

@@ -15,8 +15,12 @@ use App\Out;
 use App\Over;
 use App\Tass;
 use App\InningScore;
+use App\CheckNotOut;
 use DB;
+use App\RoundrobinTournament;
+use App\Fixture;
 use App\PlayerStat;
+use App\Team_Stats;
 use DataTables;
 use Illuminate\Http\Request;
 use Garethellis\CricketStatsHelper\CricketStatsHelper;
@@ -33,10 +37,12 @@ class ScoringController extends Controller
 
   	public function index1($match)
   	{
+
 		$matches = Match::where('id',$match)->get();
 		if($matches[0]->status == 0 || $matches[0]->status == 1)
 		{
 			#cached data
+				$checknotout = BatsmenScore::where('match_id',$match)->where('inning_no',1)->sum('checknotout');
 				$helper = new CricketStatsHelper();
 				$runs = BatsmenScore::where('match_id',$match)->where('inning_no',1)->sum('runs');
 				$balls = BatsmenScore::where('match_id',$match)->where('inning_no',1)->sum('balls');
@@ -160,7 +166,7 @@ class ScoringController extends Controller
 						$format = Match::where('id',$match)->select('match_type_id')->first()->match_type_id;
 			#////
 
-			return view('admin.scoringscorecard',compact('format','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingfirst','ballingfirst','extra'));
+			return view('admin.scoringscorecard',compact('checknotout','format','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingfirst','ballingfirst','extra'));
 		}
 		else{
 			return view('unauthorized');
@@ -183,6 +189,7 @@ class ScoringController extends Controller
     	$balls = $dots+ $ones+ $twos+ $threes+ $fours+ $sixes;
 		$runs = ($ones*1)+($twos*2)+($threes*3)+($fours*4)+($sixes*6);
 
+    	
     	DB::table('batsmen_scores')
 	    	->where('match_id',$request->match_id)
 	    	->where('inning_no',$request->innings_no)
@@ -199,6 +206,20 @@ class ScoringController extends Controller
 	    		'fours'=>$request->fours,
 	    		'sixes'=>$request->sixes,
 	    	]);
+	    if ($request->out_how == 'nt') {
+	    	DB::table('batsmen_scores')
+	    	->where('match_id',$request->match_id)
+	    	->where('inning_no',$request->innings_no)
+	    	->where('batsmen_id',$request->batsmen_id)
+	    	->update(['checknotout'=>'1']);
+	    }
+	    else{
+	    	DB::table('batsmen_scores')
+	    	->where('match_id',$request->match_id)
+	    	->where('inning_no',$request->innings_no)
+	    	->where('batsmen_id',$request->batsmen_id)
+	    	->update(['checknotout'=>'0']);
+	    }
 			$data = BatsmenScore::where('match_id',$request->match_id)
 			->where('inning_no',$request->innings_no)
 			->where('batsmen_id',$request->batsmen_id)
@@ -229,11 +250,13 @@ class ScoringController extends Controller
 			$byes = Extra::where('match_id', $request->match_id)->where('inning_no',1)->sum('byes');
 			$legbyes = Extra::where('match_id', $request->match_id)->where('inning_no',1)->sum('leg_byes');
 			$runss = $runss + $wides + $noballs + $byes + $legbyes;
+			$checknotout = BatsmenScore::where('match_id',$request->match_id)->where('inning_no',1)->sum('checknotout');
 		// return $data;
 		$object= new \stdClass();
 		$object->runs = $runss;
 		$object->overs = $overs;
 		$object->wickets = $wicketss;
+		$object->checknotout = $checknotout;
 
 		return [$data,json_encode($object)];
 
@@ -391,7 +414,7 @@ class ScoringController extends Controller
 		{
 			$this->inningscore($match,1);
 			$helper = new CricketStatsHelper();
-		
+			$checknotout = BatsmenScore::where('match_id',$match)->where('inning_no',2)->sum('checknotout');
 			$runs = BatsmenScore::where('match_id',$match)->where('inning_no',2)->sum('runs');
 			$balls = BatsmenScore::where('match_id',$match)->where('inning_no',2)->sum('balls');
 			$overs = $helper->convertBallsToOvers($balls);
@@ -518,7 +541,7 @@ class ScoringController extends Controller
 			#////
 		
 				// return $battingfirst;
-				return view('admin.scoringscorecard1',compact('format','i1runs','i1wickets','i1overs','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingsecond','ballingsecond','extra'));
+				return view('admin.scoringscorecard1',compact('checknotout','format','i1runs','i1wickets','i1overs','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingsecond','ballingsecond','extra'));
 		}
 		else
 		{
@@ -558,6 +581,20 @@ class ScoringController extends Controller
 				'fours'=>$request->fours,
 				'sixes'=>$request->sixes,
 			]);
+		if ($request->out_how == 'nt') {
+	    	DB::table('batsmen_scores')
+	    	->where('match_id',$request->match_id)
+	    	->where('inning_no',$request->innings_no)
+	    	->where('batsmen_id',$request->batsmen_id)
+	    	->update(['checknotout'=>'1']);
+	    }
+	    else{
+	    	DB::table('batsmen_scores')
+	    	->where('match_id',$request->match_id)
+	    	->where('inning_no',$request->innings_no)
+	    	->where('batsmen_id',$request->batsmen_id)
+	    	->update(['checknotout'=>'0']);
+	    }
 			$data = BatsmenScore::where('match_id',$request->match_id)
 			->where('inning_no',$request->innings_no)
 			->where('batsmen_id',$request->batsmen_id)
@@ -588,14 +625,17 @@ class ScoringController extends Controller
 			$byes = Extra::where('match_id', $request->match_id)->where('inning_no',2)->sum('byes');
 			$legbyes = Extra::where('match_id', $request->match_id)->where('inning_no',2)->sum('leg_byes');
 			$runss = $runss + $wides + $noballs + $byes + $legbyes;
+			$checknotout = BatsmenScore::where('match_id',$request->match_id)->where('inning_no',1)->sum('checknotout');
 		// return $data;
 		$object= new \stdClass();
 		$object->runs = $runss;
 		$object->overs = $overs;
 		$object->wickets = $wicketss;
+		$object->checknotout = $checknotout;
 	
 		return [$data,json_encode($object)];
 	}
+
 	public function submitbowlerscore2(Request $request)
 	{
 		// return $request->innings_no;
@@ -938,7 +978,7 @@ class ScoringController extends Controller
 				}
 			}
 
-			$pastRuns = Team_Stats::where('club_id',$club1)->select('runs')->first()->runs;
+			// $pastRuns = Team_Stats::where('club_id',$club1)->select('runs')->first()->runs;
 		}
 		else{
 			return view('unauthorized');
@@ -1021,6 +1061,24 @@ class ScoringController extends Controller
 			'result'=>$result,
 			'status'=>'2'
 		]);
+
+		$fixture_id = Match::where('id',$matchId)->first()->fixture_id;
+		$refer_id = Fixture::where('id',$fixture_id)->first()->refer_id;
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('total_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('total_matches');
+
+		if ($winnerclub == $club1){
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('win_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('loss_matches');
+		}
+		elseif ($winnerclub == $club2){
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('win_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('loss_matches');
+		}
+		elseif ($winnerclub == '0'){
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('tie_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('tie_matches');
+		}
 		///////////////////////////////Team Stats 1/////////////////////////////////////
 			$allRunsScored = Team_Stats::where('club_id',$club1)->first()->total_runs_scored;
 			$allOversFaced = Team_Stats::where('club_id',$club1)->first()->total_overs_faced;
@@ -1047,12 +1105,12 @@ class ScoringController extends Controller
 				$totalBalls = $numberOfAllBalls + $numberOfBalls;
 			$allOversBowled = $helper->convertBallsToOvers($totalBalls);
 
-			$runsrateA = $total_runs_scored + $total_overs_faced;
-			$runrateB = $total_runs_conceded + $total_overs_bowled;
+			$runsrateA = $allRunsScored / $allOversFaced;
+			$runrateB = $allRunsConceed / $allOversBowled;
 			$matches = $matches + 1;
 			if ($winnerclub == $club1) 		{ $wins = $wins + 1; }
 			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
-			elseif($winnerclub == $club2) 	{ $loss = $loss + 1; }
+			elseif($winnerclub == $club2) 	{ $lost = $lost + 1; }
 			////////////////////////////UPDATING//////////////////////////////////
 			$team_stats = Team_Stats::where('club_id',$club1)->first();
 			$team_stats->total_runs_scored = $allRunsScored;
@@ -1061,9 +1119,10 @@ class ScoringController extends Controller
 			$team_stats->total_overs_bowled = $allOversBowled;
 			$team_stats->nrr = $runsrateA - $runrateB;
 			$team_stats->matches = $matches;
-			$team_stats->win = $win;
-			$team_stats->loss = $loss;
+			$team_stats->win = $wins;
+			$team_stats->loss = $lost;
 			$team_stats->nr = $nr;
+			$team_stats->save();
 		/////////////////////////////////////END////////////////////////////////////////
 
 		///////////////////////////////Team Stats 2/////////////////////////////////////
@@ -1076,7 +1135,7 @@ class ScoringController extends Controller
 			$lost = Team_Stats::where('club_id',$club2)->first()->loss;
 			$nr = Team_Stats::where('club_id',$club2)->first()->nr;
 			///////////////////////////////CALCULATIONS///////////////////////////////////////
-			$allRunsScored = (int)$runsone + (int)$allRunsScored;
+			$allRunsScored = (int)$runstwo + (int)$allRunsScored;
 
 				$helper = new CricketStatsHelper();
 				$numberOfAllBalls = $helper->convertOversToBalls($allOversFaced);
@@ -1084,7 +1143,7 @@ class ScoringController extends Controller
 				$totalBalls = $numberOfAllBalls + $numberOfBalls;
 			$allOversFaced = $helper->convertBallsToOvers($totalBalls);
 
-			$allRunsConceed = (int)$runstwo + (int)$allRunsConceed;
+			$allRunsConceed = (int)$runsone + (int)$allRunsConceed;
 
 				$helper = new CricketStatsHelper();
 				$numberOfAllBalls = $helper->convertOversToBalls($allOversBowled);
@@ -1092,21 +1151,25 @@ class ScoringController extends Controller
 				$totalBalls = $numberOfBalls + $numberOfAllBalls;
 			$allOversBowled = $helper->convertBallsToOvers($totalBalls);
 
+			$runsrateA = $allRunsScored / $allOversFaced;
+			$runrateB = $allRunsConceed / $allOversBowled;
+
 			$matches = $matches + 1;
 			if ($winnerclub == $club2) 		{ $wins = $wins + 1; }
 			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
-			elseif($winnerclub == $club1) 	{ $loss = $loss + 1; }
+			elseif($winnerclub == $club1) 	{ $lost = $lost + 1; }
 			////////////////////////////UPDATING//////////////////////////////////
 			$team_stats = Team_Stats::where('club_id',$club2)->first();
 			$team_stats->total_runs_scored = $allRunsScored;
 			$team_stats->total_overs_faced = $allOversFaced;
 			$team_stats->total_runs_conceded = $allRunsConceed;
 			$team_stats->total_overs_bowled = $allOversBowled;
-			$team_stats->nrr = $total_runs_scored / $total_overs_faced;
+			$team_stats->nrr = $runsrateA - $runrateB;
 			$team_stats->matches = $matches;
-			$team_stats->win = $win;
-			$team_stats->loss = $loss;
+			$team_stats->win = $wins;
+			$team_stats->loss = $lost;
 			$team_stats->nr = $nr;
+			$team_stats->save();
 		/////////////////////////////////////END////////////////////////////////////////
 
 

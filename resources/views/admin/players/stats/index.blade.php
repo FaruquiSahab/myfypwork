@@ -57,18 +57,18 @@
                     {{-- <th>S/R</th> --}}
                     <th>100s</th>
                     <th>50s</th>
-                    <th>Ct</th>
-                    <th>St</th>
+                    {{-- <th>Ct</th> --}}
+                    {{-- <th>St</th> --}}
                     <th>4s</th>
                     <th>6s</th>
-                    <th>Innings Ball</th>
+                    {{-- <th>Innings Ball</th>
                     <th>Overs</th>
                     <th>Runs</th>
                     <th>Wickets</th>
                     <th>Avg</th>
                     <th>B/F</th>
                     <th>Eco</th>
-                    <th>5Ws</th>
+                    <th>5Ws</th> --}}
                 </tr>
             </thead>
         </table>
@@ -202,37 +202,37 @@
     <script type="text/javascript">
 
         //load  table ajax
-        $('#mytable').DataTable(
-        {
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ route('statsdata2') }}",
-                "columns":[
-                    // { "data": "format" },
-                    { "data": "names" },
-                    { "data": "matches" },
-                    { "data": "innings"},
-                    { "data": "notouts"},
-                    { "data": "runs"},
-                    { "data": "highscore"},
-                    { "data": "average_bat"},
-                    // { "data": "strikerate"},
-                    { "data": "centuries"},
-                    { "data": "halfcenturies"},
-                    { "data": "catches"},
-                    { "data": "stumping"},
-                    { "data": "fours"},
-                    { "data": "sixes"},
-                    { "data": "innings_bowl"},
-                    { "data": "overs"},
-                    { "data": "runs_ball"},
-                    { "data": "wickets"},
-                    { "data": "average_ball"},
-                    { "data": "best_ball"},
-                    { "data": "economy"},
-                    { "data": "five_wickets"},
-                ]
-        });
+        // $('#mytable').DataTable(
+        // {
+        //         "processing": true,
+        //         "serverSide": true,
+        //         "ajax": "{{ route('statsdata2') }}",
+        //         "columns":[
+        //             // { "data": "format" },
+        //             { "data": "names" },
+        //             { "data": "matches" },
+        //             { "data": "innings"},
+        //             { "data": "notouts"},
+        //             { "data": "runs"},
+        //             { "data": "highscore"},
+        //             { "data": "average_bat"},
+        //             // { "data": "strikerate"},
+        //             { "data": "centuries"},
+        //             { "data": "halfcenturies"},
+        //             { "data": "catches"},
+        //             { "data": "stumping"},
+        //             { "data": "fours"},
+        //             { "data": "sixes"},
+        //             { "data": "innings_bowl"},
+        //             { "data": "overs"},
+        //             { "data": "runs_ball"},
+        //             { "data": "wickets"},
+        //             { "data": "average_ball"},
+        //             { "data": "best_ball"},
+        //             { "data": "economy"},
+        //             { "data": "five_wickets"},
+        //         ]
+        // });
 
         //load  table ajax
         $('#mytable1').DataTable(
@@ -252,18 +252,18 @@
                     // { "data": "strikerate"},
                     { "data": "centuries"},
                     { "data": "halfcenturies"},
-                    { "data": "catches"},
-                    { "data": "stumping"},
+                    // { "data": "catches"},
+                    // { "data": "stumping"},
                     { "data": "fours"},
                     { "data": "sixes"},
-                    { "data": "innings_bowl"},
-                    { "data": "overs"},
-                    { "data": "runs_ball"},
-                    { "data": "wickets"},
-                    { "data": "average_ball"},
-                    { "data": "best_ball"},
-                    { "data": "economy"},
-                    { "data": "five_wickets"},
+                    // { "data": "innings_bowl"},
+                    // { "data": "overs"},
+                    // { "data": "runs_ball"},
+                    // { "data": "wickets"},
+                    // { "data": "average_ball"},
+                    // { "data": "best_ball"},
+                    // { "data": "economy"},
+                    // { "data": "five_wickets"},
                 ]
         });
     </script>

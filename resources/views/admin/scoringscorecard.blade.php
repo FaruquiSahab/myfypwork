@@ -236,6 +236,7 @@
                         <button type="submit" style="margin-left: 87%" id="endbtn2"class="hidden btn btn-success">Proceed To 2nd Innings</button>
                     </form>
                     <br><br>
+                    <input type="hidden" id="checknotout" value="{{ $checknotout }}">
 	@stop
 
     @section('scripts')
@@ -270,26 +271,37 @@
                             {
                                 if($('#t_wickets').text() == $('#t_wickets1').text())
                                 {
-                                    toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
-                                    $('input').prop('disabled',true);
-                                    $('button').prop('disabled',true);
-                                    $('#endbtn0').removeClass('hidden');
-                                    $('#endbtn0').removeAttr('disabled');
-                                    $('#endbtn1').addClass('hidden');
-                                    $('#endbtn2').removeClass('hidden');
-                                    $('#endbtn2').removeAttr('disabled');
+                                    if ($('#checknotout').val() > 2)
+                                    {
+                                        toastr.warning('More Than Two Players Are Marked As Notout Which Is Immpossible','Validation Message');
+                                    }
+                                    else if ($('#checknotout').val() < 1)
+                                    {
+                                         toastr.warning('Less Than Single Player Is Marked As Notout Which Is Immpossible','Validation Message');
+                                    }
+                                    else
+                                    {
+                                        toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
+                                        $('input').prop('disabled',true);
+                                        $('button').prop('disabled',true);
+                                        $('#endbtn0').removeClass('hidden');
+                                        $('#endbtn0').removeAttr('disabled');
+                                        $('#endbtn1').addClass('hidden');
+                                        $('#endbtn2').removeClass('hidden');
+                                        $('#endbtn2').removeAttr('disabled');
+                                    }
                                 }
                                 else{
-                                    toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                                    toastr.warning('Wickets Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message');
                                 }
                             }
                             else{
-                                toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                                toastr.warning('Overs Recorded Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message');
                             }
                         }
                         else
                         {
-                            toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message')
+                            toastr.warning('Runs Score Through Batting Scorecard and Bowling Scorecard Are Not Equal','Validation Message');
                         }
                     }
                 }
@@ -386,6 +398,7 @@
                         $('#t_runs').text(data1['runs']);
                         $('#t_wickets').text(data1['wickets']);
                         $('#t_overs').text(data1['overs']);
+                        $('#checknotout').val(data1['checknotout']);
                         
                         toastr.success('Data Submitted Successfully','Success Alert',{timeOut: 3000});
                     },

@@ -6,6 +6,7 @@ use App\Club;
 use App\Level;
 use Illuminate\Http\Request;
 use App\Photo;
+use App\Team_Stats;
 use DataTables;
 use Validator;
 use Illuminate\Support\Facades\Session;
@@ -102,6 +103,9 @@ class clubController extends Controller
                     'active_status'=> '0'
                 ]);
                 $club->save();
+                $stats = new Team_Stats;
+                $stats->club_id = $club->id;
+                $stats->save();
                 $success_output = 'Club '.$request->name.' Inserted';
                 
             }

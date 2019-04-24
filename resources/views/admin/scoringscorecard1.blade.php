@@ -246,6 +246,7 @@
                         <button type="submit" style="margin-left: 87%" id="endbtn2"class="hidden btn btn-danger">Finish This Match</button>
                     </form>
                     <br><br>
+                    <input type="hidden" id="checknotout" value="{{ $checknotout }}">
 	@stop
 
     @section('scripts')
@@ -289,17 +290,28 @@
                                     }
                                     else
                                     {
-                                        toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
-                                        $('input').prop('disabled',true);
-                                        $('button').prop('disabled',true);
-                                        $('select').prop('disabled',true);
-                                        $('#endbtn1').addClass('hidden');
-                                        $('#endbtn0').removeClass('hidden');
-                                        $('#endbtn0').removeAttr('disabled');
-                                        $('#endbtn2').removeClass('hidden');
-                                        $('#endbtn2').removeAttr('disabled');
-                                        $('input[name="_token"]').removeAttr('disabled');
-                                        $('input[name="format"]').removeAttr('disabled');
+                                        if ($('#checknotout').val() > 2)
+                                        {
+                                            toastr.warning('More Than Two Players Are Marked As Notout Which Is Immpossible','Validation Message');
+                                        }
+                                        else if ($('#checknotout').val() < 1)
+                                        {
+                                             toastr.warning('Less Than Single Player Is Marked As Notout Which Is Immpossible','Validation Message');
+                                        }
+                                        else
+                                        {
+                                            toastr.info('All Records Are Equal You May Proceed Now','Proceed To Next');
+                                            $('input').prop('disabled',true);
+                                            $('button').prop('disabled',true);
+                                            $('select').prop('disabled',true);
+                                            $('#endbtn1').addClass('hidden');
+                                            $('#endbtn0').removeClass('hidden');
+                                            $('#endbtn0').removeAttr('disabled');
+                                            $('#endbtn2').removeClass('hidden');
+                                            $('#endbtn2').removeAttr('disabled');
+                                            $('input[name="_token"]').removeAttr('disabled');
+                                            $('input[name="format"]').removeAttr('disabled');
+                                        }
                                     }
                                 }
                                 else{
@@ -409,6 +421,7 @@
                         $('#t_runs').text(data1['runs']);
                         $('#t_wickets').text(data1['wickets']);
                         $('#t_overs').text(data1['overs']);
+                        $('#checknotout').val(data1['checknotout']);
                         
                         toastr.success('Data Submitted Successfully','Success Alert',{timeOut: 3000});
                     },

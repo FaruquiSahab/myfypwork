@@ -158,6 +158,14 @@ class PlayerController extends Controller
                     'active_status'=>0
                 ]);
                 $player->save();
+                $stats = new PlayerStat;
+                $stats->format = '1';
+                $stats->player_id = $player->id;
+                $stats->save();
+                $stat = new PlayerStat;
+                $stat->format = '2';
+                $stat->player_id = $player->id;
+                $stat->save();
                 $success_output = 'Player '.$request->name.' Inserted';
                 
             }
@@ -289,6 +297,14 @@ class PlayerController extends Controller
                         $player->age = \Carbon\Carbon::parse($value['date_of_birth'])->age;
                         $player->active_status = '0';
                         $player->save();
+                        $stats = new PlayerStat;
+                        $stats->format = '1';
+                        $stats->player_id = $player->id;
+                        $stats->save();
+                        $stat = new PlayerStat;
+                        $stat->format = '2';
+                        $stat->player_id = $player->id;
+                        $stat->save();
                     }
                     return 'success';
                 }
