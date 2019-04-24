@@ -41,7 +41,6 @@ class Bowler_StatsController extends Controller
 
             $nb = Bowler_Stats::where('id',$value->id)->select('noballs')->first()->nb;
 
-            // $mom = Bowler_Stats::where('id',$value->id)->select('mom')->first()->mom;
             if ($wkts == 0) {
                 $avg;
             }
@@ -56,10 +55,6 @@ class Bowler_StatsController extends Controller
             }
 
 
-            // $timeouts = bowler_Stats::select('timeouts')->first()->timeouts;
-
-
-            // $moms_points = $mom * 50;
 
             $fifer_points = $fifer * 50;
 
@@ -82,15 +77,11 @@ class Bowler_StatsController extends Controller
             $points +=  $nb_totals;
 
 
-//            $points +=  $hundred_points;
 
             $points +=  $fifer_points;
 
-            // $points +=  $moms_points;
-
 
             $id = $value->id;
-//
             $input = Bowler_Stats::findOrFail($id);
             $input['points_ball'] = $points;
             $input->update();
@@ -152,95 +143,80 @@ class Bowler_StatsController extends Controller
         $bowlers = Bowler_Stats::all();
         foreach ($bowlers as $value)
         {
-            $value->id;
-            $runs = Bowler_Stats::where('id',$value->id)->select('runs')->first()->runs;
+            
+                $value->id;
+                $runs = Bowler_Stats::where('id',$value->id)->select('runs')->first()->runs;
 
-            $points = Bowler_Stats::where('id',$value->id)->select('points')->first()->points;
+                $points = Bowler_Stats::where('id',$value->id)->select('points')->first()->points;
 
-            $overs = Bowler_Stats::where('id',$value->id)->select('overs')->first()->overs;
+                $overs = Bowler_Stats::where('id',$value->id)->select('overs')->first()->overs;
 
-            $wkts = Bowler_Stats::where('id',$value->id)->select('wkts')->first()->wkts;
+                $wkts = Bowler_Stats::where('id',$value->id)->select('wkts')->first()->wkts;
 
-            $avg = Bowler_Stats::where('id',$value->id)->select('avg')->first()->avg;
+                $avg = Bowler_Stats::where('id',$value->id)->select('avg')->first()->avg;
 
-            $econ = Bowler_Stats::where('id',$value->id)->select('econ')->first()->econ;
+                $econ = Bowler_Stats::where('id',$value->id)->select('econ')->first()->econ;
 
-            $fifer = Bowler_Stats::where('id',$value->id)->select('fifer')->first()->fifer;
+                $fifer = Bowler_Stats::where('id',$value->id)->select('fifer')->first()->fifer;
 
-            $wides = Bowler_Stats::where('id',$value->id)->select('wides')->first()->wides;
+                $wides = Bowler_Stats::where('id',$value->id)->select('wides')->first()->wides;
 
-            $nb = Bowler_Stats::where('id',$value->id)->select('nb')->first()->nb;
+                $nb = Bowler_Stats::where('id',$value->id)->select('nb')->first()->nb;
 
-            $mom = Bowler_Stats::where('id',$value->id)->select('mom')->first()->mom;
+                $mom = Bowler_Stats::where('id',$value->id)->select('mom')->first()->mom;
 
-            $avg = $runs / $wkts;
+                $avg = $runs / $wkts;
 
-            $econ = $runs/$overs;
-
-
-            // $timeouts = bowler_Stats::select('timeouts')->first()->timeouts;
+                $econ = $runs/$overs;
 
 
-            $moms_points = $mom * 50;
-
-            $fifer_points = $fifer * 50;
-
-//            $six_points = $sixes * 2;
-
-            $wide_points = -2;
-
-            $nb_points = -8;
-
-            $points = 0;
-
-            $points += $runs;
-
-//            $points += $six_points;
-
-//            $points += $fours;
-
-            $wide_totals = $wide_points * $wides;
+                // $timeouts = bowler_Stats::select('timeouts')->first()->timeouts;
 
 
-            $nb_totals = $nb_points * $nb;
+                $moms_points = $mom * 50;
+
+                $fifer_points = $fifer * 50;
 
 
-            $points +=  $wide_totals;
+                $wide_points = -2;
 
-            $points +=  $nb_totals;
+                $nb_points = -8;
 
+                $points = 0;
 
-//            $points +=  $hundred_points;
-
-            $points +=  $fifer_points;
-
-            $points +=  $moms_points;
+                $points += $runs;
 
 
-            $id = $value->id;
-//
-            $input = Bowler_Stats::findOrFail($id);
-            $input['points'] = $points;
-            $input['econ'] = $econ;
-            $input['avg'] = $avg;
-            $input['status'] = 1;
-            $input->update();
+                $wide_totals = $wide_points * $wides;
+
+
+                $nb_totals = $nb_points * $nb;
+
+
+                $points +=  $wide_totals;
+
+                $points +=  $nb_totals;
+
+
+
+                $points +=  $fifer_points;
+
+                $points +=  $moms_points;
+
+
+                $id = $value->id;
+                $input = Bowler_Stats::findOrFail($id);
+                $input['points'] = $points;
+                $input->update();
 
         }
-
     }
 
     function bowlerdatatabes()
     {
 
-
         $bowler = Bowler_Stats::all();
         return Datatables::of($bowler)
-            // ->addColumn('image',function($club)
-            // {
-            //     return  '<img height="50" src="'. $club->photo->file .'>';
-            // })
-            //
             ->addColumn('name',function($bowler)
             {
                 return '<strong>'.$bowler->player->name.'</strong>';
@@ -251,11 +227,6 @@ class Bowler_StatsController extends Controller
             })
             ->addColumn('action', function($bowler)
             {
-
-//
-
-
-
                 return '<a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1"
                 data-id="' .$bowler->id. '" data-matches="' .$bowler->matches.'"
                  data-innings="' .$bowler->innings_bowl. '" data-runs="' .$bowler->runs.'"
@@ -267,16 +238,6 @@ class Bowler_StatsController extends Controller
                 >
                 <i class="glyphicon glyphicon-eye-open"></i> View </a>
                 <input type="hidden" name="bowler_id" value="' .$bowler->id. '">"' .$bowler->id. '"';
-
-//
-//
-//                    return ' <a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1"
-//                data-id="' .$bowler->id. '"><i class="glyphicon glyphicon-eye-open"></i> View </a>';
-//
-
-//
-
-
 
             })
             ->rawColumns(['action','name'])
