@@ -19,6 +19,7 @@
                         <th>Ground</th>
                         <th>Tournament</th>
                         <th>Action</th>
+                        <th>Scoring</th>
                     </tr>
                 </thead>            
             </table>
@@ -195,7 +196,8 @@
                     { "data": "match_time" },
                     { "data": "ground" },
                     { "data": "tournament" },
-                    { "data": "action" }
+                    { "data": "action" },
+                    { "data": "scoring" }
                 ]
             });
            //when click on edit button of table

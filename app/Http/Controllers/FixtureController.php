@@ -52,7 +52,17 @@ class FixtureController extends Controller
                 data-ground="' .$fixture->ground_id. '"><i class="glyphicon glyphicon-edit"></i> Change </a>
             <a class="btn btn-sm btn-danger iddelete" data-toggle="modal" data-target="#deletemodal" data-id="' .$fixture->id. '"><i class="glyphicon glyphicon-remove "></i> Delete</a>';
             })
-            ->rawColumns(['action'])
+            ->addColumn('scoring',function($fixture){
+                if ($fixture->status == 1)
+                {
+                    $match_id = Match::where('fixture_id',$fixture->id)->first()->id;
+                    return '<a class="btn-sm btn-warning" href="' .route('scoring.match',$match_id). '">Score</a>';
+                }
+                else{
+                    return '<a class="btn-sm btn-success" href="' .route('editions.lineup',encrypt($fixture->id)). '">Lineup</a>';
+                }
+            })
+            ->rawColumns(['action','scoring'])
             ->make(true);
     }
 

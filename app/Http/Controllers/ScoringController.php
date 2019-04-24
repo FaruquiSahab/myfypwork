@@ -168,6 +168,9 @@ class ScoringController extends Controller
 
 			return view('admin.scoringscorecard',compact('checknotout','format','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingfirst','ballingfirst','extra'));
 		}
+		elseif ($matches[0]->status == 2) {
+			return redirect(route('scorecard',$match));
+		}
 		else{
 			return view('unauthorized');
 		}	
