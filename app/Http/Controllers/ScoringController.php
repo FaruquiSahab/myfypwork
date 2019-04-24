@@ -22,6 +22,7 @@ use App\Fixture;
 use App\PlayerStat;
 use App\Team_Stats;
 use DataTables;
+use Exception;
 use Illuminate\Http\Request;
 use Garethellis\CricketStatsHelper\CricketStatsHelper;
 
@@ -169,7 +170,12 @@ class ScoringController extends Controller
 			return view('admin.scoringscorecard',compact('checknotout','format','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingfirst','ballingfirst','extra'));
 		}
 		elseif ($matches[0]->status == 2) {
-			return redirect(route('scorecard',$match));
+			try{
+				return redirect(route('scorecard',$match));
+			}
+			catch(Exception $ex){
+				return view('unauthorized');
+			}
 		}
 		else{
 			return view('unauthorized');
@@ -545,6 +551,15 @@ class ScoringController extends Controller
 		
 				// return $battingfirst;
 				return view('admin.scoringscorecard1',compact('checknotout','format','i1runs','i1wickets','i1overs','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingsecond','ballingsecond','extra'));
+		}
+		elseif ($matches[0]->status == 2) 
+		{
+			try{
+				return redirect(route('scorecard',$match));
+			}
+			catch(Exception $ex){
+				return view('unauthorized');
+			}
 		}
 		else
 		{
@@ -1183,10 +1198,14 @@ class ScoringController extends Controller
 
 	public function finishmatch(Request $request, $matchId)
 	{
-		$this->inningscore($matchId,2);
-		$this->statsupdate($matchId,$request->format);
-		$this->generateResult($matchId);
-		return redirect(route('scorecard',$matchId));
+		$matches = Match::where('id',$match)->get();
+		if($matches[0]->status == 1)
+		{
+			$this->inningscore($matchId,2);
+			$this->statsupdate($matchId,$request->format);
+			$this->generateResult($matchId);
+			return redirect(route('scorecard',$matchId));
+		}
 	}
 
 	public function scorecard($match)
@@ -1208,7 +1227,6 @@ class ScoringController extends Controller
 			$inningscoresecond = InningScore::where('match_id',$match)->where('inning_no',2)->first();
 			$result = Match::where('id',$match)->select('result')->first()->result;
 			return view('admin.scorecard',compact('batfirst','batsecond','ballfirst','ballsecond','extrafirst','extrasecond','inningscorefirst','inningscoresecond','result','wickets','format','club1','club2','clubname1','clubname2'));
-
 		}
 		else
 		{
