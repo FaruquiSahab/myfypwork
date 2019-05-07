@@ -269,12 +269,12 @@ class Batsmen_StatsController extends Controller
                 return '<a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1"
                 data-id="' .$batsmen->id. '" data-matches="' .$batsmen->matches.'"
                  data-innings="' .$batsmen->innings. '" data-runs="' .$batsmen->runs.'"
-                 data-balls="' .$batsmen->balls. '" data-avg="' .$batsmen->average_bat.'"
+                 data-balls="' .$batsmen->balls_played. '" data-avg="' .$batsmen->average_bat.'"
                  data-sr="' .$batsmen->strikerate. '" data-moms="' .$batsmen->moms.'"
                  data-hundreds="' .$batsmen->centuries. '" data-fifties="' .$batsmen->halfcenturies.'"
                  data-sixes="' .$batsmen->sixes. '" data-fours="' .$batsmen->fours.'"
                  data-ducks="' .$batsmen->ducks. '" data-points="' .$batsmen->points.'"
-                 data-timeouts="' .$batsmen->innings. '">
+                 data-timeouts="' .$batsmen->innings. '" >
                 <i class="glyphicon glyphicon-eye-open"></i> View </a>
                 <input type="hidden" name="batsmen_id" value="' .$batsmen->id. '">"' .$batsmen->id. '"';
 

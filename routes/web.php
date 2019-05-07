@@ -905,15 +905,15 @@ Route::get('/series/table/{id}', [
 ]);
 
 
-Route::get('/line-up/{id}',[
+Route::get('/line-ups/{id}',[
     'uses'=> 'SeriesController@series_matches_index',
     'as' => 'series.lineup'
 ]);
 
 
-Route::post('/line-up/', [
+Route::post('/line-ups/', [
     'uses' => 'SeriesController@series_matches_store',
-    'as' => 'fixtures.store'
+    'as' => 'fixtures.stores'
 ]);
 
 //-----------------------------------------------------------------------------------------------------
@@ -979,3 +979,66 @@ Route::get('/graph/team/points', [
 
 //--- download sample file
 Route::get('/sample-download', 'PlayerController@download');
+    // -------------------------------------------------------------------------------------------------------
+    // 
+    // 
+    //--------------------------------------------Series Scoring-----------------------------------------------------
+
+Route::get('/series/scoring', 'SeriesScoringController@index' )
+            ->name('series.scoring')
+            ->middleware(['can:create']);
+
+Route::get('/series/updateandproceed/{match}','SeriesScoringController@updateandproceed')
+            ->name('series.updateandproceed')
+            ->middleware(['can:create']);
+Route::get('/series/scoring/match/{match}', 'SeriesScoringController@index1' )
+            ->name('series.scoring.match')
+            ->middleware(['can:create']);
+Route::get('/series/scoring/match/{match}/inningsecond', 'SeriesScoringController@index2' )
+            ->name('series.scoring.match2')
+            ->middleware(['can:create']);
+#Obsolute
+    Route::get('/batsmenScore/{match_id}','ScoringController@batsmenScore')
+                ->name('batsmenScore')
+                ->middleware(['can:create']);  
+
+    Route::get('/bowlerScore/{match_id}','ScoringController@bowlerScore')
+                ->name('bowlerScore')
+                ->middleware(['can:create']);
+
+    Route::get('/fallofwickets/{match_id}','ScoringController@fallofwickets')
+                ->name('fallofwickets')
+                ->middleware(['can:create']); 
+
+    Route::get('/runsovers/{match_id}','ScoringController@runsovers')
+                ->name('runsovers')
+                ->middleware(['can:create']); 
+
+    Route::get('/extras/{match_id}','ScoringController@extras')
+                ->name('extras')
+                ->middleware(['can:create']); 
+#End
+Route::POST('/series/submitbatsmenscore','SeriesScoringController@submitbatsmenscore')
+            ->name('series.submitbatsmenscore')
+            ->middleware(['can:create']);
+Route::POST('/series/submitbowlerscore','SeriesScoringController@submitbowlerscore')
+            ->name('series.submitbowlerscore')
+            ->middleware(['can:create']);
+Route::POST('/series/submitextrascore','SeriesScoringController@submitextrascore')
+            ->name('series.submitextrascore')
+            ->middleware(['can:create']);
+Route::POST('/series/submitbatsmenscore/inningsecond','SeriesScoringController@submitbatsmenscore2')
+            ->name('series.submitbatsmenscore2')
+            ->middleware(['can:create']);
+Route::POST('/series/submitbowlerscore/inningsecond','SeriesScoringController@submitbowlerscore2')
+            ->name('series.submitbowlerscore2')
+            ->middleware(['can:create']);
+Route::POST('/series/submitextrascore/inningsecond','SeriesScoringController@submitextrascore2')
+            ->name('series.submitextrascore2')
+            ->middleware(['can:create']);
+Route::POST('/series/finishmatch/{match}','SeriesScoringController@finishmatch')
+            ->name('series.finishmatch')
+            ->middleware(['can:create']);
+Route::GET('/series/scorecard/{match}','SeriesScoringController@scorecard')
+            ->name('series.scorecard')
+            ->middleware(['can:create']);

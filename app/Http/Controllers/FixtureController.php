@@ -18,8 +18,8 @@ class FixtureController extends Controller
 {
     public function indes()
     {
-        $clubs = Club::pluck('name','id');
-        $grounds = Ground::pluck('name','id');
+        $clubs = Club::where('active_status','0')->pluck('name','id');
+        $grounds = Ground::where('active_status','0')->pluck('name','id');
         $fixtures = Fixture::where('active_status',0)->get();
         return view('admin.fixtures.index',compact('fixtures','clubs','grounds'));
     }
@@ -83,8 +83,8 @@ class FixtureController extends Controller
         //  return $club1[0]->club1->name;
         $club2 = Fixture::where('id',$id )->get();
 
-        $players1 = Player::where('club_id',$club1[0]->club_id_1)->get();
-        $players2 = Player::where('club_id',$club2[0]->club_id_2)->get();
+        $players1 = Player::where('active_status',0)->where('club_id',$club1[0]->club_id_1)->get();
+        $players2 = Player::where('active_status',0)->where('club_id',$club2[0]->club_id_2)->get();
 
         $umpires = Umpire::all();
         //  return $umpires;

@@ -22,7 +22,7 @@
                 <tr>
 
                     <th scope="col">Club </th>
-                    <th scope="col">VS</th>
+                    <th scope="col">Against</th>
                     <th scope="col">Club </th>
                     <th scope="col">Date</th>
                     <th scope="col">Time</th>
@@ -35,25 +35,25 @@
 
                 @foreach($fixtures as $fix)
                     <tr>
-                        <td>{{$fix->club1->name}}</td>
-                        <td>VS</td>
-                        <td>{{$fix->club2->name}}</td>
+                        <td><b>{{$fix->club1->name}}</b></td>
+                        <td>vs</td>
+                        <td><b>{{$fix->club2->name}}</b></td>
                         <td>{{$fix->starting_date}}</td>
                         <td>{{$fix->time}}</td>
                         <td>{{$fix->ground->name}}</td>
                         <td>
-
-                            {{--@if($fix->starting_date =="2019-02-11")--}}
-                                <form action="{{route('series.lineup',$fix->id)}}">
-                                    <input type="hidden">
-                                    <input type="submit" class="btn btn-success" value="Allowed">
-                                </form>
-                            {{--@else--}}
-                                {{--<label for="Not Allowed" class="label label-info">Not Allowed</label>--}}
-                            {{--@endif--}}
-
+                            @if(\Carbon\Carbon::parse($fix->starting_date)->lte(\Carbon\Carbon::today()))
+                                @if($fix->status == '0')
+                                    <form action="{{route('series.lineup',$fix->id)}}">
+                                        <input type="hidden">
+                                        <input type="submit" class="btn-s btn-success" value="Make Lineup">
+                                    </form>
+                                @endif
+                            @else
+                                <label class="label label-warning">No Actions Yet</label>
+                            @endif
                         </td>
-                        <td>-</td>
+                        <td>{{ $fix->result ? $fix->result : "Yet To Play" }}</td>
 
                         {{--<td>{{$round->rounds}}</td>--}}
                         {{--<td>{{$item->c_name}}</td>--}}

@@ -54,8 +54,8 @@ class Team_StatsController extends Controller
 
             $points += $loss_total;
 
-
-            $nrr = ($total_runs_scored / $total_overs_faced) - ($total_runs_conceded / $total_overs_bowled);
+            
+            // $nrr = ($total_runs_scored / $total_overs_faced) - ($total_runs_conceded / $total_overs_bowled);
 
             $id = $value->id;
             $input = Team_Stats::findOrFail($id);
@@ -101,19 +101,15 @@ class Team_StatsController extends Controller
 
             $avg = Team_Stats::where('id',$value->id)->select('avg')->first()->avg;
 
-            $avg = $runs / $wkts;
+            if ($wkts > 0) {
+            	$avg = $runs / $wkt;
+            }
+            if ($overs > 0) {
+            	$econ = $runs/$overs;
+            }
 
-            $econ = $runs/$overs;
 
 
-            // $timeouts = team_Stats::select('timeouts')->first()->timeouts;
-
-
-//            $moms_points = $mom * 50;
-//
-//            $fifer_points = $fifer * 50;
-
-//            $six_points = $sixes * 2;
 
             $wide_points = -2;
 
@@ -123,34 +119,14 @@ class Team_StatsController extends Controller
 
             $points += $runs;
 
-//            $points += $six_points;
-
-//            $points += $fours;
-
             $wide_totals = $wide_points * $wides;
 
 
-//            $nb_totals = $nb_points * $nb;
-
-//
-//            $points +=  $wide_totals;
-//
-//            $points +=  $nb_totals;
-
-
-//            $points +=  $hundred_points;
-
-//            $points +=  $fifer_points;
-//
-//            $points +=  $moms_points;
 
 
             $id = $value->id;
-//
             $input = Team_Stats::findOrFail($id);
             $input['points'] = $points;
-            $input['nr'] = $econ;
-            $input['nrr'] = $avg;
             $input->update();
         }
 
@@ -163,11 +139,6 @@ class Team_StatsController extends Controller
 
         $team = Team_Stats::all();
         return Datatables::of($team)
-            // ->addColumn('image',function($club)
-            // {
-            //     return  '<img height="50" src="'. $club->photo->file .'>';
-            // })
-            //
 
             ->addColumn('club',function($team)
             {
@@ -175,8 +146,6 @@ class Team_StatsController extends Controller
             })
             ->addColumn('action', function($team)
             {
-
-//
 
 
 
@@ -189,13 +158,6 @@ class Team_StatsController extends Controller
                 <i class="glyphicon glyphicon-eye-open"></i> View </a>
                 <input type="hidden" name="team_id" value="' .$team->id. '">"' .$team->id. '"';
 
-//
-//
-//                    return ' <a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1"
-//                data-id="' .$bowler->id. '"><i class="glyphicon glyphicon-eye-open"></i> View </a>';
-//
-
-//
 
 
 

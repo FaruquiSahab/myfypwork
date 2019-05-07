@@ -350,15 +350,6 @@
                                 <a href="{{route('tournaments.index')}}">All Tournaments</a>
                             </li>
 
-                            {{-- <li>
-                                <a href="{{route('tournaments.create')}}">Add Tournament</a>
-                            </li> --}}
-
-
-                            {{-- <li>
-                                <a href="">Manage Tournaments</a>
-                            </li> --}}
-
                         </ul>
                     </li>
 
@@ -370,16 +361,12 @@
                             <li>
                                 <a href="{{route('edition.index')}}">Edition</a>
                             </li>
-
-                            {{-- <li>
-                                <a href="{{route('edition.create')}}">Make Edition</a>
-                            </li> --}}
-
-
-                            {{-- <li>
-                                <a href="">Manage Tournaments</a>
-                            </li> --}}
-
+                            <li>
+                                <a href="{{route('matches.index')}}">All Matches</a>
+                            </li>
+                            <li>
+                                <a href="{{route('fixtures.index')}}">All Fixture</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -389,20 +376,19 @@
 
 
 
-                    <li>
+                    {{-- <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Matches<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('matches.index')}}">All Matches</a>
                             </li>
 
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('matches.create')}}">Add Match</a>
-                            </li> --}}
+                            </li>
 
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    </li> --}}
 
                     <li>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Series<span class="fa arrow"></span></a>
@@ -414,7 +400,7 @@
                     </li>
 
 
-					<li>
+					{{-- <li>
                         <a href="#"><i class="fa fa-pencil"></i>Fixture<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -422,7 +408,7 @@
                             </li>
                         </ul>
                     </li>
-
+ --}}
 
 
 

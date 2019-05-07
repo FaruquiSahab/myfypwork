@@ -25,13 +25,14 @@ class SeriesController extends Controller
     public function index()
     {
         $clubs = Club::pluck('name','id');
+        // changes
         $fix = Series_Fixtures::all();
         $series = Series::all();
 
 
 
         $series_type = MatchType::pluck('type_name','id');
-        $grounds = Ground::pluck('name','id');
+        $grounds = Ground::where('active_status',0)->pluck('name','id');
 
 //        return $series[0]->name;
         return view('admin.series.index1',compact('clubs','series_type','grounds','series','series_fixtures'));
@@ -122,6 +123,7 @@ class SeriesController extends Controller
             $input['series_days'] = $request->series_days;
             $input['ground_id'] = $request->ground_id;
             $input['time'] = '10 AM';
+            // changes
             Series_Fixtures::create($input);
 
         }
@@ -140,30 +142,28 @@ class SeriesController extends Controller
 
     public function table($refer_id)
     {
-//        $refer_id = decrypt($refer_id);
-
-
+        //        $refer_id = decrypt($refer_id);
 
 
         $data = Series::where('id','=',$refer_id)->get();
 
-//        $date = TournamentsReference::select('starting_date')->where('id','=',$refer_id)->first()->starting_date;
-//
-//
-//      return  Carbon::parse($date)->addDays('2')->format('y-m-d');
+        //        $date = TournamentsReference::select('starting_date')->where('id','=',$refer_id)->first()->starting_date;
+        //
+        //
+        //      return  Carbon::parse($date)->addDays('2')->format('y-m-d');
 
-//            return $data;
+        //            return $data;
 
-
+        // changes
         $fixtures = Series_Fixtures::where('refer_id','=',$refer_id)->get();
 
-//       $club1 = $fixtures[0]->club1->name;
-//        $club2 = $fixtures[0]->club2->name;
-//
-//        $time = $fixtures[0]->time;
-//        $ground = $fixtures[0]->ground->name;
+        //       $club1 = $fixtures[0]->club1->name;
+        //        $club2 = $fixtures[0]->club2->name;
+        //
+        //        $time = $fixtures[0]->time;
+        //        $ground = $fixtures[0]->ground->name;
 
-//            return $fixtures;
+        //            return $fixtures;
 
          Session::flash('created_edition','The Request For The Edition Created.');
         return view('admin.series.series_table',compact('data','fixtures'));
@@ -173,58 +173,91 @@ class SeriesController extends Controller
     public function series_matches_index($id)
     {
 
-//        $id = decrypt($id);
-
-
         $club1 = Series_Fixtures::select('club_id_1')->where('id',$id )->get();
-//        $type = Series_Fixtures::select('series_type_id')->where('id',$club1[0]->refer_id)->first()->series_type_id;
+        //        $type = Series_Fixtures::select('series_type_id')->where('id',$club1[0]->refer_id)->first()->series_type_id;
         $club_1 = preg_replace('/[^0-9]/', '', $club1);
 
 
-//        return $type;
+        //        return $type;
 
-//       return $club1[0]->club1->name;
+        //       return $club1[0]->club1->name;
+        // changes
         $club2 = Series_Fixtures::select('club_id_2')->where('id',$id )->get();
         $club_2 = preg_replace('/[^0-9]/', '', $club2);
 
-
+        // changes
         $ground = Series_Fixtures::select('ground_id')->where('id',$id )->get();
         $ground_id = preg_replace('/[^0-9]/', '', $ground);
 
 
-
+        // changes
         $seriesType = Series_Fixtures::select('series_type_id')->where('id',$id )->get();
         $series_type_id = preg_replace('/[^0-9]/', '', $seriesType);
 
-
+        // changes
         $date = Series_Fixtures::select('starting_date')->where('id',$id )->first()->starting_date;
-//        $starting_date = preg_replace('/[^0-9]/', '', $seriesType);
-
+        //        $starting_date = preg_replace('/[^0-9]/', '', $seriesType);
+        
 
 
         $players1 = Player::where('club_id',$club1[0]->club_id_1)->get();
         $players2 = Player::where('club_id',$club2[0]->club_id_2)->get();
 
         $umpires = Umpire::all();
-//        return $umpires;
+        //        return $umpires;
 
-//        return $id;
+        //        return $id;
 
-        return view('admin.series.lineup',compact('club_1','club_2','umpires','players1','players2','type','id','club1','club2','ground_id','series_type_id','date'));
+        return view('admin.series.lineup',compact('id','club_1','club_2','umpires','players1','players2','type','id','club1','club2','ground_id','series_type_id','date'));
     }
 
 
 
-
+    // changes
     public function series_matches_store(Request $request)
     {
-        if (sizeof($request->player_id1) < 11)
+        $wk_count = 0;
+        $b_count = 0;
+        if (sizeof($request->player_id1) < 11 && sizeof($request->player_id1) < 11)
         {
-            return redirect()->back();
+            return "both";
+            Session::flash('players_length3','Kinldy Select Complete Playing 11 To Avoid Embarssment');
+            return redirect()->back()->withInput($request->all());
+        }
+        elseif (sizeof($request->player_id1) < 11)
+        {
+            return "one";
+            Session::flash('players_length1','Kinldy Select Complete Playing 11 To Avoid Embarssment');
+            return redirect()->back()->withInput($request->all());
+        }
+        elseif (sizeof($request->player_id2) < 11)
+        {
+            return "two";
+            Session::flash('players_length2','Kinldy Select Complete Playing 11 To Avoid Embarssment');
+            return redirect()->back()->withInput($request->all());
         }
         else {
+            foreach ($request->player_id1 as $player)
+            {
+                $roleid = Player::where('id',$player)->first()->role_id;
+                if ($roleid == 4){ $wk_count = $wk_count + 1; }
+                elseif ($roleid == 2 ||$roleid == 3){ $b_count = $b_count + 1; }
+            }
+            if ($wk_count == 0) { return "wk1"; }
+            elseif ($b_count < 5) { return "b1"; }
+            $wk_count=0;
+            $b_count=0;
+            foreach ($request->player_id2 as $player)
+            {
+                $roleid = Player::where('id',$player)->first()->role_id;
+                if ($roleid == 4){ $wk_count = $wk_count + 1; }
+                elseif ($roleid == 2 ||$roleid == 3){ $b_count = $b_count + 1; }
+            }
+            if ($wk_count == 0) { return "wk2"; }
+            elseif ($b_count < 5) { return "b2"; }
 
             $match = DB::table('series_matches')->insertGetId([
+                'fixture_id' => $request->fixture_id,
                 'toss' => $request->toss,
                 'club_id_1' => $request->club1,
                 'club_id_2' => $request->club2,
@@ -236,30 +269,30 @@ class SeriesController extends Controller
                 'choose_to' => $request->choose_to
             ]);
 
-//            return $match;
-//
+            //            return $match;
+            //
             $toss = Series_Matches::select('toss')->where('id', $match)->first()->toss;
             $c1 = 0;
             $c2 = 0;
 
 
             if ($toss == $request->club1 && $request->choose_to == 1) {
-//            club1 innings1
+            //            club1 innings1
                 // echo 'agya c1_I1';
                 $c1 = 1;
                 $c2 = 2;
             } elseif ($toss == $request->club1 && $request->choose_to == 2) {
-//            club1 innings2
+            //            club1 innings2
                 // echo 'agya c1_I2';
                 $c1 = 2;
                 $c2 = 1;
             } elseif ($toss == $request->club2 && $request->choose_to == 1) {
-//            club1 innings2
+            //            club1 innings2
                 //  echo 'agya c1_I2';
                 $c1 = 2;
                 $c2 = 1;
             } elseif ($toss == $request->club2 && $request->choose_to == 2) {
-//            club1 innings1
+            //            club1 innings1
                 //   echo 'agya c1_I1';
                 $c1 = 1;
                 $c2 = 2;
@@ -287,9 +320,8 @@ class SeriesController extends Controller
             }
 
 
-
+            return $match;
             return redirect( route('scoring.match',$match));
-//            return response()->json(array('success' => true, 'html' => $returnHtml));
         }
     }
 

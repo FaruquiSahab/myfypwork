@@ -424,8 +424,8 @@
         <div class="col-sm-8">
 
             <div class="panel-body">
-
-                {!! Form::open(['method'=>'post','action'=>'SeriesController@series_matches_store']) !!}
+                {{-- ,'action'=>'SeriesController@series_matches_store' --}}
+                {!! Form::open(['method'=>'post']) !!}
 
 
 
@@ -433,7 +433,7 @@
                 <input type="hidden" name="series_fixture_id" value="{{$id}}">
                 <input type="hidden" name="ground_id" value="{{$ground_id}}">
                 <input type="hidden" name="club2" value="{{$club_2}}">
-                {{--<input type="hidden" name="series_id" value="">--}}
+                <input type="hidden" name="fixture_id" value="{{ $id }}">
                 <input type="hidden" name="starting_date" value="{{$date}}">
                 <input type="hidden" name="series_type_id" value="{{$series_type_id}}">
 
@@ -496,6 +496,7 @@
                         <label for="Umpires">Umpires</label>
 
                         <select class="form-control" name="umpire_id">
+                            <option disabled selected value>Select Umpire</option>
                             @foreach($umpires as $umpire )
                                 <option value="{{$umpire->id}}">{{$umpire->name}}</option>
                             @endforeach
@@ -571,36 +572,37 @@
         });
 
 
-        {{--$('form').on('submit', function(event){--}}
-        {{--event.preventDefault();--}}
-        {{--var minimum = 11;--}}
-        {{--var formdata = $('form').serialize();--}}
-        {{--$.ajax({--}}
-        {{--url:'{{ route('editions.lineup.store') }}',--}}
-        {{--method:'POST',--}}
-        {{--data:formdata,--}}
-        {{--success:function(){--}}
-        {{--console.log('success');--}}
-        {{--},--}}
-        {{--error:function(){--}}
-        {{--console.log('error');--}}
-        {{--}--}}
-        {{--});--}}
-        {{--if($("#player_id1").select2('data').length >= minimum) {--}}
-        {{----}}
-        {{--alert('Proceeding');--}}
-        {{----}}
-        {{--}--}}
-        {{--else {--}}
-        {{--alert('Please Select Exactly 11 Players For '+'{{$club1[0]->club1->name}}');--}}
-        {{--}--}}
-        {{--if($("#player_id2").select2('data').length >= minimum) {--}}
-        {{--alert('Proceeding');--}}
-        {{--}--}}
-        {{--else {--}}
-        {{--alert('Please Select Exactly 11 Players For '+'{{$club1[0]->club2->name}}');--}}
-        {{--}--}}
-        //        })
+        $('form').on('submit', function(event)
+        {
+            event.preventDefault();
+            var minimum = 11;
+            var formdata = $('form').serialize();
+            $.ajax({
+                url:'{{ route('fixtures.stores') }}',
+                method:'POST',
+                data:formdata,
+                success:function(data)
+                {
+                    console.log('success');
+                    if (data == 'both'){ toastr.error('Team Length Less Than Required','Formation Error'); }
+                    else if (data == 'one'){ toastr.error('Team One: Length Less Than Required','Formation Error'); }
+                    else if (data == 'two'){ toastr.error('Team Two: Length Less Than Required','Formation Error'); }
+                    else if (data == 'wk1'){ toastr.error('Team One: At Least One Wikcet Keeper Is Required','Formation Error'); }
+                    else if (data == 'b1'){ toastr.error('Team One: At Least 5 Bowlers Or Allrounders (combined) required','Formation Error'); }
+                    else if (data == 'wk2'){ toastr.error('Team Two: At Least One Wikcet Keeper Is Required','Formation Error'); }
+                    else if (data == 'b2'){ toastr.error('Team One: At Least 5 Bowlers Or Allrounders (combined) required','Formation Error'); }
+                    else{
+                        window.location.href = "/series/scoring/match/"+data;
+                    }
+                    
+                },
+                error:function(){
+                    console.log('error');
+                }
+            });
+            
+            
+       });
 
     </script>
 
