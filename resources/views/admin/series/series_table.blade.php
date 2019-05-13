@@ -35,18 +35,23 @@
 
                 @foreach($fixtures as $fix)
                     <tr>
-                        <td><b>{{$fix->club1->name}}</b></td>
+                        <td><b>{{ $fix->club1->name }}</b></td>
                         <td>vs</td>
-                        <td><b>{{$fix->club2->name}}</b></td>
-                        <td>{{$fix->starting_date}}</td>
-                        <td>{{$fix->time}}</td>
-                        <td>{{$fix->ground->name}}</td>
+                        <td><b>{{$fix->club2->name }}</b></td>
+                        <td>{{ $fix->starting_date }}</td>
+                        <td>{{ $fix->time}}</td>
+                        <td>{{ $fix->ground->name }}</td>
                         <td>
                             @if(\Carbon\Carbon::parse($fix->starting_date)->lte(\Carbon\Carbon::today()))
                                 @if($fix->status == '0')
                                     <form action="{{route('series.lineup',$fix->id)}}">
                                         <input type="hidden">
                                         <input type="submit" class="btn-s btn-success" value="Make Lineup">
+                                    </form>
+                                @else
+                                    <form method="POST" action="{{ route('series.check.match',$fix->id) }}">
+                                        {{ csrf_field() }}
+                                        <input type="submit" class="btn-s btn-warning" value="Score">
                                     </form>
                                 @endif
                             @else

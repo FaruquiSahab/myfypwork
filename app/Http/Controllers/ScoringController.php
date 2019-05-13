@@ -1198,7 +1198,7 @@ class ScoringController extends Controller
 
 	public function finishmatch(Request $request, $matchId)
 	{
-		$matches = Match::where('id',$match)->get();
+		$matches = Match::where('id',$matchId)->get();
 		if($matches[0]->status == 1)
 		{
 			$this->inningscore($matchId,2);

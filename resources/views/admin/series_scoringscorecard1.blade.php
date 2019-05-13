@@ -119,14 +119,14 @@
                                                 {{ $value->bowler->name }}
                                                 <input id="bowler_id{{ $key }}" type="hidden" name="bowler_id" value="{{ $value->bowler->id }}">
                                             </td>
-                                            @if($matches[0]->match_type_id == 1)
+                                            @if($matches[0]->series_type_id == 1)
                                                 <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="4" name="overs" value="{{ $value->overs }}"></td>
                                                 <td><input id="maidens{{ $key }}" type="number" min="0.0" max="4.0" name="maidens" value="{{ $value->maidens }}"></td>
                                                 <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
                                                 <td><input id="wickets{{ $key }}" type="number" min="0" max="10" name="wickets" value="{{ $value->wickets }}"></td>
                                                 <td><input disabled id="eco{{ $key }}" type="number" min="0" max="40" value="{{ $value->economy }}"></td>
                                                 <td><button class="btn">Submit</button></td>
-                                            @elseif($matches[0]->match_type_id == 2)
+                                            @elseif($matches[0]->series_type_id == 2)
                                                 <td><input id="overs{{ $key }}" type="number" step="0.1" min="0" max="10" name="overs" value="{{ $value->overs }}"></td>
                                                 <td><input id="maidens{{ $key }}" type="number" min="0.0" max="10.0" name="maidens" value="{{ $value->maidens }}"></td>
                                                 <td><input id="runss{{ $key }}" type="number" min="0" max="80" name="runs" value="{{ $value->runs }}"></td>
@@ -240,7 +240,7 @@
                     <br><br>
                     <button class="hidden btn" id="endbtn0">Customize Score</button>
                     <button style="margin-left: 85%" id="endbtn1" class="btn btn-success">Validate Total Score</button>
-                    <form method="POST" action="{{ route('finishmatch',$matches[0]->id) }}">
+                    <form method="POST" action="{{ route('series.finishmatch',$matches[0]->id) }}">
                         {{ csrf_field() }}
                         <input type="hidden" name="format" value="{{ $format }}" required>
                         <button type="submit" style="margin-left: 87%" id="endbtn2"class="hidden btn btn-danger">Finish This Match</button>
@@ -395,7 +395,7 @@
                 // console.log(data);
 
                 $.ajax({
-                    url: '{{ route('submitbatsmenscore2') }}',
+                    url: '{{ route('series.submitbatsmenscore2') }}',
                     type: 'POST',
                     data: {
                         '_token':$('input[name="_token"]').val(),
@@ -444,7 +444,7 @@
 
 
                 $.ajax({
-                    url: '{{ route('submitbowlerscore2') }}',
+                    url: '{{ route('series.submitbowlerscore2') }}',
                     type: 'POST',
                     data: {
                         '_token':$('input[name="_token"]').val(),
@@ -477,7 +477,7 @@
             {
                 event.preventDefault();
                 $.ajax({
-                    url:'{{ route('submitextrascore2') }}',
+                    url:'{{ route('series.submitextrascore2') }}',
                     type:'POST',
                     data:{
                         '_token': $('input[name="_token"]').val(),
@@ -496,6 +496,7 @@
                         $('#t_runs').text(data['runss']);
                         $('#t_runs1').text(data['runs1']);
                         $('#extras').text(data['extras']);
+                        toastr.success('Data Submitted Successfully','Success Alert',{timeOut: 3000});
                     },
                     error:function()
                     {

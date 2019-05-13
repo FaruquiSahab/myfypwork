@@ -26,7 +26,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Garethellis\CricketStatsHelper\CricketStatsHelper;
 
-class ScoringController extends Controller
+class SeriesScoringController extends Controller
 {
 	public function index()
 	{
@@ -38,10 +38,12 @@ class ScoringController extends Controller
 
   	public function index1($match)
   	{
-  		return "hello";
+  		// return "hello";
 		$matches = Series_Matches::where('id',$match)->get();
+		// return $matches;
 		if($matches[0]->status == 0 || $matches[0]->status == 1)
 		{
+
 			#cached data
 				$checknotout = SeriesBatsmenScore::where('match_id',$match)->where('inning_no',1)->sum('checknotout');
 				$helper = new CricketStatsHelper();
@@ -84,9 +86,8 @@ class ScoringController extends Controller
 				})
 				->count();
 				$wicketss1 = $wicketss1 + $wicketsother;
-				$runs1 = $runs1 + $byes +$legbyes;
+				$runs1 = $runs1 + $byes + $legbyes;
 			#///
-
 
 
 			#////////////////////// Batting First
@@ -141,7 +142,7 @@ class ScoringController extends Controller
 							}
 						}
 						// return"";
-					$ballingfirst = SeriesBowlerScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
+						$ballingfirst = SeriesBowlerScore::where('match_id',$matches[0]->id)->where('inning_no',2)->get();
 			#//////////////////////
 
 
@@ -161,10 +162,10 @@ class ScoringController extends Controller
 
 
 			#others
-						$options = Option::all();
-						$optionsE = Option::where('legal','1')->get();
-						$wickets = Out::all();
-						$format = Series_Matches::where('id',$match)->select('match_type_id')->first()->match_type_id;
+					$options = Option::all();
+					$optionsE = Option::where('legal','1')->get();
+					$wickets = Out::all();
+					$format = Series_Matches::where('id',$match)->first()->series_type_id;
 			#////
 
 			return view('admin.series_scoringscorecard',compact('checknotout','format','total_extras','runs','overs','wicketss','runs1','overs1','wicketss1','matches' ,'options','optionsE','wickets','battingfirst','ballingfirst','extra'));
@@ -413,7 +414,7 @@ class ScoringController extends Controller
 		Series_Matches::where('id',$match)->update([
 			'status'=> '1'
 			]);
-		return redirect(route('scoring.match2',$match));
+		return redirect(route('series.scoring.match2',$match));
 	}
 
 	public function index2($match)
@@ -546,7 +547,7 @@ class ScoringController extends Controller
 				$options = Option::all();
 				$optionsE = Option::where('legal','1')->get();
 				$wickets = Out::all();
-				$format = Series_Matches::where('id',$match)->select('match_type_id')->first()->match_type_id;
+				$format = Series_Matches::where('id',$match)->select('series_type_id')->first()->series_type_id;
 			#////
 		
 				// return $battingfirst;
@@ -555,7 +556,7 @@ class ScoringController extends Controller
 		elseif ($matches[0]->status == 2) 
 		{
 			try{
-				return redirect(route('scorecard',$match));
+				return redirect(route('series.scorecard',$match));
 			}
 			catch(Exception $ex){
 				return view('unauthorized');
@@ -1198,19 +1199,19 @@ class ScoringController extends Controller
 
 	public function finishmatch(Request $request, $matchId)
 	{
-		$matches = Series_Matches::where('id',$match)->get();
+		$matches = Series_Matches::where('id',$matchId)->get();
 		if($matches[0]->status == 1)
 		{
 			$this->inningscore($matchId,2);
 			$this->statsupdate($matchId,$request->format);
 			$this->generateResult($matchId);
-			return redirect(route('scorecard',$matchId));
+			return redirect(route('series.scorecard',$matchId));
 		}
 	}
 
 	public function scorecard($match)
 	{
-		$status = Series_Matches::where('id',$match)->select('status')->first()->status;
+		$status = Series_Matches::where('id',$match)->first()->status;
 		if ($status == 2)
 		{
 			$club1 = SeriesInningScore::where('match_id',$match)->where('inning_no',1)->select('club_id')->first()->club_id;
@@ -1225,7 +1226,7 @@ class ScoringController extends Controller
 			$extrasecond = SeriesExtra::where('match_id',$match)->where('inning_no',2)->first();
 			$inningscorefirst = SeriesInningScore::where('match_id',$match)->where('inning_no',1)->first();
 			$inningscoresecond = SeriesInningScore::where('match_id',$match)->where('inning_no',2)->first();
-			$result = Series_Matches::where('id',$match)->select('result')->first()->result;
+			$result = Series_Matches::where('id',$match)->first()->result;
 			return view('admin.series_scorecard',compact('batfirst','batsecond','ballfirst','ballsecond','extrafirst','extrasecond','inningscorefirst','inningscoresecond','result','wickets','format','club1','club2','clubname1','clubname2'));
 		}
 		else

@@ -916,6 +916,11 @@ Route::post('/line-ups/', [
     'as' => 'fixtures.stores'
 ]);
 
+Route::post('/series/check/match/{fixture}',[
+        'uses'=> 'SeriesController@checkmatch',
+        'as' => 'series.check.match'
+]);
+
 //-----------------------------------------------------------------------------------------------------
 
 
@@ -979,10 +984,11 @@ Route::get('/graph/team/points', [
 
 //--- download sample file
 Route::get('/sample-download', 'PlayerController@download');
-    // -------------------------------------------------------------------------------------------------------
-    // 
-    // 
-    //--------------------------------------------Series Scoring-----------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------------
+// 
+// 
+//--------------------------------------------SeriesScoring-----------------------------------------------
 
 Route::get('/series/scoring', 'SeriesScoringController@index' )
             ->name('series.scoring')

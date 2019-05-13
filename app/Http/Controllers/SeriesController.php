@@ -34,7 +34,7 @@ class SeriesController extends Controller
         $series_type = MatchType::pluck('type_name','id');
         $grounds = Ground::where('active_status',0)->pluck('name','id');
 
-//        return $series[0]->name;
+        // return $series[0]->name;
         return view('admin.series.index1',compact('clubs','series_type','grounds','series','series_fixtures'));
     }
 
@@ -84,17 +84,14 @@ class SeriesController extends Controller
         $input['club_id_1'] = $request->club_id_1;
         $input['club_id_2'] = $request->club_id_2;
         $input['series_type_id'] = $request->series_type_id;
-//        $edition = Carbon::now()->format('Y');
-//        $input['edition']= $edition;
         $input['starting_date'] = $request->starting_date;
-        //$input['ending_date'] = $request->ending_date;
         $input['series_days'] = $request->series_days;
         $input['ground_id'] = $request->ground_id;
         $input['time'] = $request->time;
 
 
 
-//        $data = Series::create($input);
+        //        $data = Series::create($input);
 
         $fix = DB::table('series')->insertGetId($input);
         $match_days = Series::select('series_days')->where('id','=',$fix)->get();
@@ -112,14 +109,11 @@ class SeriesController extends Controller
             $input['club_id_1'] = $request->club_id_1;
             $input['club_id_2'] = $request->club_id_2;
             $input['series_type_id'] = $request->series_type_id;
-//        $edition = Carbon::now()->format('Y');
-//        $input['edition']= $edition;
             $date2 = Carbon::parse($date)->addDays($add_days)->format('y-m-d');
             $input['starting_date'] = $date2;
 
             $add_days = $add_days + 2;
 
-            //$input['ending_date'] = $request->ending_date;
             $input['series_days'] = $request->series_days;
             $input['ground_id'] = $request->ground_id;
             $input['time'] = '10 AM';
@@ -131,7 +125,7 @@ class SeriesController extends Controller
 
 
 
-//        Series_Fixtures::create($input);
+        //        Series_Fixtures::create($input);
 
         Session::flash('created_series','The Request For The Series Created.');
         return redirect(route('series.index1'));
@@ -142,73 +136,46 @@ class SeriesController extends Controller
 
     public function table($refer_id)
     {
-        //        $refer_id = decrypt($refer_id);
 
-
+        // refer id basically id ha series ki jo series ki primary id hai
         $data = Series::where('id','=',$refer_id)->get();
 
-        //        $date = TournamentsReference::select('starting_date')->where('id','=',$refer_id)->first()->starting_date;
-        //
-        //
-        //      return  Carbon::parse($date)->addDays('2')->format('y-m-d');
-
-        //            return $data;
-
-        // changes
+        // refer id basically id ha series ki jo series ki primary id hai or fixture k liye foreign
         $fixtures = Series_Fixtures::where('refer_id','=',$refer_id)->get();
 
-        //       $club1 = $fixtures[0]->club1->name;
-        //        $club2 = $fixtures[0]->club2->name;
-        //
-        //        $time = $fixtures[0]->time;
-        //        $ground = $fixtures[0]->ground->name;
-
-        //            return $fixtures;
-
-         Session::flash('created_edition','The Request For The Edition Created.');
+        Session::flash('created_edition','The Request For The Edition Created.');
         return view('admin.series.series_table',compact('data','fixtures'));
     }
 
 
     public function series_matches_index($id)
     {
-
-        $club1 = Series_Fixtures::select('club_id_1')->where('id',$id )->get();
-        //        $type = Series_Fixtures::select('series_type_id')->where('id',$club1[0]->refer_id)->first()->series_type_id;
-        $club_1 = preg_replace('/[^0-9]/', '', $club1);
-
-
-        //        return $type;
-
-        //       return $club1[0]->club1->name;
         // changes
-        $club2 = Series_Fixtures::select('club_id_2')->where('id',$id )->get();
-        $club_2 = preg_replace('/[^0-9]/', '', $club2);
+        $club1 = Series_Fixtures::where('id',$id )->first()->club_id_1;
+        $clubname1 = Club::where('id',$club1)->first()->name;
 
         // changes
-        $ground = Series_Fixtures::select('ground_id')->where('id',$id )->get();
-        $ground_id = preg_replace('/[^0-9]/', '', $ground);
-
-
-        // changes
-        $seriesType = Series_Fixtures::select('series_type_id')->where('id',$id )->get();
-        $series_type_id = preg_replace('/[^0-9]/', '', $seriesType);
+        $club2 = Series_Fixtures::where('id',$id )->first()->club_id_2;
+        $clubname2 = Club::where('id',$club2)->first()->name;
 
         // changes
-        $date = Series_Fixtures::select('starting_date')->where('id',$id )->first()->starting_date;
+        $ground = Series_Fixtures::where('id',$id )->first()->ground_id;
+
+        // changes
+        $series_type_id = Series_Fixtures::where('id',$id )->first()->series_type_id;
+
+        // changes
+        $date = Series_Fixtures::where('id',$id )->first()->starting_date;
         //        $starting_date = preg_replace('/[^0-9]/', '', $seriesType);
         
 
 
-        $players1 = Player::where('club_id',$club1[0]->club_id_1)->get();
-        $players2 = Player::where('club_id',$club2[0]->club_id_2)->get();
+        $players1 = Player::where('club_id',$club1)->get();
+        $players2 = Player::where('club_id',$club2)->get();
 
         $umpires = Umpire::all();
-        //        return $umpires;
-
-        //        return $id;
-
-        return view('admin.series.lineup',compact('id','club_1','club_2','umpires','players1','players2','type','id','club1','club2','ground_id','series_type_id','date'));
+        // return $umpires       ;
+        return view('admin.series.lineup',compact('id','umpires','players1','players2','id','club1','club2','clubname1','clubname2','ground','series_type_id','date'));
     }
 
 
@@ -216,6 +183,7 @@ class SeriesController extends Controller
     // changes
     public function series_matches_store(Request $request)
     {
+        // return $request->club2;
         $wk_count = 0;
         $b_count = 0;
         if (sizeof($request->player_id1) < 11 && sizeof($request->player_id1) < 11)
@@ -236,7 +204,8 @@ class SeriesController extends Controller
             Session::flash('players_length2','Kinldy Select Complete Playing 11 To Avoid Embarssment');
             return redirect()->back()->withInput($request->all());
         }
-        else {
+        else 
+        {
             foreach ($request->player_id1 as $player)
             {
                 $roleid = Player::where('id',$player)->first()->role_id;
@@ -269,6 +238,13 @@ class SeriesController extends Controller
                 'choose_to' => $request->choose_to
             ]);
 
+            if($match)
+            {
+                Series_Fixtures::where('id', $request->fixture_id)->update([
+                    'status' => '1'
+                ]);
+            }
+
             //            return $match;
             //
             $toss = Series_Matches::select('toss')->where('id', $match)->first()->toss;
@@ -276,22 +252,26 @@ class SeriesController extends Controller
             $c2 = 0;
 
 
-            if ($toss == $request->club1 && $request->choose_to == 1) {
+            if ($toss == $request->club1 && $request->choose_to == 1) 
+            {
             //            club1 innings1
                 // echo 'agya c1_I1';
                 $c1 = 1;
                 $c2 = 2;
-            } elseif ($toss == $request->club1 && $request->choose_to == 2) {
+            } elseif ($toss == $request->club1 && $request->choose_to == 2) 
+            {
             //            club1 innings2
                 // echo 'agya c1_I2';
                 $c1 = 2;
                 $c2 = 1;
-            } elseif ($toss == $request->club2 && $request->choose_to == 1) {
+            } elseif ($toss == $request->club2 && $request->choose_to == 1) 
+            {
             //            club1 innings2
                 //  echo 'agya c1_I2';
                 $c1 = 2;
                 $c2 = 1;
-            } elseif ($toss == $request->club2 && $request->choose_to == 2) {
+            } elseif ($toss == $request->club2 && $request->choose_to == 2) 
+            {
             //            club1 innings1
                 //   echo 'agya c1_I1';
                 $c1 = 1;
@@ -370,13 +350,31 @@ class SeriesController extends Controller
     public function destroy($id)
     {
         $series = Series::findOrFail($id);
-//        if($series->delete())
-//        {
-//            echo 'Series '.$series->name.' Deleted Successfully';
-//        }
-//        else
-//        {
-//            echo 'An Error Occurred Cannot Delete Series';
-//        }
+        //        if($series->delete())
+        //        {
+        //            echo 'Series '.$series->name.' Deleted Successfully';
+        //        }
+        //        else
+        //        {
+        //            echo 'An Error Occurred Cannot Delete Series';
+        //        }
+    }
+
+    public function checkmatch($fixtureId)
+    {
+        $status = DB::table('series_matches')->where('fixture_id',$fixtureId)->first()->status;
+        $matchId = DB::table('series_matches')->where('fixture_id',$fixtureId)->first()->id;
+        if($status == '0' || $status == '1')
+        {
+            return redirect(route('series.scoring.match',$matchId));
+        }
+        elseif ($status == '2') 
+        {
+            return redirect(route('series.scorecard',$matchId));
+        }
+        else
+        {
+            return view('unauthorized');
+        }
     }
 }

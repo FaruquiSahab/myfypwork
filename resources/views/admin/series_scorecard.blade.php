@@ -1,19 +1,20 @@
 @extends('layouts.admin')
+
     @section('content')
-    <fieldset style="border: 2px solid #ebebe0;">
+        <fieldset style="border: 2px solid #ebebe0;">
+            <br>
+            <b style="font-size: larger; margin-left: 5px;">o {{ $clubname1 }}</b>: <span  style="font-size: larger;">{{ $inningscorefirst->runs }}/{{ $inningscorefirst->wickets }}, {{ $inningscorefirst->overs }} Overs <br></span>
+            <b style="font-size: larger; margin-left: 5px;">o {{ $clubname2 }}</b>: <span  style="font-size: larger;">{{ $inningscoresecond->runs }}/{{ $inningscoresecond->wickets }}, {{ $inningscoresecond->overs }} Overs</span>
+            <br>
+             <span style="margin-left: 5px;">o Result:</span> 
+            <b>
+              {{ $result }}  
+            </b>
+            <br>
+        </fieldset>
+        <button class="btn btn-success" >{{ $clubname1 }} Score</button>
+        <button class="btn btn-warning" >{{ $clubname2 }} Score</button>
         <br>
-        <b style="font-size: larger; margin-left: 5px;">o {{ $clubname1 }}</b>: <span  style="font-size: larger;">{{ $inningscorefirst->runs }}/{{ $inningscorefirst->wickets }}, {{ $inningscorefirst->overs }} Overs <br></span>
-        <b style="font-size: larger; margin-left: 5px;">o {{ $clubname2 }}</b>: <span  style="font-size: larger;">{{ $inningscoresecond->runs }}/{{ $inningscoresecond->wickets }}, {{ $inningscoresecond->overs }} Overs</span>
-        <br>
-         <span style="margin-left: 5px;">o Result:</span> 
-        <b>
-          {{ $result }}  
-        </b>
-        <br>
-    </fieldset>
-    <button class="btn btn-success" >{{ $clubname1 }} Score</button>
-    <button class="btn btn-warning" >{{ $clubname2 }} Score</button>
-    <br>
                 <div class="firstinning hidden">
                     {{-- batsmen score --}}
                         <div class="table-responsive table-bordered">
@@ -36,8 +37,7 @@
                                 <tbody>
                                   @foreach($batfirst as $keyb=>$value)
                                     <div>
-                                        <form class="batsmen" data-key="{{ $keyb }}">
-                                            @if($value->out_how != 'dnb')
+                                        @if($value->out_how != 'dnb')
                                                 <tr id="row{{ $keyb }}">
                                                   <td>{{ $value->batsmen->name }}</td>
                                                   <td>
@@ -74,7 +74,12 @@
                                                   <td>{{ $value->fours }}</td>
                                                   <td>{{ $value->sixes }}</td>
                                                 </tr>
-                                            @elseif($value->out_how == 'dnb')
+                                        @endif
+                                    </div>
+                                  @endforeach
+                                  @foreach($batfirst as $keyb=>$value)
+                                    <div>
+                                            @if($value->out_how == 'dnb')
                                                 <tr id="row{{ $keyb }}">
                                                   <td>{{ $value->batsmen->name }}</td>
                                                   <td>
@@ -94,7 +99,6 @@
                                                   <td>--</td>
                                                 </tr>
                                             @endif
-                                        </form>
                                     </div>
                                   @endforeach
                             </tbody>
@@ -118,12 +122,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach($ballfirst as $key=>$value)
-                                    <form class="bowler" data-key="{{ $key }}">
                                         @if($value->overs != 0 || $value->overs != NULL)
                                             <tr>
-                                                <td>
-                                                    {{ $value->bowler->name }}
-                                                </td>
+                                                <td>{{ $value->bowler->name }}</td>
                                                 <td>{{ $value->overs }}</td>
                                                 <td>{{ $value->maidens }}</td>
                                                 <td>{{ $value->runs }}</td>
@@ -131,7 +132,6 @@
                                                 <td>{{ $value->economy }}</td>
                                             </tr>
                                         @endif
-                                    </form>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -151,21 +151,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <form class="extras">
                                             <tr>
                                                 <td>{{ $extrafirst->wides }}</td>
                                                 <td>{{ $extrafirst->no_balls }}</td>
                                                 <td>{{ $extrafirst->byes }}</td>
                                                 <td>{{ $extrafirst->leg_byes }}</td>
                                             </tr>
-                                        </form>
                                     </tbody>
                                 </table>
                         </div>
                         <br>
                     {{-- extras --}}
                 </div>
-                <label>ooo</label>
                 <div class="secondinning hidden">
                     {{-- batsmen score --}}
                         <div class="table-responsive table-bordered">
@@ -188,9 +185,8 @@
                                 <tbody>
                                   @foreach($batsecond as $keyb=>$value)
                                     <div>
-                                        <form class="batsmen" data-key="{{ $keyb }}">
-                                            @if($value->out_how != 'dnb')
-                                                <tr id="row{{ $keyb }}">
+                                        @if($value->out_how != 'dnb')
+                                            <tr id="row{{ $keyb }}">
                                                   <td>{{ $value->batsmen->name }}</td>
                                                   <td>
                                                     @if($value->out_how == 'b')
@@ -225,29 +221,31 @@
                                                   <td>{{ $value->threes }}</td>
                                                   <td>{{ $value->fours }}</td>
                                                   <td>{{ $value->sixes }}</td>
-                                                </tr>
-                                            @elseif($value->out_how == 'dnb')
-                                                <tr id="row{{ $keyb }}">
-                                                  <td>{{ $value->batsmen->name }}</td>
-                                                  <td>
-                                                    @if($value->out_how == 'dnb')
-                                                        Did Not Bat
-                                                    @else
-                                                    @endif
-                                                  </td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                  <td>--</td>
-                                                </tr>
-                                            @endif
-                                        </form>
+                                            </tr>
+                                        @endif
                                     </div>
+                                  @endforeach
+                                  @foreach($batsecond as $keyb=>$value)
+                                    @if($value->out_how == 'dnb')
+                                        <tr id="row{{ $keyb }}">
+                                            <td>{{ $value->batsmen->name }}</td>
+                                            <td>
+                                                @if($value->out_how == 'dnb')
+                                                    Did Not Bat
+                                                @else
+                                                @endif
+                                            </td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                        </tr>
+                                    @endif
                                   @endforeach
                             </tbody>
                             </table>
@@ -270,7 +268,6 @@
                                 </thead>
                                 <tbody>
                                     @foreach($ballsecond as $key=>$value)
-                                    <form class="bowler" data-key="{{ $key }}">
                                         @if($value->overs != 0 || $value->overs != NULL)
                                             <tr>
                                                 <td>
@@ -283,7 +280,6 @@
                                                 <td>{{ $value->economy }}</td>
                                             </tr>
                                         @endif
-                                    </form>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -303,34 +299,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <form class="extras">
-                                            <tr>
-                                                <td>{{ $extrasecond->wides }}</td>
-                                                <td>{{ $extrasecond->no_balls }}</td>
-                                                <td>{{ $extrasecond->byes }}</td>
-                                                <td>{{ $extrasecond->leg_byes }}</td>
-                                            </tr>
-                                        </form>
+                                        <tr>
+                                            <td>{{ $extrasecond->wides }}</td>
+                                            <td>{{ $extrasecond->no_balls }}</td>
+                                            <td>{{ $extrasecond->byes }}</td>
+                                            <td>{{ $extrasecond->leg_byes }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                         </div>
                         <br>
                     {{-- extras --}}
-                </div>
+                </div>              
+    @stop
 
-                    
-  @stop
-
-  @section('scripts')
-    <script type="text/javascript">
-        $('.btn-success').on('click',function(){
-            $('.firstinning').removeClass('hidden');
-            $('.secondinning').addClass('hidden');
-        });
-        $('.btn-warning').on('click',function(){
-            $('.secondinning').removeClass('hidden');
-            $('.firstinning').addClass('hidden');
-        });
-    </script>
-  @stop
-
+    @section('scripts')
+        <script type="text/javascript">
+            $('.btn-success').on('click',function(){
+                $('.firstinning').removeClass('hidden');
+                $('.secondinning').addClass('hidden');
+            });
+            $('.btn-warning').on('click',function(){
+                $('.secondinning').removeClass('hidden');
+                $('.firstinning').addClass('hidden');
+            });
+        </script>
+    @stop

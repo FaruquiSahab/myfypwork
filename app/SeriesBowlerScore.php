@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BowlerScore extends Model
+class SeriesBowlerScore extends Model
 {
     protected $guarded = [];
 

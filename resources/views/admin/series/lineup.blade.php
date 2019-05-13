@@ -429,10 +429,10 @@
 
 
 
-                <input type="hidden" name="club1" value="{{$club_1}}">
+                <input type="hidden" name="club1" value="{{$club1}}">
                 <input type="hidden" name="series_fixture_id" value="{{$id}}">
-                <input type="hidden" name="ground_id" value="{{$ground_id}}">
-                <input type="hidden" name="club2" value="{{$club_2}}">
+                <input type="hidden" name="ground_id" value="{{$ground}}">
+                <input type="hidden" name="club2" value="{{$club2}}">
                 <input type="hidden" name="fixture_id" value="{{ $id }}">
                 <input type="hidden" name="starting_date" value="{{$date}}">
                 <input type="hidden" name="series_type_id" value="{{$series_type_id}}">
@@ -445,10 +445,10 @@
                     <div class="form-group">
                         <label for="Toss">Toss</label>
 
-                        <select class="form-control" name="toss">
-                            <option disabled selected>Select Team</option>
-                            <option value="{{$club1[0]->club_id_1}}">{{$club1[0]->club1->name}}</option>
-                            <option value="{{$club2[0]->club_id_2}}">{{$club2[0]->club2->name}}</option>
+                        <select class="form-control" name="toss" required>
+                            <option disabled selected value>Select Team</option>
+                            <option value="{{$club1}}">{{$clubname1}}</option>
+                            <option value="{{$club2}}">{{$clubname2}}</option>
                         </select>
                     </div>
 
@@ -456,8 +456,8 @@
                     <div class="form-group">
                         <label for="Toss">Choose To</label>
 
-                        <select class="form-control" name="choose_to">
-                            <option disabled selected>Select Decision</option>
+                        <select class="form-control" name="choose_to" required>
+                            <option disabled selected value>Select Decision</option>
                             <option value="1">Bat</option>
                             <option value="2">Field</option>
                         </select>
@@ -466,8 +466,8 @@
 
                     <div class="form-group">
 
-                        <label for="players">Lineup for {{$club1[0]->club1->name}}</label>
-                        <select id="player_id1" name="player_id1[]"  class="form-control players">
+                        <label for="players">Lineup for {{$clubname1}}</label>
+                        <select id="player_id1" name="player_id1[]"  class="form-control players" required>
                             @foreach($players1 as $key => $player1)
                                 <option value="{{ $player1->id }}" >{{ $player1->name }} ({{ $player1->role->name }})</option>
                             @endforeach
@@ -482,8 +482,8 @@
 
                     <div class="form-group">
 
-                        <label for="players">Lineup for {{$club2[0]->club2->name}}</label>
-                        <select id="player_id2" name="player_id2[]"  class="form-control">
+                        <label for="players">Lineup for {{$clubname2}}</label>
+                        <select id="player_id2" name="player_id2[]"  class="form-control" required>
                             @foreach($players2 as $key => $player2)
                                 <option value="{{ $player2->id }}" >{{ $player2->name }} ({{ $player2->role->name }})</option>
                             @endforeach
@@ -495,7 +495,7 @@
                     <div class="form-group">
                         <label for="Umpires">Umpires</label>
 
-                        <select class="form-control" name="umpire_id">
+                        <select class="form-control" name="umpire_id" required>
                             <option disabled selected value>Select Umpire</option>
                             @foreach($umpires as $umpire )
                                 <option value="{{$umpire->id}}">{{$umpire->name}}</option>
@@ -584,6 +584,7 @@
                 success:function(data)
                 {
                     console.log('success');
+                    // alert(data);
                     if (data == 'both'){ toastr.error('Team Length Less Than Required','Formation Error'); }
                     else if (data == 'one'){ toastr.error('Team One: Length Less Than Required','Formation Error'); }
                     else if (data == 'two'){ toastr.error('Team Two: Length Less Than Required','Formation Error'); }
