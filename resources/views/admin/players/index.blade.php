@@ -465,7 +465,7 @@
                             toastr.error('File Is Required Kindly Insert It','Error Alert');
                         }
                         else if(data == 'format'){
-                            toastr.error('Kindly Select xls,xlsx,csv format none other than that','Error Alert');
+                            toastr.error('Kindly Select xls,xlsx,csv Format none other than that','Error Alert');
                         }
                         else if(data=='success'){
                             toastr.success('Players Inserted Successfully','Success Alert');

@@ -47,7 +47,7 @@ class TournamentClubController extends Controller
     public function store(Request $request)
     {
 
-//        $a= new TournamentClub();
+        //        $a= new TournamentClub();
         $a = [];
         $a['tournament_id'] = $request->tournament_id;
         $a['refer_id'] = $request->refer_id;
@@ -55,12 +55,12 @@ class TournamentClubController extends Controller
         $a['club_id'] = $abc;
         $lastid = DB::table('tournament_clubs')->insertGetId($a);
 
-//        return $lastid;
+        //        return $lastid;
 
         $input = TournamentClub::findOrFail($lastid);
         $array =  json_decode($input->club_id,true);
         $val = array();
-//        return $array;
+        //        return $array;
         foreach ($array as $key=>$value)
         {
             $b=[];
@@ -68,7 +68,7 @@ class TournamentClubController extends Controller
             $b['refer_id']=$request->refer_id;
             $b['club_id']=$value;
            $check =  DB::table('roundrobin_tournament')->insertGetId($b);
-//            echo DB::table('clubs')->select('name')->where('id','=',$value)->get();
+        //            echo DB::table('clubs')->select('name')->where('id','=',$value)->get();
             $val[1] = DB::table('roundrobin_tournament')
                 ->join('clubs','roundrobin_tournament.club_id','clubs.id')
                 ->join('tournaments','roundrobin_tournament.tournament_id','tournaments.id')
@@ -87,7 +87,7 @@ class TournamentClubController extends Controller
         ]);
 
 
-//        $fix = DB::table('roundrobin_tournament')->select('club_id')->where('refer_id','=',$request->refer_id)->get();
+        //        $fix = DB::table('roundrobin_tournament')->select('club_id')->where('refer_id','=',$request->refer_id)->get();
         $tr = TournamentsReference::where('id','=',$request->refer_id)->get();
         //return $tr[0]->ground_id;
         $ground = $tr[0]->ground_id;
@@ -104,7 +104,7 @@ class TournamentClubController extends Controller
         foreach ($fix as $key=>$value)
         {
             foreach ($fix as $ke=>$valu) {
-//            echo $fix[$key]->club_id . '<br>';
+        //            echo $fix[$key]->club_id . '<br>';
 
                 if ($key != $ke) {
                     $clubs['club_id_1'] = $fix[$key]->club_id;
@@ -134,9 +134,6 @@ class TournamentClubController extends Controller
             return redirect(route('edition.tournament_table',$refer_id));
         }
 
-
-
-
     }
     public function table($refer_id)
     {
@@ -150,19 +147,39 @@ class TournamentClubController extends Controller
 
         $data = TournamentsReference::where('id','=',$refer_id)->get();
 
-//        $date = TournamentsReference::select('starting_date')->where('id','=',$refer_id)->first()->starting_date;
-//
-//
-//      return  Carbon::parse($date)->addDays('2')->format('y-m-d');
-
-
-
+        //        $date = TournamentsReference::select('starting_date')->where('id','=',$refer_id)->first()->starting_date;
+        //
+        //
+        //      return  Carbon::parse($date)->addDays('2')->format('y-m-d');
 
         $fixtures = Fixture::where('refer_id','=',$refer_id)->get();
+        $last = Fixture::where('refer_id','=',$refer_id)->orderBy('id','DESC')->limit(1)->first()->match_date;
 
-
-
-
+        // return $last;
+        $n = TournamentsReference::where('id',$refer_id)->first()->number_of_teams;
+        $result = $n * ($n-1);
+        // return "Done";
+        // return $result;
+        $sum = DB::table('roundrobin_tournament')->where('refer_id',$refer_id)->SUM('total_matches');
+        if ($sum  == $result)
+        {
+            $datas = DB::table('roundrobin_tournament')->where('refer_id',$refer_id)->orderBy('points_matches','DESC')->limit(2)->get();
+            foreach ($datas as $key => $value) {
+                if ($key == 0) 
+                {
+                    $final = new Fixture;
+                    $final->refer_id = $refer_id;
+                    $final->club_id_1 = $data[$key];
+                    $final->club_id_2 = $data[$key+1];
+                    $final->match_date = Carbon::parse($last)->addDays(2)->format('Y-m-d');
+                    $final->match_time = "10 AM";
+                    $final->tournament_id = $data[0]->tournament_id;
+                    $final->status = 0;
+                    $final->final_check = 1;
+                    $final->save();
+                }
+            }
+        }
 
         // Session::flash('created_edition','The Request For The Edition Created.');
         return view('admin.tournaments.editions.tournament_table',compact('val','data','fixtures'));

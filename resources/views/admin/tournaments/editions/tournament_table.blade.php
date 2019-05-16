@@ -13,7 +13,7 @@
         @endforeach
 
     <h3>{{$val[0]->t_name}} {{$data[0]->tournament_type->type_name}} {{$data[0]->edition}}</h3>
-    <h4>{{$data[0]->tournament_format->format_name}}</h4>
+    {{-- <h4>{{$data[0]->tournament_format->format_name}}</h4> --}}
 
 
     <br>
@@ -79,7 +79,7 @@
                 <th scope="col">Time</th>
                 <th scope="col">Venue</th>
                 <th scope="col">Line Up</th>
-                <th scope="col">Result</th>
+                {{-- <th scope="col">Result</th> --}}
             </tr>
             </thead>
             <tbody>
@@ -111,7 +111,7 @@
                     @endif
 
                 </td>
-                <td>-</td>
+                {{-- <td>-</td> --}}
 
                 {{--<td>{{$round->rounds}}</td>--}}
                 {{--<td>{{$item->c_name}}</td>--}}

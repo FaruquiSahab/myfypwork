@@ -37,21 +37,21 @@ class TournamentReferenceController extends Controller
         {
            $ids =  $tour->tournament_id . '<br>';
 
-//           echo $ids;
+        //           echo $ids;
 
            $names[] = Tournament::where('id', '!=',$ids)->get();
         }
         foreach ($names as $key=> $name)
         {
             echo $name;
-//            if($key!=0)
+        //            if($key!=0)
             foreach ($name as $k=>$val)
             if($k!=0 && $key ==0) {
                 $tr = DB::table('tournaments')->select('id','name')->where('id',$val->id)->distinct('id')->get();
-//                $tr = Tournament::where('id',$val->id)->distinct()->get();
+        //                $tr = Tournament::where('id',$val->id)->distinct()->get();
                 echo $k;
                 echo $tr;
-//                echo $k . $val . '<br>';
+        //                echo $k . $val . '<br>';
             }
         }
 
@@ -61,27 +61,27 @@ class TournamentReferenceController extends Controller
 
 
 
-  // return $tour_id[0]->tournament_id;
-         //$tour_id[0]->tournament_id;
-//return $tour_id;
+          // return $tour_id[0]->tournament_id;
+                 //$tour_id[0]->tournament_id;
+        //return $tour_id;
 
-//         foreach ($tour_id as $tour)
-//         {
-//            $ids =  $tour->tournament_id;
-////            echo $ids.'<br>';
-//
-//             $tournamentss[] = Tournament::select('id','name')->where('id','!=',$ids)->get();
-//         }
-/*        $tournamentss[] = Tournament::select('id','name')->where('id','!=',1)->get();
-        $tournamentss[] = Tournament::select('id','name')->where('id','!=',4)->get();*/
+        //         foreach ($tour_id as $tour)
+        //         {
+        //            $ids =  $tour->tournament_id;
+        ////            echo $ids.'<br>';
+        //
+        //             $tournamentss[] = Tournament::select('id','name')->where('id','!=',$ids)->get();
+        //         }
+        /*        $tournamentss[] = Tournament::select('id','name')->where('id','!=',1)->get();
+                $tournamentss[] = Tournament::select('id','name')->where('id','!=',4)->get();*/
 
 
-//         return " Ok";
-//            foreach ($tournamentss as $tt)
-//            {
-//                echo $tt->['name'];
-//            }
-//            return"";
+        //         return " Ok";
+        //            foreach ($tournamentss as $tt)
+        //            {
+        //                echo $tt->['name'];
+        //            }
+        //            return"";
 
         $m_type = MatchType::pluck('type_name','id');
         $t_format = TournamentFormat::pluck('format_name','id');

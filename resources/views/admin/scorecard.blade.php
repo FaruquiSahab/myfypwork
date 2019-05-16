@@ -74,7 +74,14 @@
                                                   <td>{{ $value->fours }}</td>
                                                   <td>{{ $value->sixes }}</td>
                                                 </tr>
-                                            @elseif($value->out_how == 'dnb')
+                                            @endif
+                                        </form>
+                                    </div>
+                                  @endforeach
+                                  @foreach($batfirst as $keyb=>$value)
+                                    <div>
+                                        <form class="batsmen" data-key="{{ $keyb }}">
+                                            @if($value->out_how == 'dnb')
                                                 <tr id="row{{ $keyb }}">
                                                   <td>{{ $value->batsmen->name }}</td>
                                                   <td>
@@ -226,7 +233,14 @@
                                                   <td>{{ $value->fours }}</td>
                                                   <td>{{ $value->sixes }}</td>
                                                 </tr>
-                                            @elseif($value->out_how == 'dnb')
+                                            @endif
+                                        </form>
+                                    </div>
+                                  @endforeach
+                                  @foreach($batsecond as $keyb=>$value)
+                                    <div>
+                                        <form class="batsmen" data-key="{{ $keyb }}">
+                                            @if($value->out_how == 'dnb')
                                                 <tr id="row{{ $keyb }}">
                                                   <td>{{ $value->batsmen->name }}</td>
                                                   <td>
