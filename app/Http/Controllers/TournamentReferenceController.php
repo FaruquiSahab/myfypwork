@@ -242,7 +242,7 @@ class TournamentReferenceController extends Controller
         $did = decrypt($id);
         $tournament = TournamentsReference::find($did);
         $count = 0;
-        $count = TournamentsReference::where('id',$did)->update(['active_status',0]);
+        $count = TournamentsReference::where('id',$did)->update(['active_status'=>1]);
         if ($count > 0)
         {
             return redirect()->back();

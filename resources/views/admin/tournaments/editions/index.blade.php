@@ -206,7 +206,8 @@
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all">
     <script type="text/javascript">
-
+        $('input').prop('required',true);
+        $('select').prop('required',true);
 //         Get today's date
         var today = new Date();
         console.log(today);

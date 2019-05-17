@@ -11,7 +11,7 @@
 
 
 
-    <h2>Edit Tournament Edition</h2>
+    <h2>Clubs Selection For Tournament Edition</h2>
 
 
     <div class="row">
@@ -56,7 +56,7 @@
                                                 <label for="clubs">Select Clubs</label>
                                                 <select id="club_id" name=" club_id[]"  class="form-control">
                                                     @foreach($clubs as $key => $club)
-                                                        <option value="{{ $key }}" >{{ $club }}</option>
+                                                        <option value="{{ $club->id }}" >{{ $club->name }}</option>
                                                     @endforeach
                                                 </select>
 
@@ -75,15 +75,6 @@
                     {!! Form::submit('Add Tournament', ['class'=>'btn btn-primary col-sm-3']) !!}
                 </div>
 
-
-
-
-                    {{--<div class="tournament">--}}
-
-
-
-                    {{--</div>--}}
-
                 </div>
 
                 {!! Form::close() !!}
@@ -97,6 +88,9 @@
 
 
     <script type="text/javascript">
+        @if(Session::has('less'))
+            alert('Less Than ' +{{ session('less') }}+ ' Clubs Selected','Error Alert');
+        @endif
         var totalAllowedClubs = $('#totalClubs').val();
         $("#club_id").select2({
             placeholder: "Select Clubs",
@@ -105,37 +99,6 @@
             maximumSelectionLength : totalAllowedClubs,
         });
     </script>
-
-    {{--<script type="text/javascript">
-        var abc = $('#clubs').val();
-        console.log(abc);
-        var minData = {
-            teams:
-                [
-
-                    ["A","B"],
-                    ["C","D"],
-                    ["E","F"],
-                    ["G","H"]
-
-
-                ],
-            results:
-                [
-                    [ [1,0],[1,2],[2,4],[2,1] ],
-                    [ [1,0],[1,2] ],
-                    [ [1,0],[1,2] ]
-                ]
-        }
-
-        // $('.tournament').append('<p>Hello</p>');
-
-        $('.tournament').bracket({
-            init:minData
-        });
-
-
-    </script>--}}
 
 
 

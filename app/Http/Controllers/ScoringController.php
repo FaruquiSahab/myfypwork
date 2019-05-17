@@ -18,6 +18,7 @@ use App\InningScore;
 use App\CheckNotOut;
 use DB;
 use App\RoundrobinTournament;
+use App\TournamentsReference;
 use App\Fixture;
 use App\PlayerStat;
 use App\Team_Stats;
@@ -1081,21 +1082,33 @@ class ScoringController extends Controller
 		]);
 
 		$fixture_id = Match::where('id',$matchId)->first()->fixture_id;
+		$final_check = Fixture::where('id',$fixture_id)->first()->final_check;
+		$match_date = Fixture::where('id',$fixture_id)->first()->match_date;
+		if ($final_check == 1){
+			TournamentsReference::where('id',$refer_id)->update([
+				'winner_club_id'=>$winnerclub,
+				'ending_date'=>$match_date
+			]);
+		}
 		$refer_id = Fixture::where('id',$fixture_id)->first()->refer_id;
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('total_matches');
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('total_matches');
 
 		if ($winnerclub == $club1){
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('win_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('points_matches',2);
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('loss_matches');
 		}
 		elseif ($winnerclub == $club2){
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('win_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('points_matches',2);
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('loss_matches');
 		}
 		elseif ($winnerclub == '0'){
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('tie_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('points_matches');
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('tie_matches');
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('points_matches');
 		}
 		///////////////////////////////Team Stats 1/////////////////////////////////////
 			$allRunsScored = Team_Stats::where('club_id',$club1)->first()->total_runs_scored;
