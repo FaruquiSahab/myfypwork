@@ -25,6 +25,7 @@
                 <input type="hidden" name="date" value="{{$club2[0]->match_date}}">
                 <input type="hidden" name="match_type_id" value="{{$type}}">
                 <input type="hidden" name="fixture_id" value="{{ $club1[0]->id }}">
+                <input type="hidden" name="refer_id" value="{{ $refer_id }}">
 
 
 

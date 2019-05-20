@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Club;
 use App\Fixture;
+use App\SeriesFixture;
 use App\RoundRobinTour;
 use App\RoundrobinTournament;
 use Carbon\Carbon;
@@ -215,11 +216,17 @@ class TournamentClubController extends Controller
                              ->select('club_id_1')->distinct('club_id_1')->get();
         $club_id_2  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])
                              ->select('club_id_2')->distinct('club_id_2')->get();
+        $club_id_1_s  = SeriesFixture::whereBetween('starting_date',[$starting_date,$ending_date])
+                             ->select('club_id_1')->distinct('club_id_1')->get();
+        $club_id_2_S  = SeriesFixture::whereBetween('starting_date',[$starting_date,$ending_date])
+                             ->select('club_id_2')->distinct('club_id_2')->get();
         // return $club_id_1;
         // return $editions;
         $clubstring1 = 'WHERE id != 0 ';
         foreach ($club_id_1 as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_1. ' '; }
         foreach ($club_id_2 as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_2. ' '; }
+        foreach ($club_id_1_s as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_1. ' '; }
+        foreach ($club_id_2_s as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_2. ' '; }
         // return $clubstring1;
         $clubs = DB::select(DB::raw('select * from clubs '.$clubstring1));
         // return $club;

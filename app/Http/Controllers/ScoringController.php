@@ -99,6 +99,7 @@ class ScoringController extends Controller
 								[
 									'match_id'=>$matches[0]->id,
 									'batsmen_id'=>$battingfirst[$i]->player->id,
+									'refer_id'=>$matches[0]->refer_id,
 									'inning_no'=>1
 								]
 							);
@@ -124,6 +125,7 @@ class ScoringController extends Controller
 									[
 										'match_id'=>$matches[0]->id,
 										'bowler_id'=>$ballingfirst[$i]->player->id,
+										'refer_id'=>$matches[0]->refer_id,
 										'inning_no'=>2
 									]
 								);
@@ -136,6 +138,7 @@ class ScoringController extends Controller
 									[
 										'match_id'=>$matches[0]->id,
 										'bowler_id'=>$ballingfirst[$i]->player->id,
+										'refer_id'=>$matches[0]->refer_id,
 										'inning_no'=>2
 									]
 								);
@@ -152,6 +155,7 @@ class ScoringController extends Controller
 				Extra::updateOrCreate(
 					[
 						'match_id'=>$match,
+						'refer_id'=>$matches[0]->refer_id,
 						'inning_no'=>1
 					]
 				);
@@ -368,6 +372,7 @@ class ScoringController extends Controller
 	{	
 		$playerId =  BatsmenScore::where('match_id',$matchId)->where('inning_no',$inningNo)->first()->batsmen_id;
 		$clubid = Player::where('id',$playerId)->first()->club_id;
+		$refer_id = Match::where('id',$matchId)->first()->refer_id;
 		$helper = new CricketStatsHelper();
 		if($inningNo == 1)
 		{
@@ -399,12 +404,13 @@ class ScoringController extends Controller
 		InningScore::updateOrCreate(
 			[
 				'match_id'=>$matchId,
-				'inning_no'=>$inningNo
+				'inning_no'=>$inningNo,
 			],
 			[
 				'club_id'=>$clubid,
 				'runs'=>$runs1,
 				'overs'=>$overs1,
+				'refer_id'=>$refer_id,
 				'wickets'=>$wicketss1
 			]);
 	}
@@ -479,6 +485,7 @@ class ScoringController extends Controller
 							[
 								'match_id'=>$matches[0]->id,
 								'batsmen_id'=>$battingsecond[$i]->player->id,
+								'refer_id'=>$matches[0]->refer_id,
 								'inning_no'=>2
 							]
 						);
@@ -503,6 +510,7 @@ class ScoringController extends Controller
 								[
 									'match_id'=>$matches[0]->id,
 									'bowler_id'=>$ballingsecond[$i]->player->id,
+									'refer_id'=>$matches[0]->refer_id,
 									'inning_no'=>1
 								]
 							);
@@ -515,6 +523,7 @@ class ScoringController extends Controller
 								[
 									'match_id'=>$matches[0]->id,
 									'bowler_id'=>$ballingsecond[$i]->player->id,
+									'refer_id'=>$matches[0]->refer_id,
 									'inning_no'=>1
 								]
 							);
@@ -530,6 +539,7 @@ class ScoringController extends Controller
 				Extra::updateOrCreate(
 					[
 						'match_id'=>$match,
+						'refer_id'=>$matches[0]->refer_id,
 						'inning_no'=>2
 					]
 				);

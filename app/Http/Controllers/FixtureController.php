@@ -82,6 +82,7 @@ class FixtureController extends Controller
 
         //  return $club1[0]->club1->name;
         $club2 = Fixture::where('id',$id )->get();
+        $refer_id = Fixture::where('id',$id )->first()->refer_id;
 
         $players1 = Player::where('active_status',0)->where('club_id',$club1[0]->club_id_1)->get();
         $players2 = Player::where('active_status',0)->where('club_id',$club2[0]->club_id_2)->get();
@@ -90,7 +91,7 @@ class FixtureController extends Controller
         //  return $umpires;
 
 
-        return view('admin.tournaments.editions.lineup',compact('club1','club2','umpires','players1','players2','type'));
+        return view('admin.tournaments.editions.lineup',compact('refer_id','club1','club2','umpires','players1','players2','type'));
     
     }
 
@@ -163,7 +164,8 @@ class FixtureController extends Controller
                 'match_date' => $request->date,
                 'match_type_id' => $request->match_type_id,
                 'choose_to' => $request->choose_to,
-                'fixture_id'=> $request->fixture_id
+                'fixture_id'=> $request->fixture_id,
+                'refer_id' => $request->refer_id
             ]);
             if($match)
             {

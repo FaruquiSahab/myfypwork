@@ -661,6 +661,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
 
     ]);
 
+    //tournament stats new route
+    Route::get('tournament/{id}/stats','TournamentReferenceController@tournamentStats')
+    ->name('tournamentStats');
+
 
     Route::post('/tournament/edition/store', [
         'uses' => 'TournamentReferenceController@store',

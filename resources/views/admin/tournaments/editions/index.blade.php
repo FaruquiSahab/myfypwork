@@ -66,7 +66,9 @@
                         @if($tournament->status == 0)
                         <a href="{{route('edition.show', $tournament->id)}}"> {{$tournament->tournament->name}}</a>
                         @else
-                            {{$tournament->tournament->name}}
+                            <a href="{{ route('tournamentStats',$tournament->id) }}">
+                                {{$tournament->tournament->name}}
+                            </a>
                         @endif
                     </td>
                     {{--<td>{{$Tournament->type}}</td>--}}

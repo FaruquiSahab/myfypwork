@@ -6,6 +6,11 @@ use App\Club;
 use App\Ground;
 use App\MatchType;
 use App\Photo;
+use App\Fixture;
+use App\Match;
+use App\InningScore;
+use App\BatsmenScore;
+use App\BowlerScore;
 use DB;
 use App\Tournament;
 use App\TournamentFormat;
@@ -29,65 +34,34 @@ class TournamentReferenceController extends Controller
 
         // wo tornment id jo ban chkii hain
         $tour_id = TournamentsReference::where('edition','=',Carbon::now()->format('Y'))->get();
-        /*
-
-
         
-        foreach ($tour_id as $tour)
-        {
-           $ids =  $tour->tournament_id . '<br>';
-
-        //           echo $ids;
-
-           $names[] = Tournament::where('id', '!=',$ids)->get();
-        }
-        foreach ($names as $key=> $name)
-        {
-            echo $name;
-        //            if($key!=0)
-            foreach ($name as $k=>$val)
-            if($k!=0 && $key ==0) {
-                $tr = DB::table('tournaments')->select('id','name')->where('id',$val->id)->distinct('id')->get();
-        //                $tr = Tournament::where('id',$val->id)->distinct()->get();
-                echo $k;
-                echo $tr;
-        //                echo $k . $val . '<br>';
-            }
-        }
-
-        return "";*/
-
-
-
-
-
-          // return $tour_id[0]->tournament_id;
-                 //$tour_id[0]->tournament_id;
-        //return $tour_id;
-
-        //         foreach ($tour_id as $tour)
-        //         {
-        //            $ids =  $tour->tournament_id;
-        ////            echo $ids.'<br>';
-        //
-        //             $tournamentss[] = Tournament::select('id','name')->where('id','!=',$ids)->get();
-        //         }
-        /*        $tournamentss[] = Tournament::select('id','name')->where('id','!=',1)->get();
-                $tournamentss[] = Tournament::select('id','name')->where('id','!=',4)->get();*/
-
-
-        //         return " Ok";
-        //            foreach ($tournamentss as $tt)
-        //            {
-        //                echo $tt->['name'];
-        //            }
-        //            return"";
 
         $m_type = MatchType::pluck('type_name','id');
         $t_format = TournamentFormat::pluck('format_name','id');
         $t_grounds = Ground::where('active_status',0)->pluck('name','id');
 
         return view('admin.tournaments.editions.index',compact('tournaments','tournamentss','m_type','t_format','t_grounds'));
+    }
+
+    public function tournamentStats(Request $request, $id)
+    {
+        $tournament_id = TournamentsReference::where('id',$id)->first()->tournament_id;
+        $name = Tournament::where('id',$tournament_id)->first()->name;
+        $edition = TournamentsReference::where('id',$id)->first()->edition;
+        $total_matches = Match::where('refer_id',$id)->count('matches.id');
+        $total_runs = InningScore::where('refer_id',$id)->sum('innings_score.runs');
+        $total_sixes = BatsmenScore::where('refer_id',$id)->sum('batsmen_scores.sixes');
+        $total_fours = BatsmenScore::where('refer_id',$id)->sum('batsmen_scores.fours');
+        $max_f_runs = InningScore::where('refer_id',$id)->where('inning_no',1)->max('innings_score.runs');
+        $min_f_runs = InningScore::where('refer_id',$id)->where('inning_no',1)->min('innings_score.runs');
+        $max_s_runs = InningScore::where('refer_id',$id)->where('inning_no',2)->max('innings_score.runs');
+        $min_s_runs = InningScore::where('refer_id',$id)->where('inning_no',2)->min('innings_score.runs');
+        $highscore = BatsmenScore::where('refer_id',$id)->max('batsmen_scores.runs');
+        $halfcenturies = sizeof(BowlerScore::where('refer_id',$id)->where('bowler_scores.runs','>','50')->where('bowler_scores.runs','<','100')->get());
+        $centuries = sizeof(BowlerScore::where('refer_id',$id)->where('bowler_scores.runs','>','100'));
+        $record = BowlerScore::where('refer_id',$id)->orderBy('bowler_scores.wickets','DESC')->limit(1)->first();
+        $bestball = $record->wickets. ' / ' .$record->runs;
+        return view('admin.tournaments.editions.tournament_stats',compact('name','edition','total_matches','total_runs','total_sixes','total_fours','max_f_runs','min_f_runs','max_s_runs','min_s_runs','highscore','bestball','halfcenturies','centuries'));
     }
 
     /**
@@ -124,13 +98,11 @@ class TournamentReferenceController extends Controller
 
 
 
-
-
         $input['tournament_id'] = $request->tournament_id;
         $input['tournament_format_id'] = $request->tournament_format_id;
         $input['tournament_type_id'] = $request->tournament_type_id;
         $input['number_of_teams'] = $request->number_of_teams;
-        $edition = Carbon::now()->format('Y');
+        $edition = Carbon::parse($request->starting_date)->format('Y');
         $input['edition']= $edition;
         $input['starting_date'] = $request->starting_date;
         //$input['ending_date'] = $request->ending_date;
