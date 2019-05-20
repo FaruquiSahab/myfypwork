@@ -57,10 +57,15 @@ class TournamentReferenceController extends Controller
         $max_s_runs = InningScore::where('refer_id',$id)->where('inning_no',2)->max('innings_score.runs');
         $min_s_runs = InningScore::where('refer_id',$id)->where('inning_no',2)->min('innings_score.runs');
         $highscore = BatsmenScore::where('refer_id',$id)->max('batsmen_scores.runs');
-        $halfcenturies = sizeof(BowlerScore::where('refer_id',$id)->where('bowler_scores.runs','>','50')->where('bowler_scores.runs','<','100')->get());
-        $centuries = sizeof(BowlerScore::where('refer_id',$id)->where('bowler_scores.runs','>','100'));
-        $record = BowlerScore::where('refer_id',$id)->orderBy('bowler_scores.wickets','DESC')->limit(1)->first();
+        $halfcenturies = BatsmenScore::where('refer_id',$id)->where('batsmen_scores.runs','>','50')->where('batsmen_scores.runs','<','100')->get();
+        $centuries = BatsmenScore::where('refer_id',$id)->where('batsmen_scores.runs','>=','100')->get();
+        $record = BowlerScore::where('refer_id',$id)
+                             ->orderBy('bowler_scores.wickets','DESC')
+                             ->orderBy('bowler_scores.runs','ASC')
+                             ->limit(1)->first();
         $bestball = $record->wickets. ' / ' .$record->runs;
+        $centuries = sizeof($centuries);
+        $halfcenturies = sizeof($halfcenturies);
         return view('admin.tournaments.editions.tournament_stats',compact('name','edition','total_matches','total_runs','total_sixes','total_fours','max_f_runs','min_f_runs','max_s_runs','min_s_runs','highscore','bestball','halfcenturies','centuries'));
     }
 
