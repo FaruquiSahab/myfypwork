@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-
+    <link rel="icon" href="https://previews.123rf.com/images/makstrv/makstrv1601/makstrv160100004/50151920-cricket-player-and-bats-sport-emblem-logo-.jpg">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,11 +78,10 @@
 </head>
 
 <body id="admin-page" style="padding-top: 1px">
-
 <div id="wrapper">
-
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -90,7 +89,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">eCric</a>
+            <img src="https://previews.123rf.com/images/makstrv/makstrv1601/makstrv160100004/50151920-cricket-player-and-bats-sport-emblem-logo-.jpg" alt="" height="42" width="42">
+            <a class="navbar-brand" href="/">Cricket Club Services</a>
         </div>
         <!-- /.navbar-header -->
 
