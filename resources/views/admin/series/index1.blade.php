@@ -81,7 +81,7 @@
                     <td>
 
                             <a style="margin: 5px" href="{{{route('series.series_table', $serie->id)}}}}" class=" col-sm-8 btn btn-info btn-circle"><i class="fa fa-eye fa-fw"></i></a>
-
+                        {{-- {{ route('series.destroy',$serie->id) }} --}}
                         <a style="margin: 5px" href="" class="col-sm-8 btn btn-danger btn-circle"><i class="fa fa-trash fa-fw"></i></a>
                     </td>
 

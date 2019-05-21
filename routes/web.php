@@ -930,6 +930,9 @@ Route::post('/series/check/match/{fixture}',[
         'as' => 'series.check.match'
 ]);
 
+Route::get('series/destroy/{id}','SeriesController@destroy')
+->name('series.destroy');
+
 //-----------------------------------------------------------------------------------------------------
 
 

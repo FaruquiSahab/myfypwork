@@ -27,7 +27,7 @@ class SeriesController extends Controller
         $clubs = Club::pluck('name','id');
         // changes
         $fix = Series_Fixtures::all();
-        $series = Series::all();
+        $series = Series::where('active_status',0)->get();
 
 
 
@@ -84,7 +84,7 @@ class SeriesController extends Controller
         $input['club_id_1'] = $request->club_id_1;
         $input['club_id_2'] = $request->club_id_2;
         $input['series_type_id'] = $request->series_type_id;
-        $input['starting_date'] = $request->starting_date;
+        $input['starting_date'] = Carbon::parse($request->starting_date)->format('Y-m-d');
         $input['series_days'] = $request->series_days;
         $input['ground_id'] = $request->ground_id;
         $input['time'] = $request->time;
@@ -349,15 +349,18 @@ class SeriesController extends Controller
      */
     public function destroy($id)
     {
-        $series = Series::findOrFail($id);
-        //        if($series->delete())
-        //        {
-        //            echo 'Series '.$series->name.' Deleted Successfully';
-        //        }
-        //        else
-        //        {
-        //            echo 'An Error Occurred Cannot Delete Series';
-        //        }
+        // return 's';
+        $series = Series::where('id',$id)->update(['active_status'=>1]);
+               if($series > 0)
+               {
+                    Session::flash('deleted_tournament','Series Deleted Successfully');
+                    return redirect()->back();
+               }
+               else
+               {
+                   Session::flash('deleted_tournament','Error In Deletion');
+                    return redirect()->back();
+               }
     }
 
     public function checkmatch($fixtureId)
