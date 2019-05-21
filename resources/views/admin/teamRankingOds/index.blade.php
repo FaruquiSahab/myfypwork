@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Oppo Club Rankings 
+@stop
 
+@section('header')
+    Oppo Club Rankings 
+@stop
 
 
 @section('content')
@@ -35,9 +41,9 @@
 
     @endif
 
-    <a href="{{route('team.point')}}" class="btn btn-info">Points</a>
+    <a style="float: right; margin: 10px;" href="{{route('team.point')}}" class="btn btn-info">Points</a>
 
-    <h2>Team Rankings</h2>
+    {{-- <h2>Team Rankings</h2> --}}
 
 
     <table id="batsmen_table" class="table table-sm table-hover  table-striped">

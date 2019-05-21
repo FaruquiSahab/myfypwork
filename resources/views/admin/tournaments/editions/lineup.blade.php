@@ -1,11 +1,17 @@
 @extends('layouts.admin')
 
+@section('title')
+    Make Lineup
+@stop
 
+@section('header')
+    Make Lineup
+@stop
 
 
 @section('content')
 
-        <h2>Lineup</h2>
+        {{-- <h2>Lineup</h2> --}}
 
     
 

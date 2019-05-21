@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Tournament Editions Section
+@stop
 
+@section('header')
+    Tournament Editions Section
+@stop
 
 
 @section('content')
@@ -35,9 +41,9 @@
 
     @endif
 
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >New Edition</a>
+    <a href="" style="float: right;" data-target="#addmodel" data-toggle="modal" class="btn btn-info" >New Edition</a>
 
-    <h2>Tournaments Edition</h2>
+    {{-- <h2>Tournaments Edition</h2> --}}
 
 
     <table class="table table-sm table-hover  table-striped">

@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Tournament Section
+@stop
 
+@section('header')
+    Tournament Section
+@stop
 
 
 @section('content')
@@ -35,9 +41,9 @@
 
     @endif
 
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >New Tournament</a>
+    <a href="" style="float: right;"  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >New Tournament</a>
 
-    <h2>Tournaments</h2>
+    {{-- <h2>Tournaments</h2> --}}
 
 
     <table class="table table-sm table-hover  table-striped">

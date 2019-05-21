@@ -1,5 +1,14 @@
 @extends('layouts.admin')
 
+
+@section('title')
+    Clubs List
+@stop
+
+@section('header')
+    Clubs List
+@stop
+
     @section('content')
 
 
@@ -29,9 +38,9 @@
     </div>
     @endif
 
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Add Club</a>
+    <a href="" style="float: right; margin: 10px;" data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Add Club</a>
 
-    <h1>Clubs</h1>
+    {{-- <h1>Clubs</h1> --}}
             <table id="club_table" class="table table-bordered">
                 <thead>
                     <tr>

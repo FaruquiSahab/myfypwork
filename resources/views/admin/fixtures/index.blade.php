@@ -1,14 +1,23 @@
 @extends('layouts.admin')
 
+@section('title')
+    Upcoming Fixtures
+@stop
+
+@section('header')
+    Upcoming Fixtures
+@stop
+
+
     @section('content')
 
 
 
     <span id="form_output"></span>
 
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Friendly Match</a>
+    <a href="" style="float: right; margin: 10px;"  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Friendly Match</a>
 
-    <h1>Upcoming Fixtures</h1>
+    {{-- <h1>Upcoming Fixtures</h1> --}}
             <table id="mytable" class="table table-bordered">
                 <thead>
                     <tr>

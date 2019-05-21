@@ -1,11 +1,17 @@
 @extends('layouts.admin')
 
+@section('title')
+    Graph On Points
+@stop
 
+@section('header')
+    Graph On Points
+@stop
 
 
 @section('content')
 
-    <a href="{{route('batsmen_stats.index')}}" class="btn btn-info">Back</a>
+    <a style="float: right; margin: 10px;" href="{{route('batsmen_stats.index')}}" class="btn btn-info">Back</a>
 
 
     <br>

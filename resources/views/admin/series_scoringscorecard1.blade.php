@@ -1,4 +1,12 @@
 @extends('layouts.admin')
+
+@section('title')
+    Scoring Innings 2
+@stop
+
+@section('header')
+    Scoring Innings 2
+@stop
     @section('content')
                     <fieldset>
                         <strong>1st Innings Score</strong> 

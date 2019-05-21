@@ -1,11 +1,18 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Strike Rate Based Performance
+@stop
+
+@section('header')
+    Strike Rate Based Performance
+@stop
 
 
 @section('content')
 
-    <a href="{{route('batsmen_stats.index')}}" class="btn btn-info">Back</a>
+    <a style="float: right; margin: 10px;" href="{{route('batsmen_stats.index')}}" class="btn btn-info">Back</a>
 
 
     <br>

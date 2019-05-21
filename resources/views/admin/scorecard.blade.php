@@ -1,4 +1,12 @@
 @extends('layouts.admin')
+
+@section('title')
+  Scorecard {{ $clubname1 }} vs {{ $clubname2 }}
+@stop
+
+@section('header')
+  Scorecard {{ $clubname1 }} vs {{ $clubname2 }}
+@stop
     @section('content')
     <fieldset style="border: 2px solid #ebebe0;">
         <br>

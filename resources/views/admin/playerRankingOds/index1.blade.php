@@ -1,5 +1,13 @@
 @extends('layouts.admin')
 
+@section('title')
+    Q Mobile Bowlers Rankings
+@stop
+
+@section('header')
+    Q Mobile Bowlers Rankings
+@stop
+
 @section('content')
 
 
@@ -33,16 +41,16 @@
 
    gle="modal" class="btn btn-info" >Add Club</a>--}}
 
-    <a href="{{route('bowlers.point')}}" class="btn btn-info">Points</a>
+    <a style="float: right; margin: 10px;" href="{{route('bowlers.point')}}" class="btn btn-info">Points</a>
 
-    <a href="{{route('bowlers.econ')}}" class="btn btn-info">Economy</a>
+    <a style="float: right; margin: 10px;" href="{{route('bowlers.econ')}}" class="btn btn-info">Economy</a>
 
-    <a href="{{route('bowlers.avg')}}" class="btn btn-info">Average</a>
-
-
+    <a style="float: right; margin: 10px;" href="{{route('bowlers.avg')}}" class="btn btn-info">Average</a>
 
 
-    <h2>Bowler Rankings</h2>
+
+
+    {{-- <h2>Bowler Rankings</h2> --}}
     <table id="bowler_table" class="table table-bordered">
         <thead>
         <tr>

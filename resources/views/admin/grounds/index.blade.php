@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Grounds List
+@stop
 
+@section('header')
+    Grounds List
+@stop
 
 
 @section('content')
@@ -25,9 +31,9 @@
             <p class="bg-info">{{session('updated_ground')}}</p>
         </div>
     @endif
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Register Ground</a>
+    <a href="" style="float: right; margin: 10px;" data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Register Ground</a>
 
-    <h2>Grounds</h2>
+    {{-- <h2>Grounds</h2> --}}
 
     <table class="table table-sm table-hover table-striped" id="mytable">
         <thead>

@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Club Selection For Tournament Edition
+@stop
 
+@section('header')
+    Club Selection For Tournament Edition
+@stop
 
 @section('content')
 
@@ -11,7 +17,7 @@
 
 
 
-    <h2>Clubs Selection For Tournament Edition</h2>
+    {{-- <h2>Clubs Selection For Tournament Edition</h2> --}}
 
 
     <div class="row">

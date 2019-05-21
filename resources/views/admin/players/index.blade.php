@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Players Section
+@stop
 
+@section('header')
+    Players Section
+@stop
 
 
 @section('content')
@@ -33,10 +39,10 @@
 
     @endif
     
-    <a style="float: right;"  data-target="#batchinsert" data-toggle="modal" class="btn btn-warning" >Insert Batch Players</a>
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Add Player</a>
+    <a style="float: right; margin: 10px"  data-target="#batchinsert" data-toggle="modal" class="btn btn-warning" >Insert Batch Players</a>
+    <a href="" style="float: right; margin: 10px" data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Add Player</a>
 
-    <h2>Players</h2>
+    {{-- <h2>Players</h2> --}}
 
 
     <table class="table table-sm table-hover  table-striped" id="mytable">

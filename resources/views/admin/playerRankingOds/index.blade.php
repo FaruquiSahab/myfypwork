@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Q Mobile Batsmen Rankings
+@stop
 
+@section('header')
+    Q Mobile Batsmen Rankings
+@stop
 
 
 @section('content')
@@ -36,16 +42,16 @@
     @endif
 
 
-    <a href="{{route('batsmen.point')}}" class="btn btn-info">Points</a>
+    <a style="float: right; margin:10px;" href="{{route('batsmen.point')}}" class="btn btn-info">Points</a>
 
-    <a href="{{route('batsmen.sr')}}" class="btn btn-info">Strike Rate</a>
+    <a style="float: right; margin:10px;" href="{{route('batsmen.sr')}}" class="btn btn-info">Strike Rate</a>
 
-    <a href="{{route('batsmen.avg')}}" class="btn btn-info">Average</a>
+    <a style="float: right; margin:10px;" href="{{route('batsmen.avg')}}" class="btn btn-info">Average</a>
 
-    <a href="{{route('batsmen.runs')}}" class="btn btn-info">Runs</a>
+    <a style="float: right; margin:10px;" href="{{route('batsmen.runs')}}" class="btn btn-info">Runs</a>
 
 
-    <h2>Batsmen Rankings</h2>
+    {{-- <h2>Batsmen Rankings</h2> --}}
 
 
     <table id="batsmen_table" class="table table-sm table-hover  table-striped">

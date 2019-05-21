@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Fixtures and Points Table
+@stop
 
+@section('header')
+    Fixtures and Points Table
+@stop
 
 @section('content')
 

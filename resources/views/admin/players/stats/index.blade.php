@@ -1,14 +1,20 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Players Stats
+@stop
 
+@section('header')
+    Players Stats
+@stop
 
 
 @section('content')
 
 
     
-    <u><h2>Stats Of Players</h2></u>
+    {{-- <u><h2>Stats Of Players</h2></u> --}}
 
     {{-- <fieldset>
         <legend>One Day Stats</legend>

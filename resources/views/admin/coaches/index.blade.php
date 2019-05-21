@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Coaches Section
+@stop
 
+@section('header')
+    Coaches Section
+@stop
 
 
 @section('content')
@@ -20,8 +26,8 @@
             <p class="bg-info">{{session('updated_coach')}}</p>
         </div>
     @endif
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Register Coach</a>
-    <h1>Coaches</h1>
+    <a href="" style="float: right; margin: 10px;" data-target="#addmodel" data-toggle="modal" class="btn btn-info" >Register Coach</a>
+    {{-- <h1>Coaches</h1> --}}
     <table class="table table-sm table-hover  table-striped">
         <thead>
         <tr>

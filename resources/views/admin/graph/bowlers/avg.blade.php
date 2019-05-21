@@ -1,11 +1,18 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Bowlers Average's Graph
+@stop
+
+@section('header')
+    Bowlers Average's Graph
+@stop
 
 
 @section('content')
 
-    <a href="{{route('bowler_stats.index')}}" class="btn btn-info">Back</a>
+    <a style="float: right; margin: 10px;" href="{{route('bowler_stats.index')}}" class="btn btn-info">Back</a>
 
 
     <br>

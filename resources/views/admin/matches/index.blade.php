@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 
 
+@section('title')
+    Matches Section
+@stop
 
+@section('header')
+    Matches Section
+@stop
 
 
 @section('content')
@@ -9,7 +15,7 @@
 
     <span id="form_output"></span>
 
-    <h2>Matches</h2>
+    {{-- <h2>Matches</h2> --}}
 
     <table class="table table-sm table-hover  table-striped" id="mytable">
         <thead>
