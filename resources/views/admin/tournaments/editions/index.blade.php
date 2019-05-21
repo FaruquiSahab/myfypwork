@@ -74,6 +74,7 @@
                         @else
                             <a href="{{ route('tournamentStats',$tournament->id) }}">
                                 {{$tournament->tournament->name}}
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>
                             </a>
                         @endif
                     </td>

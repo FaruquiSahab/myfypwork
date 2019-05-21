@@ -70,6 +70,7 @@
                     <td>
                         <a href="{{ route('seriesStats',$serie->id) }}">
                             {{$serie->name}}
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
                         </a>
                     </td>
                     {{--<td>{{$Tournament->type}}</td>--}}
@@ -287,7 +288,7 @@
                     console.log(data)
                 }
             }) 
-        })
+        });
     </script>
 
 
