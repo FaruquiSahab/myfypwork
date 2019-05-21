@@ -2,6 +2,6 @@ tournament final ``
 tournament winner update ``
 tournament stats like runs etc ``
 show only clubs available b/w dates``
-friendly match and series no same clubs can be select!
+friendly match and series no same clubs can be select! ``
 when click on club show records and stats.
 when click on player show records and stats.

@@ -218,7 +218,7 @@ class TournamentClubController extends Controller
                              ->select('club_id_2')->distinct('club_id_2')->get();
         $club_id_1_s  = SeriesFixture::whereBetween('starting_date',[$starting_date,$ending_date])
                              ->select('club_id_1')->distinct('club_id_1')->get();
-        $club_id_2_S  = SeriesFixture::whereBetween('starting_date',[$starting_date,$ending_date])
+        $club_id_2_s  = SeriesFixture::whereBetween('starting_date',[$starting_date,$ending_date])
                              ->select('club_id_2')->distinct('club_id_2')->get();
         // return $club_id_1;
         // return $editions;

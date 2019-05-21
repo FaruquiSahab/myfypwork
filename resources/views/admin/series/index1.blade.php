@@ -1,5 +1,11 @@
 @extends('layouts.admin')
+@section('title')
+    Series
+@stop
 
+@section('header')
+    Series
+@stop
 
 
 @section('content')
@@ -33,9 +39,9 @@
 
     @endif
 
-    <a href=""  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >New Series</a>
+    <a href="" style="float: right;"  data-target="#addmodel" data-toggle="modal" class="btn btn-info" >New Series</a>
 
-    <h2>Series</h2>
+    {{-- <h2>Series</h2> --}}
 
 
     <table class="table table-sm table-hover  table-striped">
@@ -100,87 +106,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title"><strong>Series</strong></h3>
+                    <h3 class="modal-title">
+                        <strong>New Series Requirement</strong>
+                    </h3>
                 </div>
                 <div class="modal-body">
 
                     {!! Form::open(['method'=>'POST', 'action'=> 'SeriesController@store','files'=>true]) !!}
 
-
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::label('photo_id', 'Logo') !!}--}}
-                        {{--{!! Form::file('photo_id', null, ['class'=>'form-control'])!!}--}}
-                    {{--</div>--}}
-
-
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::label('starting_date', 'Starting Date') !!}--}}
-                        {{--{!! Form::text('starting_date', null, ['class'=>'form-control','required', 'id' => 'start_date'])!!}--}}
-                        {{--<input name="starting_date" class="form-control" type="text" id="datepicker" required>--}}
-                    {{--</div>--}}
-
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::label('ending_date', 'Ending Date') !!}--}}
-                        {{--{!! Form::date('ending_date', null, ['class'=>'form-control','required','id' => 'end_date'])!!}--}}
-                    {{--</div>--}}
-              {{----}}
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::label('tournament_id', 'Tournament') !!}--}}
-                        {{--{!! Form::select('tournament_id', $tournamentss, null, ['placeholder'=>'Select a Tournament', 'class'=>'form-control', 'name'=>'tournament_id','id'=>'tournamentSelect', 'required'])!!}--}}
-
-
-                        {{--<label for="tournament">Tournament</label>--}}
-                        {{--<select name="tournament_id" form="carform" class="form-control">--}}
-                        {{--<option value="" default selected>Tournament</option>--}}
-                        {{--  @foreach($tournamentss as $key=> $tour)--}}
-                        {{--<option value="{{$tournamentss[$key]->id}}">{{$tournamentss[$key]->name}}</option>--}}
-                        {{--@endforeach--}}
-                        {{--</select>--}}
-
-
-
-                    {{--</div>--}}
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::label('tournament_type_id', 'Tournament Type') !!}--}}
-                        {{--{!! Form::select('tournament_type_id', $m_type, null, ['placeholder'=>'Match Type', 'class'=>'form-control', 'name'=>'tournament_type_id','id'=>'TypeSelect', 'required'])!!}--}}
-                    {{--</div>--}}
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::label('tournament_format_id', 'Tournament') !!}--}}
-                        {{--{!! Form::select('tournament_id', $t_format, null, ['placeholder'=>'Tournament Format', 'class'=>'form-control', 'name'=>'tournament_format_id','id'=>'formatSelect', 'required'])!!}--}}
-                    {{--</div>--}}
-
-
-
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::label('ground_id', 'Ground') !!}--}}
-                        {{--{!! Form::select('ground_id', $t_grounds, null, ['placeholder'=>'Ground', 'class'=>'form-control', 'name'=>'ground_id', 'required'])!!}--}}
-                    {{--</div>--}}
-
-
-
-
-                    {{--<div class="form-group">--}}
-
-                        {{--{!! Form::label('number_of_teams', 'Number of Teams') !!}--}}
-                        {{--{!! Form::number('number_of_teams', null, ['class'=>'form-control', 'min'=>'4','max'=>'10', 'required'])!!}--}}
-
-                    {{--</div>--}}
-
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::submit('Add Tournament', ['class'=>'btn btn-primary col-sm-3']) !!}--}}
-                    {{--</div>--}}
-
-                    {{--<div class="form-group">--}}
-                        {{--{!! Form::button('Cancel', ['class'=>'btn btn-danger col-sm-3', 'data-dismiss'=>'modal']) !!}--}}
-                    {{--</div>--}}
 
                     <input type="hidden" name="button_action" value="0">
                     <div class="form-group">
@@ -202,15 +135,21 @@
 
 
                     <div class="form-group">
-                        {!! Form::label('club_id_1', 'Club') !!}
-                        {!! Form::select('club_id_1', $clubs, null, ['placeholder'=>'Select Club','class'=>'form-control', 'id'=>'clublevel'])!!}
+                        {!! Form::label('club_id_1', 'First Club') !!}
+                        {{-- {!! Form::select('club_id_1', $clubs, null, ['placeholder'=>'Select Club','class'=>'form-control', 'id'=>'club1'])!!} --}}
+                        <select class="form-control" name="club_id_1" id="club1">
+                            
+                        </select>
                     </div>
 
 
 
                     <div class="form-group">
-                        {!! Form::label('club_id_2', 'Club') !!}
-                        {!! Form::select('club_id_2', $clubs, null, ['placeholder'=>'Select Club','class'=>'form-control', 'id'=>'clublevel'])!!}
+                        {!! Form::label('club_id_2', 'Second Club') !!}
+                        {{-- {!! Form::select('club_id_2', $clubs, null, ['placeholder'=>'Select Club','class'=>'form-control', 'id'=>'clublevel'])!!} --}}
+                        <select class="form-control" name="club_id_2" id="club2">
+                            
+                        </select>
                     </div>
 
 
@@ -274,7 +213,8 @@
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all">
     <script type="text/javascript">
-
+        $('input').prop('required',true);
+        $('select').prop('required',true);
         var today = new Date();
         console.log(today);
         $('#datepicker').datepicker({
@@ -283,32 +223,68 @@
             maxDate: "+1Y"
         });
 
-        /* $('#start_date').on('change select',function () {
-            $('#end_date').prop('disabled',false);
-         });
+        $('#club1').on('change select', function(){
+            $.ajax({
+                data:{
+                    '_token':$('input[name=_token]').val(),
+                    'id': $('#club1').val(),
+                    'date': $('#datepicker').val()
+                },
+                type: "POST",
+                url: "{{ route('clubByClub') }}",
+                success:function(data){
+                    console.log('success');
+                    console.log(data);
+                    var clubs = JSON.parse(data,true);
+                    console.log(clubs.length);
+                    var html = '';
+                    $('#club2').html(html);
+                    html = '<option selected disabled value>Select Club</option>';
+                    for(var i=0; i<clubs.length; i++)
+                    {
+                        html += '<option value="'+clubs[i]['id'] +'">'+clubs[i]['name'] +'</option>';
+                    }
+                    $('#club2').append(html);
+                },
+                error:function(data){
+                    console.log('error');
+                    console.log(data);
+                }
+            })
+        });
 
-
-         $('#end_date').on('change select',function () {
-            var endDate =  $('#end_date').val();
-             var startDate =  $('#start_date').val();
- //            console.log(endDate);
-
-             $.ajax({
-                 url: "tournaments_edtions",
-                 method: "GET",
-                 data: {
-                     'end_date':endDate,
-                     'start_date':startDate,
-                     '_token': $('input[name=_token]').val()
-                 },
-                 success: function () {
-
-                 },
-                 error: function () {
-
-                 }
-             })
-         });*/
+        $('#datepicker').on('change select', function(){
+            var _date = $('#datepicker').val();
+            var _token = $('input[name=_token]').val();
+            $.ajax({
+                type:"POST",
+                url: "{{ route('clubByDate') }}",
+                data: {
+                    '_token': _token,
+                    'date': _date
+                },
+                success:function(data){
+                    console.log('success');
+                    console.log(data);
+                    var clubs = JSON.parse(data,true);
+                    console.log(clubs);
+                    var html = '';
+                    html = '<option selected disabled value>Select Club</option>';
+                    $('#club1').html(html);
+                    $('#club2').html(html);
+                    html = '';
+                    for(var i=0; i<clubs.length; i++)
+                    {
+                        html+= '<option value="'+clubs[i]['id']+'">'+clubs[i]['name']+'</option>';
+                    }
+                    $('#club1').append(html);
+                },
+                error:function(data){
+                    console.log('error');
+                    console.log(data)
+                }
+            }) 
+        })
     </script>
 
 

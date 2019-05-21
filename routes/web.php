@@ -750,6 +750,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
             'uses'=> 'TournamentReferenceController@clubByClub',
             'as' => 'clubByClub'
         ])->middleware(['can:create']);
+    // new route
+    Route::POST('/clubBy/date',[
+        'uses'=>'TournamentReferenceController@clubByDate',
+        'as'=>'clubByDate'
+    ])->middleware(['can:create']);
 
 
         Route::patch('/tournament/edition/update/{id}', [

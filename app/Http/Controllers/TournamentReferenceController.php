@@ -7,6 +7,7 @@ use App\Ground;
 use App\MatchType;
 use App\Photo;
 use App\Fixture;
+use App\Series_Fixtures;
 use App\Match;
 use App\InningScore;
 use App\BatsmenScore;
@@ -173,10 +174,53 @@ class TournamentReferenceController extends Controller
 
     public function clubByClub(Request $request)
     {
-        $clubsR = Club::where('id','!=',$request->id)->pluck('name','id');
+        $date = $request->date;
+        $starting_date = Carbon::parse($date)->format('Y-m-d');
+        $total_matches = 5;
+        $total_days = $total_matches * 2;
+        $ending_date = Carbon::parse($starting_date)->addDays($total_days)->format('Y-m-d');
+        $club_id_1  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])
+                             ->select('club_id_1')->distinct('club_id_1')->get();
+        $club_id_2  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])
+                             ->select('club_id_2')->distinct('club_id_2')->get();
+        $club_id_1_s  = Series_Fixtures::whereBetween('starting_date',[$starting_date,$ending_date])
+                             ->select('club_id_1')->distinct('club_id_1')->get();
+        $club_id_2_s  = Series_Fixtures::whereBetween('starting_date',[$starting_date,$ending_date])
+                             ->select('club_id_2')->distinct('club_id_2')->get();
+        $clubstring1 = 'WHERE id != 0 ';
+        foreach ($club_id_1 as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_1. ' '; }
+        foreach ($club_id_2 as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_2. ' '; }
+        foreach ($club_id_1_s as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_1. ' '; }
+        foreach ($club_id_2_s as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_2. ' '; }
+        $clubstring1 .= 'AND id != '.$request->id. ' ';
+        $clubs = DB::select(DB::raw('select * from clubs '.$clubstring1));
+        echo json_encode($clubs);
 
-        echo json_encode($clubsR);
+    }
 
+    public function clubByDate(Request $request)
+    {
+        $date = $request->date;
+        $starting_date = Carbon::parse($date)->format('Y-m-d');
+        $total_matches = 5;
+        $total_days = $total_matches * 2;
+        $ending_date = Carbon::parse($starting_date)->addDays($total_days)->format('Y-m-d');
+        $club_id_1  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])
+                             ->select('club_id_1')->distinct('club_id_1')->get();
+        $club_id_2  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])
+                             ->select('club_id_2')->distinct('club_id_2')->get();
+        $club_id_1_s  = Series_Fixtures::whereBetween('starting_date',[$starting_date,$ending_date])
+                             ->select('club_id_1')->distinct('club_id_1')->get();
+        $club_id_2_s  = Series_Fixtures::whereBetween('starting_date',[$starting_date,$ending_date])
+                             ->select('club_id_2')->distinct('club_id_2')->get();
+        $clubstring1 = 'WHERE id != 0 ';
+        foreach ($club_id_1 as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_1. ' '; }
+        foreach ($club_id_2 as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_2. ' '; }
+        foreach ($club_id_1_s as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_1. ' '; }
+        foreach ($club_id_2_s as $key => $value) { $clubstring1 .= 'AND id != ' .$value->club_id_2. ' '; }
+        // return $clubstring1;
+        $clubs = DB::select(DB::raw('select * from clubs '.$clubstring1));
+        echo json_encode($clubs);
     }
 
 //    public function edition()
