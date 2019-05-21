@@ -40,6 +40,7 @@ class SeriesScoringController extends Controller
   	{
   		// return "hello";
 		$matches = Series_Matches::where('id',$match)->get();
+		$refer_id = Series_Matches::where('id',$match)->first()->refer_id;
 		// return $matches;
 		if($matches[0]->status == 0 || $matches[0]->status == 1)
 		{
@@ -99,7 +100,8 @@ class SeriesScoringController extends Controller
 								[
 									'match_id'=>$matches[0]->id,
 									'batsmen_id'=>$battingfirst[$i]->player->id,
-									'inning_no'=>1
+									'inning_no'=>1,
+									'refer_id'=>$refer_id
 								]
 							);
 						}
@@ -124,7 +126,8 @@ class SeriesScoringController extends Controller
 									[
 										'match_id'=>$matches[0]->id,
 										'bowler_id'=>$ballingfirst[$i]->player->id,
-										'inning_no'=>2
+										'inning_no'=>2,
+										'refer_id'=>$refer_id
 									]
 								);
 							}
@@ -136,7 +139,8 @@ class SeriesScoringController extends Controller
 									[
 										'match_id'=>$matches[0]->id,
 										'bowler_id'=>$ballingfirst[$i]->player->id,
-										'inning_no'=>2
+										'inning_no'=>2,
+										'refer_id'=>$refer_id
 									]
 								);
 							}
@@ -152,7 +156,8 @@ class SeriesScoringController extends Controller
 				SeriesExtra::updateOrCreate(
 					[
 						'match_id'=>$match,
-						'inning_no'=>1
+						'inning_no'=>1,
+						'refer_id'=>$refer_id
 					]
 				);
 				$extra = SeriesExtra::where('match_id',$match)->where('inning_no',1)->get();
@@ -366,6 +371,7 @@ class SeriesScoringController extends Controller
 
 	public function inningscore($matchId,$inningNo)
 	{	
+		$refer_id = Series_Matches::where('id',$matchId)->first()->refer_id;
 		$playerId =  SeriesBatsmenScore::where('match_id',$matchId)->where('inning_no',$inningNo)->first()->batsmen_id;
 		$clubid = Player::where('id',$playerId)->first()->club_id;
 		$helper = new CricketStatsHelper();
@@ -399,7 +405,8 @@ class SeriesScoringController extends Controller
 		SeriesInningScore::updateOrCreate(
 			[
 				'match_id'=>$matchId,
-				'inning_no'=>$inningNo
+				'inning_no'=>$inningNo,
+				'refer_id'=>$refer_id
 			],
 			[
 				'club_id'=>$clubid,
@@ -419,6 +426,7 @@ class SeriesScoringController extends Controller
 
 	public function index2($match)
 	{
+		$refer_id = Series_Matches::where('id',$match)->first()->refer_id;
 		$matches = Series_Matches::where('id',$match)->get();
 		if($matches[0]->status == 1)
 		{
@@ -479,7 +487,8 @@ class SeriesScoringController extends Controller
 							[
 								'match_id'=>$matches[0]->id,
 								'batsmen_id'=>$battingsecond[$i]->player->id,
-								'inning_no'=>2
+								'inning_no'=>2,
+									'refer_id'=>$refer_id
 							]
 						);
 					}
@@ -503,7 +512,8 @@ class SeriesScoringController extends Controller
 								[
 									'match_id'=>$matches[0]->id,
 									'bowler_id'=>$ballingsecond[$i]->player->id,
-									'inning_no'=>1
+									'inning_no'=>1,
+									'refer_id'=>$refer_id
 								]
 							);
 						}
@@ -515,7 +525,8 @@ class SeriesScoringController extends Controller
 								[
 									'match_id'=>$matches[0]->id,
 									'bowler_id'=>$ballingsecond[$i]->player->id,
-									'inning_no'=>1
+									'inning_no'=>1,
+									'refer_id'=>$refer_id
 								]
 							);
 						}
@@ -530,7 +541,8 @@ class SeriesScoringController extends Controller
 				SeriesExtra::updateOrCreate(
 					[
 						'match_id'=>$match,
-						'inning_no'=>2
+						'inning_no'=>2,
+									'refer_id'=>$refer_id
 					]
 				);
 				$extra = SeriesExtra::where('match_id',$match)->where('inning_no',2)->get();

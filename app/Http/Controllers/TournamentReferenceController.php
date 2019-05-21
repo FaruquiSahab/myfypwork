@@ -58,7 +58,7 @@ class TournamentReferenceController extends Controller
         $max_s_runs = InningScore::where('refer_id',$id)->where('inning_no',2)->max('innings_score.runs');
         $min_s_runs = InningScore::where('refer_id',$id)->where('inning_no',2)->min('innings_score.runs');
         $highscore = BatsmenScore::where('refer_id',$id)->max('batsmen_scores.runs');
-        $halfcenturies = BatsmenScore::where('refer_id',$id)->where('batsmen_scores.runs','>','50')->where('batsmen_scores.runs','<','100')->get();
+        $halfcenturies = BatsmenScore::where('refer_id',$id)->where('batsmen_scores.runs','>=','50')->where('batsmen_scores.runs','<','100')->get();
         $centuries = BatsmenScore::where('refer_id',$id)->where('batsmen_scores.runs','>=','100')->get();
         $record = BowlerScore::where('refer_id',$id)
                              ->orderBy('bowler_scores.wickets','DESC')

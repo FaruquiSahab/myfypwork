@@ -67,7 +67,9 @@
                 <tr>
                     {{--<td> <img height="50" src="{{$tournament->photo ? $tournament->photo->file : 'http://placehold.it/400x400'}}" alt="" ></td>--}}
                     <td>
-                       {{$serie->name}}
+                        <a href="{{ route('seriesStats',$serie->id) }}">
+                            {{$serie->name}}
+                        </a>
                     </td>
                     {{--<td>{{$Tournament->type}}</td>--}}
 

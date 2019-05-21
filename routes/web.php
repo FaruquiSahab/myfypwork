@@ -933,6 +933,10 @@ Route::post('/series/check/match/{fixture}',[
 Route::get('series/destroy/{id}','SeriesController@destroy')
 ->name('series.destroy');
 
+//series stats new route
+    Route::get('series/{id}/stats','SeriesController@seriesStats')
+    ->name('seriesStats');
+
 //-----------------------------------------------------------------------------------------------------
 
 

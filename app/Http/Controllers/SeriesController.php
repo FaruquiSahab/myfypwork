@@ -9,6 +9,9 @@ use App\Player;
 use App\Series;
 use App\Series_Fixtures;
 use App\Series_Matches;
+use App\SeriesInningScore;
+use App\SeriesBatsmenScore;
+use App\SeriesBowlerScore;
 use App\Umpire;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -69,6 +72,40 @@ class SeriesController extends Controller
     public function create()
     {
         //
+    }
+
+    public function seriesStats(Request $request, $id)
+    {
+        $name = Series::where('id',$id)->first()->name;
+        $edition = Carbon::parse(Series::where('id',$id)->first()->starting_date)->format('Y');
+        $total_matches = Series_Matches::where('refer_id',$id)
+                                        ->count('series_matches.id');
+        $total_runs = SeriesInningScore::where('refer_id',$id)
+                                        ->sum('series_innings_score.runs');
+        $total_sixes = SeriesBatsmenScore::where('refer_id',$id)
+                                        ->sum('series_batsmen_scores.sixes');
+        $total_fours = SeriesBatsmenScore::where('refer_id',$id)
+                                        ->sum('series_batsmen_scores.fours');
+        $max_f_runs = SeriesInningScore::where('refer_id',$id)->where('inning_no',1)
+                                        ->max('series_innings_score.runs');
+        $min_f_runs = SeriesInningScore::where('refer_id',$id)->where('inning_no',1)
+                                        ->min('series_innings_score.runs');
+        $max_s_runs = SeriesInningScore::where('refer_id',$id)->where('inning_no',2)
+                                        ->max('series_innings_score.runs');
+        $min_s_runs = SeriesInningScore::where('refer_id',$id)->where('inning_no',2)
+                                        ->min('series_innings_score.runs');
+        $highscore = SeriesBatsmenScore::where('refer_id',$id)
+                                        ->max('series_batsmen_scores.runs');
+        $halfcenturies = SeriesBatsmenScore::where('refer_id',$id)->where('series_batsmen_scores.runs','>=','50')->where('series_batsmen_scores.runs','<','100')->get();
+        $centuries = SeriesBatsmenScore::where('refer_id',$id)->where('series_batsmen_scores.runs','>=','100')->get();
+        $record = SeriesBowlerScore::where('refer_id',$id)
+                             ->orderBy('series_bowler_scores.wickets','DESC')
+                             ->orderBy('series_bowler_scores.runs','ASC')
+                             ->limit(1)->first();
+        $bestball = $record->wickets. ' / ' .$record->runs;
+        $centuries = sizeof($centuries);
+        $halfcenturies = sizeof($halfcenturies);
+        return view('admin.series.series_stats',compact('name','edition','total_matches','total_runs','total_sixes','total_fours','max_f_runs','min_f_runs','max_s_runs','min_s_runs','highscore','bestball','halfcenturies','centuries'));
     }
 
     /**
@@ -168,14 +205,14 @@ class SeriesController extends Controller
         $date = Series_Fixtures::where('id',$id )->first()->starting_date;
         //        $starting_date = preg_replace('/[^0-9]/', '', $seriesType);
         
-
+        $refer_id = Series_Fixtures::where('id',$id)->first()->refer_id;
 
         $players1 = Player::where('club_id',$club1)->get();
         $players2 = Player::where('club_id',$club2)->get();
 
         $umpires = Umpire::all();
         // return $umpires       ;
-        return view('admin.series.lineup',compact('id','umpires','players1','players2','id','club1','club2','clubname1','clubname2','ground','series_type_id','date'));
+        return view('admin.series.lineup',compact('id','umpires','players1','players2','id','club1','club2','clubname1','clubname2','ground','series_type_id','date','refer_id'));
     }
 
 
@@ -235,7 +272,8 @@ class SeriesController extends Controller
                 'umpire_id' => $request->umpire_id,
                 'starting_date' => $request->starting_date,
                 'series_type_id' => $request->series_type_id,
-                'choose_to' => $request->choose_to
+                'choose_to' => $request->choose_to,
+                'refer_id' =>$request->refer_id
             ]);
 
             if($match)

@@ -1,6 +1,12 @@
 @extends('layouts.admin')
 
+@section('title')
+Series Lineup
+@stop
 
+@section('header')
+Series Lineup
+@stop
 
 
 @section('content')
@@ -414,7 +420,7 @@
 
     </style>
 
-    <h2>Lineup</h2>
+    {{-- <h2>Lineup</h2> --}}
 
 
 
@@ -436,6 +442,7 @@
                 <input type="hidden" name="fixture_id" value="{{ $id }}">
                 <input type="hidden" name="starting_date" value="{{$date}}">
                 <input type="hidden" name="series_type_id" value="{{$series_type_id}}">
+                <input type="hidden" name="refer_id" value="{{$refer_id}}">
 
 
 
