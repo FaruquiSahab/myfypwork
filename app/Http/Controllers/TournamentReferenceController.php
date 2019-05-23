@@ -228,6 +228,7 @@ class TournamentReferenceController extends Controller
         $date = $request->date;
         $starting_date = Carbon::parse($date)->format('Y-m-d');
         $total_matches = 5;
+        if($request->extra == 0){$total_matches = 20;}
         $total_days = $total_matches * 2;
         $ending_date = Carbon::parse($starting_date)->addDays($total_days)->format('Y-m-d');
         $ground_id  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])

@@ -236,7 +236,8 @@
                 url: "{{ route('groundByDate') }}",
                 data: {
                     '_token': _token,
-                    'date': _date
+                    'date': _date,
+                    'extra': '0'
                 },
                 success:function(data){
                     console.log('success');
