@@ -112,7 +112,7 @@
                         {!! Form::open(['id'=>'batchform','files'=>true]) !!}
                         <div class="form-group">
                             <label style="float: left;"for="select_file">Club</label>
-                            {!! Form::select('club_id',[''=>'Choose Club'] + $clubs, null, ['class'=>'form-control','id'=>'editclub','required'])!!}
+                            {!! Form::select('club_id',[''=>'Choose Club'] + $clubs, null, ['class'=>'form-control','id'=>'','required'])!!}
                         </div>
                         <div class="form-group">
                             <label style="float: left;"for="select_file">Players File</label>
@@ -297,6 +297,7 @@
             {
                     "processing": true,
                     "serverSide": true,
+                    "bStateSave": true,
                     "ajax": "{{ route('playersData') }}",
                     "columns":[
                         { "data": "names" },
@@ -381,7 +382,7 @@
                                 // $('#action').val('Add');
                                 // $('.modal-title').text('Add Data');
                                 // $('#button_action').val('insert');
-                                $('#mytable').DataTable().ajax.reload();
+                                $('#mytable').DataTable().ajax.reload(null, false);
                             }
                         }
                     },
@@ -427,7 +428,7 @@
                     success:function(data)
                     {
                         // alert(data);
-                        $('#mytable').DataTable().ajax.reload();
+                        $('#mytable').DataTable().ajax.reload(null, false);
                         toastr.success(data, 'Data Deleted');
                     },
                     error:function(data)

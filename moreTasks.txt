@@ -3,5 +3,8 @@ tournament winner update ``
 tournament stats like runs etc ``
 show only clubs available b/w dates``
 friendly match and series no same clubs can be select! ``
-when click on club show records and stats.
-when click on player show records and stats.
+when click on club show records and stats. ``
+when click on player show records and stats. ``
+show only ground available b/w dates. ``
+tournament runrate update
+knockout format setup

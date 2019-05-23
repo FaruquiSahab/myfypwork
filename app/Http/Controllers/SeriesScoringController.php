@@ -1095,21 +1095,6 @@ class SeriesScoringController extends Controller
 
 		$fixture_id = Series_Matches::where('id',$matchId)->first()->fixture_id;
 		$refer_id = Series_Fixtures::where('id',$fixture_id)->first()->refer_id;
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('total_matches');
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('total_matches');
-
-		// if ($winnerclub == $club1){
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('win_matches');
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('loss_matches');
-		// }
-		// elseif ($winnerclub == $club2){
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('win_matches');
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('loss_matches');
-		// }
-		// elseif ($winnerclub == '0'){
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->increment('tie_matches');
-		// RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('tie_matches');
-		// }
 		///////////////////////////////Team Stats 1/////////////////////////////////////
 			$allRunsScored = Team_Stats::where('club_id',$club1)->first()->total_runs_scored;
 			$allOversFaced = Team_Stats::where('club_id',$club1)->first()->total_overs_faced;
@@ -1139,9 +1124,9 @@ class SeriesScoringController extends Controller
 			$runsrateA = $allRunsScored / $allOversFaced;
 			$runrateB = $allRunsConceed / $allOversBowled;
 			$matches = $matches + 1;
-			if ($winnerclub == $club1) 		{ $wins = $wins + 1; }
-			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
-			elseif($winnerclub == $club2) 	{ $lost = $lost + 1; }
+			if ($winnerclub == $club1) 		{ $wins = $wins + 1; $points = 2; }
+			elseif($winnerclub == 0) 		{ $nr = $nr+1; $points = 1; }
+			elseif($winnerclub == $club2) 	{ $lost = $lost + 1; $points = 0; }
 			////////////////////////////UPDATING//////////////////////////////////
 			$team_stats = Team_Stats::where('club_id',$club1)->first();
 			$team_stats->total_runs_scored = $allRunsScored;
@@ -1153,6 +1138,7 @@ class SeriesScoringController extends Controller
 			$team_stats->win = $wins;
 			$team_stats->loss = $lost;
 			$team_stats->nr = $nr;
+			$team_stats->points = $team_stats->points+$points;
 			$team_stats->save();
 		/////////////////////////////////////END////////////////////////////////////////
 
@@ -1186,9 +1172,9 @@ class SeriesScoringController extends Controller
 			$runrateB = $allRunsConceed / $allOversBowled;
 
 			$matches = $matches + 1;
-			if ($winnerclub == $club2) 		{ $wins = $wins + 1; }
-			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
-			elseif($winnerclub == $club1) 	{ $lost = $lost + 1; }
+			if ($winnerclub == $club2) 		{ $wins = $wins + 1; $points = 2; }
+			elseif($winnerclub == 0) 		{ $nr = $nr+1; $points = 1; }
+			elseif($winnerclub == $club1) 	{ $lost = $lost + 1; $points = 0; }
 			////////////////////////////UPDATING//////////////////////////////////
 			$team_stats = Team_Stats::where('club_id',$club2)->first();
 			$team_stats->total_runs_scored = $allRunsScored;
@@ -1200,6 +1186,7 @@ class SeriesScoringController extends Controller
 			$team_stats->win = $wins;
 			$team_stats->loss = $lost;
 			$team_stats->nr = $nr;
+			$team_stats->points = $team_stats->points+$points;
 			$team_stats->save();
 		/////////////////////////////////////END////////////////////////////////////////
 

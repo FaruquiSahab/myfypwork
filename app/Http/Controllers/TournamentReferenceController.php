@@ -223,6 +223,25 @@ class TournamentReferenceController extends Controller
         echo json_encode($clubs);
     }
 
+    public function groundByDate(Request $request)
+    {
+        $date = $request->date;
+        $starting_date = Carbon::parse($date)->format('Y-m-d');
+        $total_matches = 5;
+        $total_days = $total_matches * 2;
+        $ending_date = Carbon::parse($starting_date)->addDays($total_days)->format('Y-m-d');
+        $ground_id  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])
+                             ->select('ground_id')->distinct('ground_id')->get();
+        $ground_id_s  = Series_Fixtures::whereBetween('starting_date',[$starting_date,$ending_date])
+                             ->select('ground_id')->distinct('ground_id')->get();
+        $groundstring = 'WHERE id != 0 ';
+        foreach ($ground_id as $key => $value) { $groundstring .= 'AND id != ' .$value->ground_id. ' '; }
+        foreach ($ground_id_s as $key => $value) { $groundstring .= 'AND id != ' .$value->ground_id. ' '; }
+        // return $groundstring;
+        $grounds = DB::select(DB::raw('select * from grounds '. $groundstring));
+        echo json_encode($grounds);
+    }
+
 //    public function edition()
 //    {
 //

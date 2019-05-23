@@ -44,7 +44,6 @@
             <table id="club_table" class="table table-bordered">
                 <thead>
                     <tr>
-                        {{-- <th class="col-sm-2">Photo</th> --}}
                         <th class="col-sm-4">Name</th>
                         <th class="col-sm-2">Level</th>
                         <th class="col-sm-3">Action</th>

@@ -180,7 +180,8 @@
 
                     <div class="form-group">
                         {!! Form::label('ground_id', 'Ground') !!}
-                        {!! Form::select('ground_id', $grounds, null, ['placeholder'=>'Select Ground','class'=>'form-control', 'id'=>'clublevel'])!!}
+                        {{-- {!! Form::select('ground_id', $grounds, null, ['placeholder'=>'Select Ground','class'=>'form-control', 'id'=>'clublevel'])!!} --}}
+                        <select class="form-control" name="ground_id" id="ground"></select>
                     </div>
 
 
@@ -282,6 +283,38 @@
                         html+= '<option value="'+clubs[i]['id']+'">'+clubs[i]['name']+'</option>';
                     }
                     $('#club1').append(html);
+                },
+                error:function(data){
+                    console.log('error');
+                    console.log(data)
+                }
+            }) 
+        });
+
+        $('#datepicker').on('change select', function(){
+            var _date = $('#datepicker').val();
+            var _token = $('input[name=_token]').val();
+            $.ajax({
+                type:"POST",
+                url: "{{ route('groundByDate') }}",
+                data: {
+                    '_token': _token,
+                    'date': _date
+                },
+                success:function(data){
+                    console.log('success');
+                    console.log(data);
+                    var ground = JSON.parse(data,true);
+                    console.log(ground);
+                    var html = '';
+                    html = '<option selected disabled value>Select Ground</option>';
+                    $('#ground').html(html);
+                    html = '';
+                    for(var i=0; i<ground.length; i++)
+                    {
+                        html+= '<option value="'+ground[i]['id']+'">'+ground[i]['name']+'</option>';
+                    }
+                    $('#ground').append(html);
                 },
                 error:function(data){
                     console.log('error');

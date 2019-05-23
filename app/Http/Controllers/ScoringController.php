@@ -1149,9 +1149,9 @@ class ScoringController extends Controller
 			$runsrateA = $allRunsScored / $allOversFaced;
 			$runrateB = $allRunsConceed / $allOversBowled;
 			$matches = $matches + 1;
-			if ($winnerclub == $club1) 		{ $wins = $wins + 1; }
-			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
-			elseif($winnerclub == $club2) 	{ $lost = $lost + 1; }
+			if ($winnerclub == $club1) 		{ $wins = $wins + 1; $points = 2; }
+			elseif($winnerclub == 0) 		{ $nr = $nr+1; $points = 1; }
+			elseif($winnerclub == $club2) 	{ $lost = $lost + 1; $points = 0; }
 			////////////////////////////UPDATING//////////////////////////////////
 			$team_stats = Team_Stats::where('club_id',$club1)->first();
 			$team_stats->total_runs_scored = $allRunsScored;
@@ -1163,6 +1163,7 @@ class ScoringController extends Controller
 			$team_stats->win = $wins;
 			$team_stats->loss = $lost;
 			$team_stats->nr = $nr;
+			$team_stats->points = $team_stats->points+$points;
 			$team_stats->save();
 		/////////////////////////////////////END////////////////////////////////////////
 
@@ -1196,9 +1197,9 @@ class ScoringController extends Controller
 			$runrateB = $allRunsConceed / $allOversBowled;
 
 			$matches = $matches + 1;
-			if ($winnerclub == $club2) 		{ $wins = $wins + 1; }
-			elseif($winnerclub == 0) 		{ $nr = $nr+1; }
-			elseif($winnerclub == $club1) 	{ $lost = $lost + 1; }
+			if ($winnerclub == $club2) 		{ $wins = $wins + 1; $points = 2; }
+			elseif($winnerclub == 0) 		{ $nr = $nr+1; $points = 1; }
+			elseif($winnerclub == $club1) 	{ $lost = $lost + 1; $points = 0; }
 			////////////////////////////UPDATING//////////////////////////////////
 			$team_stats = Team_Stats::where('club_id',$club2)->first();
 			$team_stats->total_runs_scored = $allRunsScored;
@@ -1210,6 +1211,7 @@ class ScoringController extends Controller
 			$team_stats->win = $wins;
 			$team_stats->loss = $lost;
 			$team_stats->nr = $nr;
+			$team_stats->points = $team_stats->points+$points;
 			$team_stats->save();
 		/////////////////////////////////////END////////////////////////////////////////
 

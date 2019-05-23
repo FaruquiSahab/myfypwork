@@ -65,6 +65,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     ]);
 	Route::get('clubdata', 'ClubController@clubdata')->name('clubdata');
 
+    Route::get('club/{id}/record&stats','ClubController@record')->name('clubrecord');
 
 
     Route::post('/club/store', [
@@ -200,6 +201,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
 
     ]);
     Route::get('/player','PlayerController@playersData')->name('playersData');
+
+    Route::get('player/{id}/records&stats','PlayerController@record')->name('recordplayer');
 
 
     Route::post('/player/store', [
@@ -754,6 +757,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
     Route::POST('/clubBy/date',[
         'uses'=>'TournamentReferenceController@clubByDate',
         'as'=>'clubByDate'
+    ])->middleware(['can:create']);
+
+    Route::POST('/groundBy/date',[
+        'uses'=>'TournamentReferenceController@groundByDate',
+        'as'=>'groundByDate'
     ])->middleware(['can:create']);
 
 

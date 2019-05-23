@@ -7,8 +7,10 @@ use App\Level;
 use Illuminate\Http\Request;
 use App\Photo;
 use App\Team_Stats;
+use App\InningScore;
 use DataTables;
 use Validator;
+use App\Match;
 use Illuminate\Support\Facades\Session;
 
 class clubController extends Controller
@@ -28,14 +30,14 @@ class clubController extends Controller
     {
         $clubs = Club::where('active_status',0)->get();
         return DataTables::of($clubs)
-                        // ->addColumn('image',function($club)
-                        // {
-                        //     return  '<img height="50" src="'. $club->photo->file .'>';
-                        // })
-                        // 
                         ->addColumn('name',function($club)
                         {
-                            return '<strong>'.$club->name.'</strong>';
+                            return 
+                            '<strong>
+                                '.$club->name.'<a href="'.route('clubrecord',$club->id).'">
+                                <i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
+                                </a>
+                            </strong>';
                         })
                         ->addColumn('level',function($club)
                         {
@@ -48,6 +50,17 @@ class clubController extends Controller
                         })
                         ->rawColumns(['action','name'])
                         ->make(true);
+    }
+
+    public function record($id)
+    {
+        $club = Club::where('id',$id)->first()->name;
+        $stats = Team_Stats::where('club_id',$id)->first();
+        $hs = InningScore::where('club_id',$id)->orderBy('runs','DSC')->limit(1)->first();
+        $ls = InningScore::where('club_id',$id)->orderBy('runs','ASC')->limit(1)->first();
+        $matches = Match::where('club_id_1',$id)->orWhere('club_id_2',$id)->where('status',2)->orderBy('match_date','DESC')->get();
+        // return $matches;
+        return view('admin.clubs.recordandstats',compact('id','club','stats','hs','ls','matches'));
     }
 
     /**

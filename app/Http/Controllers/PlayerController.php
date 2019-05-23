@@ -9,6 +9,8 @@ use App\Photo;
 use App\Player;
 use App\PlayerRole;
 use App\PlayerStat;
+use App\BatsmenScore;
+use App\BowlerScore;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Excel;
@@ -40,7 +42,12 @@ class PlayerController extends Controller
         return DataTables::of($players)
         ->addColumn('names',function($player)
         {
-            return '<strong>'.$player->name. '</strong>';
+            return 
+            '<strong>'.$player->name. 
+            '<a href="'.route('recordplayer',$player->id).'">
+            <i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
+            </a>
+            </strong>';
         })
         ->addColumn('role',function($player)
         {
@@ -74,6 +81,22 @@ class PlayerController extends Controller
 
         ->rawColumns(['names','action'])
         ->make(true);
+    }
+
+    public function record($id)
+    {
+        $player = Player::where('id',$id)->first()->name;
+        $role_id = Player::where('id',$id)->first()->role_id;
+        $stats_t = PlayerStat::where('player_id',$id)->where('format',1)->first();
+        $batsmen = BatsmenScore::join('matches','batsmen_scores.match_id','matches.id')
+                                ->where('batsmen_scores.batsmen_id',$id)
+                                ->orderBy('batsmen_scores.updated_at','DESC')
+                                ->where('matches.status',2)->get();
+        $bowler = BowlerScore::join('matches','bowler_scores.match_id','matches.id')
+                                ->where('bowler_scores.bowler_id',$id)
+                                ->orderBy('bowler_scores.updated_at','DESC')
+                                ->where('matches.status',2)->get();
+        return view('admin.players.recordsandstats',compact('player','role_id','stats_t','batsmen','bowler'));
     }
 
     public function club($id)
@@ -161,10 +184,12 @@ class PlayerController extends Controller
                 $stats = new PlayerStat;
                 $stats->format = '1';
                 $stats->player_id = $player->id;
+                $stats->role_id = $player->role_id;
                 $stats->save();
                 $stat = new PlayerStat;
                 $stat->format = '2';
                 $stat->player_id = $player->id;
+                $stats->role_id = $player->role_id;
                 $stat->save();
                 $success_output = 'Player '.$request->name.' Inserted';
                 
@@ -180,6 +205,10 @@ class PlayerController extends Controller
                 $player->batting_style_id = $request->batting_style_id;
                 $player->bowling_style_id = $request->bowling_style_id;
                 $player->save();
+                $stat = PlayerStat::updateOrCreate(
+                    ['player_id'=>$player->id,'format'=>'1'],['player_id'=>$player->id,'role_id'=>$player->role_id]);
+                $stat = PlayerStat::updateOrCreate(
+                    ['player_id'=>$player->id,'format'=>'2'],['player_id'=>$player->id,'role_id'=>$player->role_id]);
                 $success_output = 'Player '.$request->name.' Updated';
             }
         }

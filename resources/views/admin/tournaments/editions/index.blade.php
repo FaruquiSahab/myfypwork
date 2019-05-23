@@ -175,7 +175,8 @@
 
                 <div class="form-group">
                     {!! Form::label('ground_id', 'Ground') !!}
-                    {!! Form::select('ground_id', $t_grounds, null, ['placeholder'=>'Ground', 'class'=>'form-control', 'name'=>'ground_id', 'required'])!!}
+                    {{-- {!! Form::select('ground_id', $t_grounds, null, ['placeholder'=>'Ground', 'class'=>'form-control', 'name'=>'ground_id', 'required'])!!} --}}
+                    <select class="form-control" name="ground_id" id="ground"></select>
                 </div>
 
 
@@ -227,36 +228,37 @@
             maxDate: "+1Y"
         });
 
-        /*
-            format: 'yyyy-mm-dd',
-        */
-
-       /* $('#start_date').on('change select',function () {
-           $('#end_date').prop('disabled',false);
-        });
-
-
-        $('#end_date').on('change select',function () {
-           var endDate =  $('#end_date').val();
-            var startDate =  $('#start_date').val();
-//            console.log(endDate);
-
+        $('#datepicker').on('change select', function(){
+            var _date = $('#datepicker').val();
+            var _token = $('input[name=_token]').val();
             $.ajax({
-                url: "tournaments_edtions",
-                method: "GET",
+                type:"POST",
+                url: "{{ route('groundByDate') }}",
                 data: {
-                    'end_date':endDate,
-                    'start_date':startDate,
-                    '_token': $('input[name=_token]').val()
+                    '_token': _token,
+                    'date': _date
                 },
-                success: function () {
-
+                success:function(data){
+                    console.log('success');
+                    console.log(data);
+                    var ground = JSON.parse(data,true);
+                    console.log(ground);
+                    var html = '';
+                    html = '<option selected disabled value>Select Ground</option>';
+                    $('#ground').html(html);
+                    html = '';
+                    for(var i=0; i<ground.length; i++)
+                    {
+                        html+= '<option value="'+ground[i]['id']+'">'+ground[i]['name']+'</option>';
+                    }
+                    $('#ground').append(html);
                 },
-                error: function () {
-
+                error:function(data){
+                    console.log('error');
+                    console.log(data)
                 }
-            })
-        });*/
+            }) 
+        });
     </script>
 
 
