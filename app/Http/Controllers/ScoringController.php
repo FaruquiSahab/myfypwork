@@ -1120,6 +1120,76 @@ class ScoringController extends Controller
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('tie_matches');
 		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->increment('points_matches');
 		}
+		//////////////////////////////////Runs By and Against Club 1 ////////////////////////////////////////////
+		$record = InningScore::where('refer_id',$refer_id)->where('club_id',$club1)->get();
+		// return $record;
+		$runsbyclub = InningScore::where('refer_id',$refer_id)->where('club_id',$club1)->sum('runs');
+		$runsagainstclub=0;
+		foreach ($record as $key => $value) {
+			$datam = InningScore::where('refer_id',$refer_id)->where('match_id',$value->match_id)->where('club_id','!=',$club1)->first()->runs;
+			echo "<br> datam ".$datam."<br>";
+			$runsagainstclub = (int)$runsagainstclub + (int)$datam;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		echo "<br> runs by ".$runsagainstclub."<br>";
+
+		//////////////////////////////////Balls By and Against Club 1 ////////////////////////////////////////////
+		$record = InningScore::where('refer_id',$refer_id)->where('club_id',$club1)->get();
+		$ballsbyclub = 0;
+		$converter = new CricketStatsHelper();
+		foreach ($record as $key => $value) {
+			$ballsbyclub = (int)$ballsbyclub + (int)$converter->convertOversToBalls($value->overs);
+		}
+		$ballsagainstclub=0;
+		foreach ($record as $key => $value) {
+			$datam = InningScore::where('refer_id',$refer_id)->where('match_id',$value->match_id)->where('club_id','!=',$club1)->first()->overs;
+			$ballsagainstclub = (int)$ballsagainstclub + (int)$converter->convertOversToBalls($datam);
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////Runs By and Against Club 2 ////////////////////////////////////////////
+		$record_2 = InningScore::where('refer_id',$refer_id)->where('club_id',$club2)->get();
+		$runsbyclub_2 = InningScore::where('refer_id',$refer_id)->where('club_id',$club2)->sum('runs');
+		$runsagainstclub_2 = 0;
+		foreach ($record_2 as $key => $value) {
+			$datam_2 = InningScore::where('refer_id',$refer_id)->where('match_id',$value->match_id)->where('club_id','!=',$club2)->first()->runs;
+			$runsagainstclub_2 = (int)$runsagainstclub_2 + (int)$datam_2;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////Balls By and Against Club 2 ////////////////////////////////////////////
+		$record_2 = InningScore::where('refer_id',$refer_id)->where('club_id',$club1)->get();
+		$ballsbyclub_2 = 0;
+		$converter = new CricketStatsHelper();
+		foreach ($record as $key => $value) {
+			$ballsbyclub_2 = (int)$ballsbyclub_2 + (int)$converter->convertOversToBalls($value->overs);
+		}
+		$ballsagainstclub_2 = 0;
+		foreach ($record as $key => $value) {
+			$datam_2 = InningScore::where('refer_id',$refer_id)->where('match_id',$value->match_id)->where('club_id','!=',$club1)->first()->overs;
+			$ballsagainstclub_2 = (int)$ballsagainstclub_2 + (int)$converter->convertOversToBalls($datam);
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		$runsbyclub = $runsbyclub + 0;
+		$runsagainstclub = $runsagainstclub + 0;
+		$oversbyclub = $converter->convertBallsToOvers($ballsbyclub);
+		$oversagainstclub = $converter->convertBallsToOvers($ballsagainstclub);
+		$runrate_one = $runsbyclub / $oversbyclub;
+		$runrate_two = $runsagainstclub / $oversagainstclub;
+		$finalrunrate = $runrate_one - $runrate_two;
+
+		$runsbyclub_2 = $runsbyclub_2 + 0;
+		$runsagainstclub_2 = $runsagainstclub_2 + 0;
+		$oversbyclub_2 = $converter->convertBallsToOvers($ballsbyclub_2);
+		$oversagainstclub_2 = $converter->convertBallsToOvers($ballsagainstclub_2);
+		$runrate_one_2 = $runsbyclub_2 / $oversbyclub_2;
+		$runrate_two_2 = $runsagainstclub_2 / $oversagainstclub_2;
+		$finalrunrate_2 = $runrate_one_2 - $runrate_two_2;
+
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club1)->update(['rr_matches'=>$finalrunrate]);
+		RoundrobinTournament::where('refer_id',$refer_id)->where('club_id',$club2)->update(['rr_matches'=>$finalrunrate_2]);
+
 		///////////////////////////////Team Stats 1/////////////////////////////////////
 			$allRunsScored = Team_Stats::where('club_id',$club1)->first()->total_runs_scored;
 			$allOversFaced = Team_Stats::where('club_id',$club1)->first()->total_overs_faced;
@@ -1224,7 +1294,7 @@ class ScoringController extends Controller
 	public function finishmatch(Request $request, $matchId)
 	{
 		$matches = Match::where('id',$matchId)->get();
-		if($matches[0]->status == 1)
+		if($matches[0]->status == 1 || $matches[0]->status == 2)
 		{
 			$this->inningscore($matchId,2);
 			$this->statsupdate($matchId,$request->format);

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <link rel="icon" href="https://previews.123rf.com/images/makstrv/makstrv1601/makstrv160100004/50151920-cricket-player-and-bats-sport-emblem-logo-.jpg">
+    <link rel="icon" href="/images/logo.png">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -89,8 +89,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <img src="https://previews.123rf.com/images/makstrv/makstrv1601/makstrv160100004/50151920-cricket-player-and-bats-sport-emblem-logo-.jpg" alt="" height="42" width="42">
-            <a class="navbar-brand" href="/">Cricket Club Services</a>
+            <img src="/images/logo.png" alt="" height="42" width="42">
+            <span class="navbar-brand" href="/">Cricket Club Services</span>
         </div>
         <!-- /.navbar-header -->
 

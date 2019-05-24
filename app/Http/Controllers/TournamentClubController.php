@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Club;
 use App\Fixture;
-use App\SeriesFixture;
+use App\Series_Fixtures;
 use App\RoundRobinTour;
 use App\RoundrobinTournament;
 use Carbon\Carbon;
@@ -172,14 +172,14 @@ class TournamentClubController extends Controller
         $sum = DB::table('roundrobin_tournament')->where('refer_id',$refer_id)->SUM('total_matches');
         if ($sum  == $result)
         {
-            $datas = DB::table('roundrobin_tournament')->where('refer_id',$refer_id)->orderBy('points_matches','DESC')->limit(2)->get();
+            $datas = DB::table('roundrobin_tournament')->where('refer_id',$refer_id)->orderBy('points_matches','DESC')->orderBy('rr_matches','DESC')->limit(2)->get();
             foreach ($datas as $key => $value) {
                 if ($key == 0) 
                 {
                     $final = new Fixture;
                     $final->refer_id = $refer_id;
-                    $final->club_id_1 = $data[$key];
-                    $final->club_id_2 = $data[$key+1];
+                    $final->club_id_1 = $data[$key]->club_id;
+                    $final->club_id_2 = $data[$key+1]->club_id;
                     $final->match_date = Carbon::parse($last)->addDays(2)->format('Y-m-d');
                     $final->match_time = "10 AM";
                     $final->tournament_id = $data[0]->tournament_id;
@@ -216,9 +216,9 @@ class TournamentClubController extends Controller
                              ->select('club_id_1')->distinct('club_id_1')->get();
         $club_id_2  = Fixture::whereBetween('match_date',[$starting_date,$ending_date])
                              ->select('club_id_2')->distinct('club_id_2')->get();
-        $club_id_1_s  = SeriesFixture::whereBetween('starting_date',[$starting_date,$ending_date])
+        $club_id_1_s  = Series_Fixtures::whereBetween('starting_date',[$starting_date,$ending_date])
                              ->select('club_id_1')->distinct('club_id_1')->get();
-        $club_id_2_s  = SeriesFixture::whereBetween('starting_date',[$starting_date,$ending_date])
+        $club_id_2_s  = Series_Fixtures::whereBetween('starting_date',[$starting_date,$ending_date])
                              ->select('club_id_2')->distinct('club_id_2')->get();
         // return $club_id_1;
         // return $editions;

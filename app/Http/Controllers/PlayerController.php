@@ -189,7 +189,7 @@ class PlayerController extends Controller
                 $stat = new PlayerStat;
                 $stat->format = '2';
                 $stat->player_id = $player->id;
-                $stats->role_id = $player->role_id;
+                $stat->role_id = $player->role_id;
                 $stat->save();
                 $success_output = 'Player '.$request->name.' Inserted';
                 
@@ -329,12 +329,14 @@ class PlayerController extends Controller
                         $stats = new PlayerStat;
                         $stats->format = '1';
                         $stats->player_id = $player->id;
+                        $stats->role_id = $player->role_id;
                         $stats->save();
                         $stat = new PlayerStat;
                         $stat->format = '2';
                         $stat->player_id = $player->id;
+                        $stat->role_id = $player->role_id;
                         $stat->save();
-                    }
+                            }
                     return 'success';
                 }
                 else

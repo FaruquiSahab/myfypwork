@@ -64,7 +64,10 @@ class TournamentReferenceController extends Controller
                              ->orderBy('bowler_scores.wickets','DESC')
                              ->orderBy('bowler_scores.runs','ASC')
                              ->limit(1)->first();
-        $bestball = $record->wickets. ' / ' .$record->runs;
+        $bestball = '';
+        if (sizeof($record) > 0) {
+            $bestball = $record->wickets. ' / ' .$record->runs;
+        }
         $centuries = sizeof($centuries);
         $halfcenturies = sizeof($halfcenturies);
         return view('admin.tournaments.editions.tournament_stats',compact('name','edition','total_matches','total_runs','total_sixes','total_fours','max_f_runs','min_f_runs','max_s_runs','min_s_runs','highscore','bestball','halfcenturies','centuries'));
@@ -110,7 +113,7 @@ class TournamentReferenceController extends Controller
         $input['number_of_teams'] = $request->number_of_teams;
         $edition = Carbon::parse($request->starting_date)->format('Y');
         $input['edition']= $edition;
-        $input['starting_date'] = $request->starting_date;
+        $input['starting_date'] = Carbon::parse($request->starting_date)->format('Y-m-d');
         //$input['ending_date'] = $request->ending_date;
         $input['rounds'] = $request->rounds;
         $input['ground_id'] = $request->ground_id;
