@@ -802,9 +802,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
 
     //----------------------------------teamStats----------------------------------------------------------
 
-        Route::get('/players/stats', [
-            'uses' => 'PlayerController@statsindex',
-            'as' => 'stats.index'
+        Route::get('/players/stats/batsmen', [
+            'uses' => 'PlayerController@statsindexBatsmen',
+            'as' => 'stats.index.batsmen'
+        ])->middleware(['can:create']);
+        Route::get('/players/stats/bowlers', [
+            'uses' => 'PlayerController@statsindexBowler',
+            'as' => 'stats.index.bowlers'
+        ])->middleware(['can:create']);
+        Route::get('/players/stats/allrounder', [
+            'uses' => 'PlayerController@statsindexAllrounders',
+            'as' => 'stats.index.allrounders'
         ])->middleware(['can:create']);
         Route::get('/stats2','PlayerController@statsdata2')
             ->name('statsdata2')

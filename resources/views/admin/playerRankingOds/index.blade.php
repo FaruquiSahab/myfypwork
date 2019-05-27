@@ -56,12 +56,21 @@
 
     <table id="batsmen_table" class="table table-sm table-hover  table-striped">
         <thead>
-        <tr>
-            <th class="col-sm-4">Player</th>
-            <th class="col-sm-2">Club</th>
-            <th class="col-sm-3">Action</th>
-        </tr>
+            <tr>
+                <th class="col-sm-1">Points</th>
+                <th class="col-sm-4">Player</th>
+                <th class="col-sm-2">Club</th>
+                <th class="col-sm-3">Action</th>
+            </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <th class="col-sm-1">Points</th>
+                <th class="col-sm-4">Player</th>
+                <th class="col-sm-2">Club</th>
+                <th class="col-sm-3">Action</th>
+            </tr>
+        </tfoot>
     </table>
 
 
@@ -74,8 +83,8 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 
-                    <h3 class="modal-title"><strong>{{$stats[0]->player->name}}</strong></h3>
-                    <h5 class="modal-title"><strong>{{$stats[0]->player->club->name}}</strong></h5>
+                    <h3 class="modal-title"><strong id="playername"></strong></h3>
+                    <h5 class="modal-title"><strong id="playerclub"></strong></h5>
                 </div>
                 <div class="modal-body">
 
@@ -203,10 +212,12 @@
                     "serverSide": true,
                     "ajax": "{{ route('batsmendatatabes') }}",
                     "columns":[
+                        { "data": "points" },
                         { "data": "name" },
                         { "data": "club" },
                         { "data": "action" }
-                    ]
+                    ],
+                    "order": [[ 0, "desc" ]]
                 });
 
 
@@ -226,6 +237,8 @@
                 $('#ducks').text($(this).data('ducks'));
                 $('#points').text($(this).data('points'));
                 $('#timeouts').text($(this).data('timeouts'));
+                $('#playername').text($(this).data('playername'));
+                $('#playerclub').text($(this).data('playerclub'));
             });
 
 

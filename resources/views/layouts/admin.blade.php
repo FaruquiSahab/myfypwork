@@ -224,7 +224,13 @@
                         <a href="#"><i class="fa fa-fire fa-fw"></i>Stats<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="{{route('stats.index')}}">Index</a>
+                                <a href="{{route('stats.index.batsmen')}}">Batting Stats</a>
+                            </li>
+                            <li>
+                                <a href="{{route('stats.index.bowlers')}}">Bowling Stats</a>
+                            </li>
+                            <li>
+                                <a href="{{route('stats.index.allrounders')}}">Overall Stats</a>
                             </li>
                         </ul>
                     </li>

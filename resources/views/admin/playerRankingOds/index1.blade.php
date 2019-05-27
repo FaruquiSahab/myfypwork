@@ -54,12 +54,20 @@
     <table id="bowler_table" class="table table-bordered">
         <thead>
         <tr>
-            {{-- <th class="col-sm-2">Photo</th> --}}
+            <th class="col-sm-1">Points</th>
             <th class="col-sm-4">Player</th>
             <th class="col-sm-2">Club</th>
             <th class="col-sm-3">Action</th>
         </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <th class="col-sm-1">Points</th>
+                <th class="col-sm-4">Player</th>
+                <th class="col-sm-2">Club</th>
+                <th class="col-sm-3">Action</th>
+            </tr>
+        </tfoot>
     </table>
 
 
@@ -75,8 +83,8 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 
-                    <h3 class="modal-title"><strong>{{$stats[0]->player->name}}</strong></h3>
-                    <h5 class="modal-title"><strong>{{$stats[0]->player->club->name}}</strong></h5>
+                    <h3 class="modal-title"><strong id="playername"></strong></h3>
+                    <h5 class="modal-title"><strong id="playerclub"></strong></h5>
                 </div>
                 <div class="modal-body">
 
@@ -120,10 +128,10 @@
                         </tr>
 
 
-                        <tr>
+                        {{-- <tr>
                         <th>MOM</th>
                         <td><span id="mom"></span></td>
-                        </tr>
+                        </tr> --}}
 
 
                         <tr>
@@ -189,10 +197,12 @@
                     "serverSide": true,
                     "ajax": "{{ route('bowlerdatatabes') }}",
                     "columns":[
+                        { "data": "points" },
                         { "data": "name" },
                         { "data": "club" },
                         { "data": "action" }
-                    ]
+                    ],
+                    "order": [[ 0, "desc" ]]
                 });
             //when click on edit button of table
             $(document).on('click','.idedit',function (){
@@ -209,6 +219,8 @@
             $('#nb').text($(this).data('nb'));
             $('#mom').text($(this).data('mom'));
             $('#points').text($(this).data('points'));
+            $('#playername').text($(this).data('playername'));
+            $('#playerclub').text($(this).data('playerclub'));
         });
 
 

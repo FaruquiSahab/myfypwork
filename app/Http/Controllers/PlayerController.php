@@ -418,15 +418,25 @@ class PlayerController extends Controller
         }
     }
 
-    public function statsindex()
+    public function statsindexBatsmen()
     {
 
-        return view('admin.players.stats.index');
+        return view('admin.players.stats.batsmen');
+    }
+    public function statsindexBowler()
+    {
+
+        return view('admin.players.stats.bowlers');
+    }
+    public function statsindexAllrounders()
+    {
+
+        return view('admin.players.stats.allrounders');
     }
     //twenty 20
     public function statsdata1()
     {
-        $stats = PlayerStat::where('format',1)->get();
+        $stats = PlayerStat::where('format',1)->where('matches','>',0)->get();
         return DataTables::of($stats)
         ->addColumn('names',function($stat){
             return '<h2><strong style="font-size:12px">'.$stat->player->name ?? '--'.'</strong></h2>';
@@ -440,7 +450,7 @@ class PlayerController extends Controller
     //one day
     public function statsdata2()
     {
-        $stats = PlayerStat::where('format',2)->get();
+        $stats = PlayerStat::where('format',2)->where('matches','>',0)->get();
         return DataTables::of($stats)
         ->addColumn('names',function($stat){
             return '<h2><strong style="font-size:10px">'.$stat->player->name ?? 'NULL'.'</strong></h2>';

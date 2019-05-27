@@ -18,12 +18,14 @@ class Bowler_StatsController extends Controller
     {
 
 
-        $stats = Bowler_Stats::all();
-        $bowlers = Bowler_Stats::all();
+        $stats = Bowler_Stats::where('format',1)->where('role_id',2)->orwhere('format',1)->where('role_id',3)->distinct('player_id')->get();
+        $bowlers = Bowler_Stats::where('format',1)->where('role_id',2)->orwhere('format',1)->where('role_id',3)->distinct('player_id')->get();
         foreach ($bowlers as $value)
         {
             $value->id;
             $runs = Bowler_Stats::where('id',$value->id)->select('runs_ball')->first()->runs_ball;
+
+            $matches = Bowler_Stats::where('id',$value->id)->select('matches')->first()->matches;
 
             $points = Bowler_Stats::where('id',$value->id)->select('points_ball')->first()->points_ball;
 
@@ -64,22 +66,34 @@ class Bowler_StatsController extends Controller
 
             $points = 0;
 
-            $points += $runs;
+            if ($matches > 0)
+            {
+              $overs_points = $overs * 3;
+              $points += $overs_points;
+              if ($econ > 6) {
+                $eco_points = 10;
+              }
+              elseif ($econ < 6) {
+                $eco_points = 25;
+              }
+              if ($avg > 30) {
+                $avg_points = -10;
+              }
+              elseif ($avg > 20) {
+                $avg_points = 10;
+              }
+              elseif ($avg < 20) {
+                $avg_points = 25;
+              }
 
-            $wide_totals = $wide_points * $wides;
-
-
-            $nb_totals = $nb_points * $nb;
-
-
-            $points +=  $wide_totals;
-
-            $points +=  $nb_totals;
-
-
-
-            $points +=  $fifer_points;
-
+              $points += $eco_points;
+              $points += $avg_points;
+              $wide_totals = $wide_points * $wides;
+              $nb_totals = $nb_points * $nb;
+              $points +=  $wide_totals;
+              $points +=  $nb_totals;
+              $points +=  $fifer_points;
+            }
 
             $id = $value->id;
             $input = Bowler_Stats::findOrFail($id);
@@ -96,7 +110,7 @@ class Bowler_StatsController extends Controller
 
         $bar = new Lavacharts();
         $point_max = $bar->DataTable();
-      $data = Bowler_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","points_ball as 1")->where('player_stats.points_ball','>',0)->orderBy('points_ball','DSC')->take(10)->get()->toArray();
+      $data = Bowler_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","points_ball as 1")->where('player_stats.points_ball','>',0)->where('player_stats.format',1)->where('player_stats.role_id',2)->orwhere('player_stats.format',1)->where('player_stats.role_id',3)->orderBy('points_ball','DSC')->take(10)->get()->toArray();
         $point_max->addStringColumn("Player")
             ->addNumberColumn("Points")
             ->addRows($data);
@@ -112,7 +126,7 @@ class Bowler_StatsController extends Controller
 
         $line = new Lavacharts();
         $eco_max = $line->DataTable();
-        $data = Bowler_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","economy as 1")->where('player_stats.economy','>',0)->orderBy('economy','ASC')->take(10)->get()->toArray();
+        $data = Bowler_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","economy as 1")->where('player_stats.economy','>',0)->where('player_stats.format',1)->where('player_stats.role_id',2)->orwhere('player_stats.format',1)->where('player_stats.role_id',3)->orderBy('economy','ASC')->take(10)->get()->toArray();
         $eco_max->addStringColumn("Player")
             ->addNumberColumn("Economy")
             ->addRows($data);
@@ -128,7 +142,7 @@ class Bowler_StatsController extends Controller
 
         $pie = new Lavacharts();
         $avg_max = $pie->DataTable();
-        $data = Bowler_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","average_ball as 1")->where('player_stats.average_ball','>',0)->orderBy('average_ball','ASC')->take(10)->get()->toArray();
+        $data = Bowler_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","average_ball as 1")->where('player_stats.average_ball','>',0)->where('player_stats.format',1)->where('player_stats.role_id',2)->orwhere('player_stats.format',1)->where('player_stats.role_id',3)->orderBy('average_ball','ASC')->take(10)->get()->toArray();
         $avg_max->addStringColumn("Player")
             ->addNumberColumn("Average")
             ->addRows($data);
@@ -137,86 +151,15 @@ class Bowler_StatsController extends Controller
         return view('admin.graph.bowlers.avg',compact('pie'));
     }
 
-
-    function bowlerdata()
-    {
-        $bowlers = Bowler_Stats::all();
-        foreach ($bowlers as $value)
-        {
-            
-                $value->id;
-                $runs = Bowler_Stats::where('id',$value->id)->select('runs')->first()->runs;
-
-                $points = Bowler_Stats::where('id',$value->id)->select('points')->first()->points;
-
-                $overs = Bowler_Stats::where('id',$value->id)->select('overs')->first()->overs;
-
-                $wkts = Bowler_Stats::where('id',$value->id)->select('wkts')->first()->wkts;
-
-                $avg = Bowler_Stats::where('id',$value->id)->select('avg')->first()->avg;
-
-                $econ = Bowler_Stats::where('id',$value->id)->select('econ')->first()->econ;
-
-                $fifer = Bowler_Stats::where('id',$value->id)->select('fifer')->first()->fifer;
-
-                $wides = Bowler_Stats::where('id',$value->id)->select('wides')->first()->wides;
-
-                $nb = Bowler_Stats::where('id',$value->id)->select('nb')->first()->nb;
-
-                $mom = Bowler_Stats::where('id',$value->id)->select('mom')->first()->mom;
-
-                $avg = $runs / $wkts;
-
-                $econ = $runs/$overs;
-
-
-                // $timeouts = bowler_Stats::select('timeouts')->first()->timeouts;
-
-
-                $moms_points = $mom * 50;
-
-                $fifer_points = $fifer * 50;
-
-
-                $wide_points = -2;
-
-                $nb_points = -8;
-
-                $points = 0;
-
-                $points += $runs;
-
-
-                $wide_totals = $wide_points * $wides;
-
-
-                $nb_totals = $nb_points * $nb;
-
-
-                $points +=  $wide_totals;
-
-                $points +=  $nb_totals;
-
-
-
-                $points +=  $fifer_points;
-
-                $points +=  $moms_points;
-
-
-                $id = $value->id;
-                $input = Bowler_Stats::findOrFail($id);
-                $input['points'] = $points;
-                $input->update();
-
-        }
-    }
-
     function bowlerdatatabes()
     {
 
-        $bowler = Bowler_Stats::all();
+        $bowler = Bowler_Stats::where('format',1)->where('role_id',2)->orwhere('format',1)->where('role_id',3)->distinct('player_id')->get();
         return Datatables::of($bowler)
+            ->addColumn('points',function($bowler)
+            {
+                return '<strong>'.$bowler->points_ball.'</strong>';
+            })
             ->addColumn('name',function($bowler)
             {
                 return '<strong>'.$bowler->player->name.'</strong>';
@@ -229,18 +172,19 @@ class Bowler_StatsController extends Controller
             {
                 return '<a style="margin:2px;" class="btn btn-sm btn-primary idedit" data-toggle="modal" data-target="#addmodel1"
                 data-id="' .$bowler->id. '" data-matches="' .$bowler->matches.'"
-                 data-innings="' .$bowler->innings_bowl. '" data-runs="' .$bowler->runs.'"
+                 data-innings="' .$bowler->innings_bowl. '" data-runs="' .$bowler->runs_ball.'"
                  data-overs="' .$bowler->overs. '" data-wkts="' .$bowler->wickets.'"
                  data-avg="' .$bowler->average_ball. '" data-econ="' .$bowler->economy.'"
                  data-fifer="' .$bowler->five_wickets. '" data-wides="' .$bowler->wides.'"
                  data-nb="' .$bowler->noballs. '" data-mom="' .$bowler->mom.'"
+                 data-playername="' .$bowler->player->name. '" data-playerclub="' .$bowler->player->club->name.'"
                  data-points="' .$bowler->points_ball.'"
                 >
                 <i class="glyphicon glyphicon-eye-open"></i> View </a>
                 <input type="hidden" name="bowler_id" value="' .$bowler->id. '">"' .$bowler->id. '"';
 
             })
-            ->rawColumns(['action','name'])
+            ->rawColumns(['action','name','points'])
             ->make(true);
     }
 

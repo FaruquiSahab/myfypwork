@@ -22,7 +22,7 @@ class Batsmen_StatsController extends Controller
     {
 
 
-        $stats = Batsmen_Stats::all();
+        $stats = Batsmen_Stats::where('format',1)->where('role_id',1)->orwhere('format',1)->where('role_id',4)->distinct('player_id')->get();
         $batsmen = Batsmen_Stats::all();
         foreach ($batsmen as $value)
         {
@@ -111,7 +111,7 @@ class Batsmen_StatsController extends Controller
 
         $bar = new Lavacharts();
         $point_max = $bar->DataTable();
-        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","points as 1")->where('player_stats.points','>',0)->orderBy('points','DSC')->take(10)->get()->toArray();
+        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","points as 1")->where('player_stats.points','>',0)->where('player_stats.format',1)->where('player_stats.role_id',1)->orwhere('player_stats.format',1)->where('player_stats.role_id',4)->orderBy('points','DSC')->take(10)->get()->toArray();
         $point_max->addStringColumn("Player")
             ->addNumberColumn("Points")
             ->addRows($data);
@@ -127,7 +127,7 @@ class Batsmen_StatsController extends Controller
 
         $line = new Lavacharts();
         $sr_max = $line->DataTable();
-        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","strikerate as 1")->where('player_stats.strikerate','>',0)->orderBy('strikerate','DSC')->take(10)->get()->toArray();
+        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","strikerate as 1")->where('player_stats.strikerate','>',0)->where('player_stats.format',1)->where('player_stats.role_id',1)->orwhere('player_stats.format',1)->where('player_stats.role_id',4)->orderBy('strikerate','DSC')->take(10)->get()->toArray();
         $sr_max->addStringColumn("Player")
             ->addNumberColumn("Strike Rate")
             ->addRows($data);
@@ -144,7 +144,7 @@ class Batsmen_StatsController extends Controller
 
         $pie = new Lavacharts();
         $avg_max = $pie->DataTable();
-        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","average_bat as 1")->where('player_stats.average_bat','>',0)->orderBy('average_bat','DSC')->take(10)->get()->toArray();
+        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","average_bat as 1")->where('player_stats.average_bat','>',0)->where('player_stats.format',1)->where('player_stats.role_id',1)->orwhere('player_stats.format',1)->where('player_stats.role_id',4)->orderBy('average_bat','DSC')->take(10)->get()->toArray();
         $avg_max->addStringColumn("Player")
             ->addNumberColumn("Average")
             ->addRows($data);
@@ -160,7 +160,7 @@ class Batsmen_StatsController extends Controller
 
         $area = new Lavacharts();
         $runs_max = $area->DataTable();
-        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","runs as 1",'matches as 2')->where('runs','>',0)->orderBy('runs','DSC')->take(10)->get()->toArray();
+        $data = Batsmen_Stats::join('players','player_stats.player_id','players.id')->select("players.name as 0","runs as 1",'matches as 2')->where('runs','>',0)->where('player_stats.format',1)->where('player_stats.role_id',1)->orwhere('player_stats.format',1)->where('player_stats.role_id',4)->orderBy('runs','DSC')->take(10)->get()->toArray();
         $runs_max->addStringColumn("Player")
             ->addNumberColumn("Runs")
             ->addNumberColumn("Matches")
@@ -170,89 +170,20 @@ class Batsmen_StatsController extends Controller
         return view('admin.graph.batsmen.runs',compact('area'));
     }
 
-    function batsmendata()
-    {
-        $batsmen = Batsmen_Stats::all();
-        foreach ($batsmen as $value)
-        {
-            $value->id;
-            $runs = Batsmen_Stats::select('runs')->first()->runs;
-
-            $points = Batsmen_Stats::select('points')->first()->points;
-
-            $sixes = Batsmen_Stats::select('sixes')->first()->sixes;
-
-            $fours = Batsmen_Stats::select('fours')->first()->fours;
-
-            $ducks = Batsmen_Stats::select('ducks')->first()->ducks;
-
-            $fifties = Batsmen_Stats::select('fifties')->first()->fifties;
-
-            $hundreds = Batsmen_Stats::select('hundreds')->first()->hundreds;
-
-            $moms = Batsmen_Stats::select('moms')->first()->moms;
-
-            $balls = Batsmen_Stats::select('balls')->first()->balls;
-
-            $timeouts = Batsmen_Stats::select('timeouts')->first()->timeouts;
-
-            $avg = $runs / $timeouts;
-
-            $strike_rate = ($runs / $balls) * 100;
-
-
-            // $timeouts = Batsmen_Stats::select('timeouts')->first()->timeouts;
-
-            $hundred_points = $hundreds * 100;
-
-            $moms_points = $moms * 50;
-
-            $fifties_points = $fifties * 50;
-
-            $six_points = $sixes * 2;
-
-            $duck_points = -10;
-
-            $points += $runs;
-
-            $points += $six_points;
-
-            $points += $fours;
-
-            $duck_totals = $duck_points * $ducks;
-
-            $points +=  $duck_totals;
-
-
-            $points +=  $hundred_points;
-
-            $points +=  $fifties_points;
-
-            $points +=  $moms_points;
-
-
-            $id = $value->id;
-            $input = Batsmen_Stats::findOrFail($id);
-            $input['points'] = $points;
-            $input['sr'] = $strike_rate;
-            $input['avg'] = $avg;
-            $input['status'] = 1;
-            $input->update();
-
-        }
-
-    }
-
     function batsmendatatabes()
     {
 
-        $batsmen = Batsmen_Stats::orderBy('points','ASC')->get();
+        $batsmen = Batsmen_Stats::where('player_stats.format',1)->where('player_stats.role_id',1)->orwhere('player_stats.format',1)->where('player_stats.role_id',4)->orderBy('points','ASC')->get();
         return Datatables::of($batsmen)
             // ->addColumn('image',function($club)
             // {
             //     return  '<img height="50" src="'. $club->photo->file .'>';
             // })
             //
+            ->addColumn('points',function($batsmen)
+            {
+                return '<strong>'.$batsmen->points.'</strong>';
+            })
             ->addColumn('name',function($batsmen)
             {
                 return '<strong>'.$batsmen->player->name.'</strong>';
@@ -274,14 +205,15 @@ class Batsmen_StatsController extends Controller
                  data-hundreds="' .$batsmen->centuries. '" data-fifties="' .$batsmen->halfcenturies.'"
                  data-sixes="' .$batsmen->sixes. '" data-fours="' .$batsmen->fours.'"
                  data-ducks="' .$batsmen->ducks. '" data-points="' .$batsmen->points.'"
+                 data-playername="' .$batsmen->player->name. '" data-playerclub="' .$batsmen->player->club->name.'"
                  data-timeouts="' .$batsmen->innings. '" >
                 <i class="glyphicon glyphicon-eye-open"></i> View </a>
-                <input type="hidden" name="batsmen_id" value="' .$batsmen->id. '">"' .$batsmen->id. '"';
+                <input type="hidden" name="batsmen_id" value="' .$batsmen->id. '">';
 
 
 
             })
-            ->rawColumns(['action','name'])
+            ->rawColumns(['action','name','points'])
             ->make(true);
     }
 
