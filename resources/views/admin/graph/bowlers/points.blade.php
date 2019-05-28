@@ -11,8 +11,11 @@
 
 @section('content')
 
+    @if($format == 1)
     <a style="float: right; margin: 10px;" href="{{route('bowler_stats.index')}}" class="btn btn-info">Back</a>
-
+    @else
+    <a style="float: right; margin: 10px;" href="{{route('bowler_stats.index2')}}" class="btn btn-info">Back</a>
+    @endif
 
     <br>
     <br>

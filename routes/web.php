@@ -391,8 +391,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
         'as' => 'batsmen_stats.index'
 
     ]);
-    Route::get('batsmendata', 'Batsmen_StatsController@batsmendata')->name('batsmendata');
     Route::get('batsmendatatabes', 'Batsmen_StatsController@batsmendatatabes')->name('batsmendatatabes');
+    // ODI
+    Route::get('/playersRanking/Batsmen/ODI', [
+        'uses' => 'Batsmen_StatsController@index2',
+        'as' => 'batsmen_stats.index2'
+
+    ]);
+    Route::get('batsmendatatabes/ODI', 'Batsmen_StatsController@batsmendatatabes2')->name('batsmendatatabes.odi');
 
 
 
@@ -401,8 +407,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'],function() {
         'as' => 'bowler_stats.index'
 
     ]);
-    Route::get('bowlerdata', 'Bowler_StatsController@bowlerdata')->name('bowlerdata');
     Route::get('bowlerdatatabes', 'Bowler_StatsController@bowlerdatatabes')->name('bowlerdatatabes');
+    // ODI
+    Route::get('/playersRanking/Bowlers/ODI', [
+        'uses' => 'Bowler_StatsController@index2',
+        'as' => 'bowler_stats.index2'
+
+    ]);
+    Route::get('bowlerdatatabes/ODI', 'Bowler_StatsController@bowlerdatatabes2')->name('bowlerdatatabes.odi');
 
 
 
@@ -978,6 +990,25 @@ Route::get('/graph/bowlers/average', [
     'as' => 'bowlers.avg'
 ]);
 
+// ODI
+Route::get('/graph/bowlers/points/ODI', [
+    'uses' => 'Bowler_StatsController@points_graph2',
+    'as' => 'bowlers.point2'
+]);
+
+
+Route::get('/graph/bowlers/economy/ODI', [
+    'uses' => 'Bowler_StatsController@econ_graph2',
+    'as' => 'bowlers.econ2'
+]);
+
+
+
+Route::get('/graph/bowlers/average/ODI', [
+    'uses' => 'Bowler_StatsController@avg_graph2',
+    'as' => 'bowlers.avg2'
+]);
+
 
 //----for batsmen
 
@@ -1004,6 +1035,33 @@ Route::get('/graph/batsmen/average', [
 Route::get('/graph/batsmen/runs', [
     'uses' => 'Batsmen_StatsController@runs_graph',
     'as' => 'batsmen.runs'
+]);
+
+// ODI
+
+Route::get('/graph/batsmen/points/ODI', [
+    'uses' => 'Batsmen_StatsController@points_graph2',
+    'as' => 'batsmen.point2'
+]);
+
+
+Route::get('/graph/batsmen/strike_rate/ODI', [
+    'uses' => 'Batsmen_StatsController@sr_graph2',
+    'as' => 'batsmen.sr2'
+]);
+
+
+
+Route::get('/graph/batsmen/average/ODI', [
+    'uses' => 'Batsmen_StatsController@avg_graph2',
+    'as' => 'batsmen.avg2'
+]);
+
+
+
+Route::get('/graph/batsmen/runs/ODI', [
+    'uses' => 'Batsmen_StatsController@runs_graph2',
+    'as' => 'batsmen.runs2'
 ]);
 
 

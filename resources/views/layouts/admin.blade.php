@@ -236,7 +236,7 @@
                     </li>
 
                     <li>
-                        <a href="#"><i class="fa fa-list-ul fa-fw"></i>Rankings<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-list-ul fa-fw"></i>Rankings T20<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="{{route('batsmen_stats.index')}}">Batsmen Rankings</a>
@@ -248,6 +248,23 @@
                             <li>
                                 <a href="{{route('team_stats.index')}}">Team Rankings</a>
                             </li>
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-list-ul fa-fw"></i>Rankings ODI<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{route('batsmen_stats.index2')}}">Batsmen Rankings</a>
+                            </li>
+
+                            <li>
+                                <a href="{{route('bowler_stats.index2')}}">Bowler Rankings</a>
+                            </li>
+                            {{-- <li>
+                                <a href="{{route('team_stats.index2')}}">Team Rankings</a>
+                            </li> --}}
 
                         </ul>
                     </li>
