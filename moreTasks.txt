@@ -8,4 +8,6 @@ when click on player show records and stats. ``
 show only ground available b/w dates. ``
 tournament runrate update ``
 knockout format setup
+round-robin format setup re-schedule
 reset database and test
+tournament runrate needs to be  done again ``

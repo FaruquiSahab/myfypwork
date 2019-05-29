@@ -25,6 +25,8 @@ class TournamentClubController extends Controller
      */
     public function index()
     {
+        // 
+        // 
 
     }
 
@@ -37,6 +39,7 @@ class TournamentClubController extends Controller
     public function create()
     {
         //
+        // 
     }
 
     /**
@@ -48,6 +51,7 @@ class TournamentClubController extends Controller
     public function store(Request $request)
     {
         $number_of_teams = TournamentsReference::where('id',$request->refer_id)->first()->number_of_teams;
+        $format = TournamentsReference::where('id',$request->refer_id)->first()->tournament_format_id;
         if (sizeof($request->club_id) < $number_of_teams)
         {
             Session::flash('less',$number_of_teams);
@@ -55,91 +59,103 @@ class TournamentClubController extends Controller
         }
         else
         {
-            //        $a= new TournamentClub();
-            $a = [];
-            $a['tournament_id'] = $request->tournament_id;
-            $a['refer_id'] = $request->refer_id;
-            $abc = json_encode($request->club_id);
-            $a['club_id'] = $abc;
-            $lastid = DB::table('tournament_clubs')->insertGetId($a);
-
-            //        return $lastid;
-
-            $input = TournamentClub::findOrFail($lastid);
-            $array =  json_decode($input->club_id,true);
-            $val = array();
-            //        return $array;
-            foreach ($array as $key=>$value)
+            if($format == 1)
             {
-                $b=[];
-                $b['tournament_id']=$request->tournament_id;
-                $b['refer_id']=$request->refer_id;
-                $b['club_id']=$value;
-               $check =  DB::table('roundrobin_tournament')->insertGetId($b);
-            //            echo DB::table('clubs')->select('name')->where('id','=',$value)->get();
-                $val[1] = DB::table('roundrobin_tournament')
-                    ->join('clubs','roundrobin_tournament.club_id','clubs.id')
-                    ->join('tournaments','roundrobin_tournament.tournament_id','tournaments.id')
-                  //  ->join('tournaments_references,','roundrobin_tournament.tournament_id','tournaments_references.id')
-                    ->selectRaw('clubs.name AS c_name,tournaments.name AS t_name,roundrobin_tournament.total_matches,roundrobin_tournament.win_matches,roundrobin_tournament.loss_matches,roundrobin_tournament.tie_matches,roundrobin_tournament.points_matches,roundrobin_tournament.rr_matches')
-                    ->where('roundrobin_tournament.refer_id','=',$request->refer_id)
-                    ->get();
-                //$val['c_name'] = $request->club_id;
-            }
+                $a = [];
+                $a['tournament_id'] = $request->tournament_id;
+                $a['refer_id'] = $request->refer_id;
+                $abc = json_encode($request->club_id);
+                $a['club_id'] = $abc;
+                $lastid = DB::table('tournament_clubs')->insertGetId($a);
+
+                //        return $lastid;
+
+                $input = TournamentClub::findOrFail($lastid);
+                $array =  json_decode($input->club_id,true);
+                $val = array();
+                //        return $array;
+                foreach ($array as $key=>$value)
+                {
+                    $b=[];
+                    $b['tournament_id']=$request->tournament_id;
+                    $b['refer_id']=$request->refer_id;
+                    $b['club_id']=$value;
+                   $check =  DB::table('roundrobin_tournament')->insertGetId($b);
+                //            echo DB::table('clubs')->select('name')->where('id','=',$value)->get();
+                    $val[1] = DB::table('roundrobin_tournament')
+                        ->join('clubs','roundrobin_tournament.club_id','clubs.id')
+                        ->join('tournaments','roundrobin_tournament.tournament_id','tournaments.id')
+                      //  ->join('tournaments_references,','roundrobin_tournament.tournament_id','tournaments_references.id')
+                        ->selectRaw('clubs.name AS c_name,tournaments.name AS t_name,roundrobin_tournament.total_matches,roundrobin_tournament.win_matches,roundrobin_tournament.loss_matches,roundrobin_tournament.tie_matches,roundrobin_tournament.points_matches,roundrobin_tournament.rr_matches')
+                        ->where('roundrobin_tournament.refer_id','=',$request->refer_id)
+                        ->get();
+                    //$val['c_name'] = $request->club_id;
+                }
 
 
 
-                $data = TournamentsReference::where('id','=',$request->refer_id)->get();
-            TournamentsReference::where('id','=',$request->refer_id)->update([
-                'status'=>1
-            ]);
+                    $data = TournamentsReference::where('id','=',$request->refer_id)->get();
+                TournamentsReference::where('id','=',$request->refer_id)->update([
+                    'status'=>1
+                ]);
 
 
-            //        $fix = DB::table('roundrobin_tournament')->select('club_id')->where('refer_id','=',$request->refer_id)->get();
-            $tr = TournamentsReference::where('id','=',$request->refer_id)->get();
-            //return $tr[0]->ground_id;
-            $ground = $tr[0]->ground_id;
-            $tournament = $tr[0]->tournament_id;
-            $time = $tr[0]->time;
-            //date k dekhna ha
+                //        $fix = DB::table('roundrobin_tournament')->select('club_id')->where('refer_id','=',$request->refer_id)->get();
+                $tr = TournamentsReference::where('id','=',$request->refer_id)->get();
+                //return $tr[0]->ground_id;
+                $ground = $tr[0]->ground_id;
+                $tournament = $tr[0]->tournament_id;
+                $time = $tr[0]->time;
+                //date k dekhna ha
 
-            $fix = RoundrobinTournament::selectRaw('*')->where('refer_id','=',$request->refer_id)->get();
+                $fix = RoundrobinTournament::selectRaw('*')->where('refer_id','=',$request->refer_id)->get();
 
-            $date = TournamentsReference::select('starting_date')->where('id','=',$request->refer_id)->first()->starting_date;
-
-
-            $day = 2;
-            foreach ($fix as $key=>$value)
-            {
-                foreach ($fix as $ke=>$valu) {
-            //            echo $fix[$key]->club_id . '<br>';
-
-                    if ($key != $ke) {
-                        $clubs['club_id_1'] = $fix[$key]->club_id;
-                        $clubs['club_id_2'] = $fix[$ke]->club_id;
-                        $clubs['ground_id'] = $ground;
-                        $clubs['tournament_id'] = $tournament;
-                        $clubs['match_time'] = "10 AM";
-                        $clubs['refer_id'] = $request->refer_id;
-                        $date2 = Carbon::parse($date)->addDays($day)->format('y-m-d');
-                        $clubs['match_date'] = $date2;
-                        $day = $day +2;
+                $date = TournamentsReference::select('starting_date')->where('id','=',$request->refer_id)->first()->starting_date;
 
 
+                $day = 2;
+                foreach ($fix as $key=>$value)
+                {
+                    foreach ($fix as $ke=>$valu) {
+                //            echo $fix[$key]->club_id . '<br>';
 
-                        Fixture::create($clubs);
+                        if ($key != $ke) {
+                            $clubs['club_id_1'] = $fix[$key]->club_id;
+                            $clubs['club_id_2'] = $fix[$ke]->club_id;
+                            $clubs['ground_id'] = $ground;
+                            $clubs['tournament_id'] = $tournament;
+                            $clubs['match_time'] = "10 AM";
+                            $clubs['refer_id'] = $request->refer_id;
+                            $date2 = Carbon::parse($date)->addDays($day)->format('y-m-d');
+                            $clubs['match_date'] = $date2;
+                            $day = $day + 2;
+                            Fixture::create($clubs);
+                        }
                     }
                 }
+
+
+
+
+
+                $refer_id = encrypt($request->refer_id);
+                if ($check)
+                {
+                    return redirect(route('edition.tournament_table',$refer_id));
+                }
             }
-
-
-
-
-
-            $refer_id = encrypt($request->refer_id);
-            if ($check)
+            elseif($format == 2) 
             {
-                return redirect(route('edition.tournament_table',$refer_id));
+                $abc = json_encode($request->club_id);
+                TournamentClub::updateOrCreate(
+                    [
+                        'tournament_id' =>  $request->tournament_id,
+                        'refer_id'      =>  $request->refer_id
+                    ],
+                    [
+                        'club_id'       =>  $abc
+                    ]
+                );
             }
         }
 
@@ -246,7 +262,6 @@ class TournamentClubController extends Controller
 
 
         return view('admin.tournaments.editions.show',compact('editions','clubs','data','club_brackets'));
-
 
     }
 

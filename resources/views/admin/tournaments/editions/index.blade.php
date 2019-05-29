@@ -121,13 +121,10 @@
     
     {!! Form::open(['method'=>'POST', 'action'=> 'TournamentReferenceController@store','files'=>true]) !!}
 
-
-
                 <div class="form-group">
                     {!! Form::label('photo_id', 'Logo') !!}
                     {!! Form::file('photo_id', null, ['class'=>'form-control'])!!}
                 </div>
-
 
 
       <div class="form-group">
@@ -140,8 +137,8 @@
       {{--<div class="form-group">
           {!! Form::label('ending_date', 'Ending Date') !!}
           {!! Form::date('ending_date', null, ['class'=>'form-control','required','id' => 'end_date'])!!}
-      </div>
---}}
+        </div>
+        --}}
 
                 <div class="form-group">
                     {!! Form::label('tournament_id', 'Tournament') !!}
@@ -170,7 +167,23 @@
                     {!! Form::select('tournament_id', $t_format, null, ['placeholder'=>'Tournament Format', 'class'=>'form-control', 'name'=>'tournament_format_id','id'=>'formatSelect', 'required'])!!}
                 </div>
 
+                <div class="form-group hidden" id="roundrobin">
 
+                  {!! Form::label('number_of_teams', 'Number of Teams') !!}
+                  {!! Form::number('number_of_teams', null, ['class'=>'form-control', 'id'=>'textbox', 'min'=>'4','max'=>'10', 'required','placeholder'=>'Enter Number Of Teams'])!!}
+
+                </div>
+
+                  <div class="form-group hidden" id="knockout">
+
+                      {!! Form::label('number_of_teams', 'Number of Teams') !!}
+                      <select name="number_of_teams" id="selectbox" class="form-control" required>
+                            <option value disabled selected>Select Number Of Teams</option>
+                            <option value="4">Four</option>
+                            <option value="8">Eight</option>
+                      </select>
+
+                  </div>
 
 
                 <div class="form-group">
@@ -179,15 +192,6 @@
                     <select class="form-control" name="ground_id" id="ground"></select>
                 </div>
 
-
-
-
-      <div class="form-group">
-
-          {!! Form::label('number_of_teams', 'Number of Teams') !!}
-          {!! Form::number('number_of_teams', null, ['class'=>'form-control', 'min'=>'4','max'=>'10', 'required'])!!}
-
-      </div>
 
 
           <div class="form-group">
@@ -260,6 +264,24 @@
                 }
             }) 
         });
+
+        $('#formatSelect').on('change input keyup',function(){
+            var value = $('#formatSelect').val();
+            if (value == 1)
+            {
+                $('#roundrobin').removeClass('hidden');
+                $('#knockout').addClass('hidden');
+                $('#selectbox').prop('disabled',true);
+                $('#textbox').removeAttr('disabled');
+            }
+            else if (value == 2)
+            {
+                $('#roundrobin').addClass('hidden');
+                $('#knockout').removeClass('hidden');
+                $('#textbox').prop('disabled',true);
+                $('#selectbox').removeAttr('disabled');
+            }
+        })
     </script>
 
 
