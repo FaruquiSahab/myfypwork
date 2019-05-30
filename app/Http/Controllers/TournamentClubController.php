@@ -147,15 +147,41 @@ class TournamentClubController extends Controller
             elseif($format == 2) 
             {
                 $abc = json_encode($request->club_id);
-                TournamentClub::updateOrCreate(
-                    [
-                        'tournament_id' =>  $request->tournament_id,
-                        'refer_id'      =>  $request->refer_id
-                    ],
-                    [
-                        'club_id'       =>  $abc
-                    ]
-                );
+                // TournamentClub::updateOrCreate(
+                //     [
+                //         'tournament_id' =>  $request->tournament_id,
+                //         'refer_id'      =>  $request->refer_id
+                //     ],
+                //     [
+                //         'club_id'       =>  $abc
+                //     ]
+                // );
+                $reverse = array();
+                for($j=$number_of_teams-1; $j>=0; $j--)
+                {
+                    $reverse[] = $request->club_id[$j];
+                }
+                // print_r($reverse);
+                $counter= 0;
+                // for($i=0; $i<($number_of_teams*($number_of_teams-1)); $i++)
+                // {
+                //     if ($request->club_id[$counter] == $reverse[$counter]) {
+                //         $counter++;
+                //         if ($counter >= $number_of_teams) {
+                //             $counter = 0;
+                //         }
+                //         continue;
+                //     }
+                //     else
+                //     {
+                //         echo $i. ". " .$request->club_id[$counter]. "VS" .$reverse[$counter]. '<br>' ;
+                //         $counter++;
+                //         if ($counter >= $number_of_teams) {
+                //             $counter = 0;
+                //         }
+                //     }
+                // }
+                return "Done";
             }
         }
 
