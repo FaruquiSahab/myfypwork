@@ -158,23 +158,24 @@
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('tournament_type_id', 'Tournament Type') !!}
+                    {!! Form::label('tournament_type_id', 'Match Type') !!}
                     {!! Form::select('tournament_type_id', $m_type, null, ['placeholder'=>'Match Type', 'class'=>'form-control', 'name'=>'tournament_type_id','id'=>'TypeSelect', 'required'])!!}
                 </div>
-                
-                <div class="form-group">
-                    {!! Form::label('tournament_format_id', 'Tournament') !!}
+                {{-- Tournament Format --}}
+                {{-- <div class="form-group">
+                    {!! Form::label('tournament_format_id', 'Tournament Format') !!}
                     {!! Form::select('tournament_id', $t_format, null, ['placeholder'=>'Tournament Format', 'class'=>'form-control', 'name'=>'tournament_format_id','id'=>'formatSelect', 'required'])!!}
-                </div>
+                </div> --}}
+                <input type="hidden" name="tournament_format_id" value="1">
 
-                <div class="form-group hidden" id="roundrobin">
+                <div class="form-group" id="roundrobin">
 
                   {!! Form::label('number_of_teams', 'Number of Teams') !!}
                   {!! Form::number('number_of_teams', null, ['class'=>'form-control', 'id'=>'textbox', 'min'=>'4','max'=>'10', 'required','placeholder'=>'Enter Number Of Teams'])!!}
 
                 </div>
 
-                  <div class="form-group hidden" id="knockout">
+                  {{-- <div class="form-group hidden" id="knockout">
 
                       {!! Form::label('number_of_teams', 'Number of Teams') !!}
                       <select name="number_of_teams" id="selectbox" class="form-control" required>
@@ -183,7 +184,7 @@
                             <option value="8">Eight</option>
                       </select>
 
-                  </div>
+                  </div> --}}
 
 
                 <div class="form-group">

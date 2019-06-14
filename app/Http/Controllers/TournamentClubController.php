@@ -50,6 +50,7 @@ class TournamentClubController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->all();
         $number_of_teams = TournamentsReference::where('id',$request->refer_id)->first()->number_of_teams;
         $format = TournamentsReference::where('id',$request->refer_id)->first()->tournament_format_id;
         if (sizeof($request->club_id) < $number_of_teams)
